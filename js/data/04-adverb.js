@@ -126,9 +126,31 @@ GRAMMAR.push({
         ['I’m not hungry. — I’m not hungry, <b>either</b>.', '나 배 안 고파. — 나도 안 고파.'],
       ],
     },
+    {
+      id: 'relative-adverb', title: '관계부사 where / when / why / how', en: 'Relative adverbs',
+      html: `
+        <p>관계대명사처럼 두 문장을 이어 주는데, <b>장소·시간·이유·방법</b>을 나타내는 부사 자리를 대신하면 <b>관계부사</b>예요.</p>
+        ${H.formula('선행사', '+', '*관계부사', '+', '완전한 문장')}
+        ${H.table(['선행사', '관계부사', '예'], [
+          ['장소 ' + en('(the place, the house …)'), en('<b>where</b>'), en('This is the house <b>where</b> I was born.') + '<br>여기가 내가 태어난 집이야.'],
+          ['시간 ' + en('(the day, the time …)'), en('<b>when</b>'), en('I remember the day <b>when</b> we first met.') + '<br>우리가 처음 만난 날을 기억해.'],
+          ['이유 ' + en('(the reason)'), en('<b>why</b>'), en('Tell me the reason <b>why</b> you were late.') + '<br>늦은 이유를 말해 줘.'],
+          ['방법 ' + en('(the way)'), en('<b>how</b>'), en('This is <b>how</b> I solved it.') + '<br>이게 내가 그걸 푼 방법이야.'],
+        ])}
+        ${H.box('tip', `관계부사 = <b>전치사 + 관계대명사(which)</b><br>${en('the house <b>where</b> I live')} = ${en('the house <b>in which</b> I live')}`)}
+        ${H.box('warn', `관계대명사 뒤에는 <b>빠진 자리</b>(주어나 목적어)가 있고, 관계부사 뒤에는 <b>빠진 것 없는 완전한 문장</b>이 와요.<br>${en('the house <b>which</b> I bought ___')} (bought의 목적어가 빠짐) / ${en('the house <b>where</b> I live')} (완전한 문장)`)}
+        ${H.box('warn', `${en('the way')}와 ${en('how')}는 함께 쓰지 않아요. 둘 중 하나만! <span class="strike en">the way how</span> → ${en('the way')} 또는 ${en('how')}`)}
+      `,
+      examples: [
+        ['Busan is the city <b>where</b> my grandma lives.', '부산은 우리 할머니가 사시는 도시예요.'],
+        ['Summer is the season <b>when</b> we go to the beach.', '여름은 우리가 바닷가에 가는 계절이에요.'],
+        ['That is <b>why</b> I love you.', '그게 내가 너를 사랑하는 이유야.'],
+      ],
+    },
   ],
   quiz: [
     ['부사로 바꾸세요: <span class="en">quiet, easy, good, gentle</span>', '<span class="en">quietly, easily, well, gently</span>'],
+    ['빈칸에 where / when: <span class="en">I can’t forget the day ( ) I won the race.</span>', '<span class="en">when</span> — 선행사가 시간(the day).'],
     ['알맞은 자리에 <span class="en">often</span>을 넣으세요: <span class="en">I ( ) play ( ) games.</span>', '<span class="en">I <b>often</b> play games.</span> — 일반동사 앞.'],
     ['알맞은 것: <span class="en">She is (never / never is) late.</span>', '<span class="en">She is never late.</span> — be동사 뒤.'],
     ['뜻이 다른 이유는? <span class="en">He works hard. / He hardly works.</span>', 'hard = 열심히, hardly = 거의 ~않다. 첫 문장은 “열심히 일한다”, 두 번째는 “거의 일을 안 한다”.'],

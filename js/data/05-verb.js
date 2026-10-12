@@ -177,6 +177,7 @@ GRAMMAR.push({
           [en('one of + 복수명사'), '단수 (주인공은 one)', en('One of my friends <b>lives</b> in Jeju.')],
           [en('명사 + 전치사구'), '앞의 명사에 맞춤', en('The box of apples <b>is</b> heavy.')],
           [en('family, team, class'), '보통 단수', en('My family <b>is</b> big.')],
+          [en('선행사 + who/which/that + 동사'), '관계대명사 뒤 동사는 <b>선행사</b>에 맞춤', en('I have a friend who <b>lives</b> in Jeju.') + '<br>' + en('I have friends who <b>live</b> in Jeju.')],
         ])}
         ${H.box('tip', `${en('everyone')}은 “모두”라는 뜻이지만 사람들을 <b>한 명씩</b> 가리키는 말이라서 단수예요.`)}
       `,

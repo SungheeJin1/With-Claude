@@ -66,17 +66,19 @@
   /* ---------- 탭 내용 ---------- */
   function render(t) {
     document.documentElement.style.setProperty('--tab-color', t.color);
-    let n = 0, toc = '', body = '';
+    let n = 0, toc = '', body = '', side = '';
     t.sections.forEach((s, i) => {
       if (s.group) {
         n = 0;
         toc += `<span class="toc-group">${s.no}. ${s.group}</span>`;
+        side += `<li class="side-group"><a href="#${t.id}.g${i}" data-target="${t.id}-g${i}">${s.no}. ${s.group}</a></li>`;
         body += `<div class="group-banner" id="${t.id}-g${i}"><span class="group-num">${s.no}</span><div><h2>${s.group}</h2>${s.desc ? `<p>${s.desc}</p>` : ''}</div></div>`;
         return;
       }
       n++;
       const sid = `${t.id}-${s.id || i}`;
       toc += `<a href="#${t.id}.${s.id || i}" class="${s.toon ? 'has-toon' : ''}">${s.title}</a>`;
+      side += `<li><a href="#${t.id}.${s.id || i}" data-target="${sid}"><span class="side-no">${n}</span><span>${s.title}${s.toon ? ' 🎞' : ''}</span></a></li>`;
       body += `<section class="section" id="${sid}">
         <h3><span class="sec-no">${n}</span>${s.title}${s.en ? `<span class="sec-en">${s.en}</span>` : ''}</h3>
         ${s.html || ''}
@@ -90,6 +92,8 @@
       <div class="q"><div class="q-text">Q${i + 1}. ${q}</div>
       <button class="q-btn" type="button">정답 보기</button><div class="q-ans">${a}</div></div>`).join('')}</div>` : '';
     toc += quiz ? `<a href="#${t.id}.quiz">🧩 퀴즈</a>` : '';
+    if (quiz) side += `<li class="side-quiz"><a href="#${t.id}.quiz" data-target="${t.id}-quiz">🧩 확인 퀴즈</a></li>`;
+    sideEl.innerHTML = `<p class="side-title"><span>${t.icon}</span>${t.name} <small>${t.en}</small></p><ol class="side-list">${side}</ol>`;
 
     main.innerHTML = `
       <div class="hero" style="--tab-color:${t.color}" data-icon="${t.icon}">
@@ -98,7 +102,59 @@
       </div>
       <nav class="toc" aria-label="목차"><span class="toc-title">📚 이 탭에서 배울 것 (🎞 = 웹툰 있음)</span>${toc}</nav>
       ${body}${quiz}`;
+    watchSections();
   }
+
+  /* ---------- 왼쪽 목차 ---------- */
+  const sideEl = document.getElementById('side');
+  const sideBtn = document.getElementById('sideBtn');
+  const backdrop = document.getElementById('sideBackdrop');
+  function setSide(open) {
+    document.body.classList.toggle('side-open', open);
+    sideBtn.setAttribute('aria-expanded', open);
+  }
+  sideBtn.addEventListener('click', () => setSide(!document.body.classList.contains('side-open')));
+  backdrop.addEventListener('click', () => setSide(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setSide(false); });
+
+  /* 목차 링크: 같은 항목을 다시 눌러도 이동하도록 직접 스크롤 */
+  function jump(e) {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const [, sub] = a.getAttribute('href').slice(1).split('.');
+    const el = sub && document.getElementById(`${current}-${sub}`);
+    if (!el) return;
+    e.preventDefault();
+    el.scrollIntoView();
+    try { history.replaceState(null, '', a.getAttribute('href')); } catch (_) {}
+    setSide(false);
+  }
+  sideEl.addEventListener('click', jump);
+  main.addEventListener('click', e => { if (e.target.closest('.toc')) jump(e); });
+
+  /* 지금 읽는 항목을 목차에서 표시 */
+  let observer = null;
+  function watchSections() {
+    if (observer) observer.disconnect();
+    if (!('IntersectionObserver' in window)) return;
+    const links = [...sideEl.querySelectorAll('a[data-target]')];
+    observer = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        links.forEach(l => l.classList.toggle('on', l.dataset.target === en.target.id));
+        const on = sideEl.querySelector('a.on');
+        if (on && !document.body.classList.contains('side-open')) on.scrollIntoView({ block: 'nearest' });
+      });
+    }, { rootMargin: '-35% 0px -60% 0px' });
+    links.forEach(l => { const el = document.getElementById(l.dataset.target); if (el) observer.observe(el); });
+  }
+
+  /* 헤더 높이를 CSS에 알려 줘서 목차가 헤더 아래에 붙게 함 */
+  const header = document.querySelector('.site-header');
+  const setHeaderH = () => document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+  setHeaderH();
+  if ('ResizeObserver' in window) new ResizeObserver(setHeaderH).observe(header);
+  else window.addEventListener('resize', setHeaderH);
 
   /* ---------- 라우팅 ---------- */
   let current = null;

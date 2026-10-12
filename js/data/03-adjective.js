@@ -17,6 +17,9 @@ GRAMMAR.push({
           ['상태·느낌', en('hot, cold, new, old, clean, dirty, soft')],
           ['맛', en('sweet, salty, sour, spicy, delicious')],
           ['날씨', en('sunny, rainy, cloudy, windy, snowy')],
+          ['지시형용사', en('this, that, these, those') + ' + 명사'],
+          ['수량형용사', en('many, much, a few, a little, some, any') + ' + 명사'],
+          ['소유형용사(소유격)', en('my, your, his, her, its, our, their') + ' + 명사'],
         ])}
       `,
       examples: [
@@ -76,7 +79,7 @@ GRAMMAR.push({
       ],
     },
     {
-      id: 'quantity', title: '수량 형용사: many, much, a few, a little', en: 'How many? How much?',
+      id: 'quantity', title: '수량형용사: many, much, a few, a little', en: 'How many? How much?',
       html: `
         ${H.table(['', '셀 수 있는 명사 (복수)', '셀 수 없는 명사', '뜻'], [
           ['많은', en('<b>many</b> books'), en('<b>much</b> water'), '많은'],
@@ -86,6 +89,7 @@ GRAMMAR.push({
           ['약간', en('<b>some / any</b> books'), en('<b>some / any</b> water'), '약간의'],
         ])}
         ${H.box('memo', '<b>a</b>가 있으면 “조금 <b>있네</b>!” 😊, <b>a</b>가 없으면 “거의 <b>없네</b>…” 😢')}
+        ${H.box('tip', `수량형용사는 뒤에 <b>명사</b>가 와요. 뒤에 명사 없이 혼자 쓰이면 <b>수량대명사</b>예요. (대명사 탭)<br>${en('<b>Many people</b> came.')} (수량형용사) / ${en('<b>Many</b> came.')} (수량대명사)`)}
       `,
       examples: [
         ['There are <b>many</b> stars in the sky.', '하늘에 별이 많아요.'],
@@ -107,6 +111,26 @@ GRAMMAR.push({
             line: 'a little milk 😊 / little milk 😢' },
         ],
       },
+    },
+    {
+      id: 'demonstrative', title: '지시형용사와 소유형용사', en: 'this book, my book',
+      html: `
+        <p>명사 앞에 붙어서 “<b>어느</b> 것인지”, “<b>누구의</b> 것인지”를 알려 주는 형용사도 있어요.</p>
+        ${H.table(['종류', '단어', '예'], [
+          ['지시형용사', en('this, that (+ 단수)<br>these, those (+ 복수)'), en('<b>this</b> book, <b>that</b> house, <b>these</b> shoes, <b>those</b> birds')],
+          ['소유형용사(소유격)', en('my, your, his, her, its, our, their'), en('<b>my</b> mom, <b>her</b> bag, <b>their</b> school')],
+        ])}
+        ${H.table(['형용사 (뒤에 명사 ⭕)', '대명사 (혼자 ⭕)'], [
+          [en('<b>This</b> pencil is long.') + ' — 지시형용사', en('<b>This</b> is long.') + ' — 지시대명사'],
+          [en('It is <b>my</b> pencil.') + ' — 소유형용사', en('It is <b>mine</b>.') + ' — 소유대명사'],
+        ])}
+        ${H.box('warn', `지시형용사·소유형용사가 붙으면 <b>a / an / the</b>를 함께 쓰지 않아요. <span class="strike en">a my friend</span>, <span class="strike en">the this book</span>`)}
+      `,
+      examples: [
+        ['<b>These</b> cookies are for you.', '이 쿠키들은 너를 위한 거야. (지시형용사)'],
+        ['<b>That</b> tree is 100 years old.', '저 나무는 100살이에요. (지시형용사)'],
+        ['<b>Our</b> teacher is very funny.', '우리 선생님은 정말 웃기셔요. (소유형용사)'],
+      ],
     },
     {
       id: 'compare', title: '비교급과 최상급', en: 'bigger / biggest',
@@ -166,6 +190,22 @@ GRAMMAR.push({
             line: { t: 'I am bor<u>ed</u>.', ok: true } },
         ],
       },
+    },
+    {
+      id: 'adj-clause', title: '형용사 역할을 하는 문장 (형용사절)', en: 'the boy who is tall',
+      html: `
+        <p>형용사는 보통 단어 하나지만, <b>문장 덩어리</b>가 형용사처럼 명사를 꾸밀 때도 있어요. 관계대명사(<span class="en">who, which, that</span>)나 관계부사(<span class="en">where, when</span>)가 이끄는 부분이 그래요. 이걸 <b>형용사절</b>이라고 해요.</p>
+        ${H.table(['형용사 한 단어', '형용사절 (명사 뒤에서 꾸밈)'], [
+          [en('a <b>tall</b> boy') + '<br>키 큰 소년', en('a boy <b>who is good at soccer</b>') + '<br>축구를 잘하는 소년'],
+          [en('a <b>red</b> cap') + '<br>빨간 모자', en('the cap <b>which I bought yesterday</b>') + '<br>내가 어제 산 모자'],
+          [en('a <b>quiet</b> place') + '<br>조용한 곳', en('the place <b>where I was born</b>') + '<br>내가 태어난 곳'],
+        ])}
+        ${H.box('tip', '형용사 한 단어는 명사 <b>앞</b>에서, 길어진 형용사절은 명사 <b>뒤</b>에서 꾸며요. 자세한 규칙은 대명사 탭의 <b>관계대명사</b>, 부사 탭의 <b>관계부사</b>에 있어요.')}
+      `,
+      examples: [
+        ['The girl <b>who is singing</b> is my sister.', '노래하고 있는 여자아이는 내 여동생이에요.'],
+        ['I lost the umbrella <b>that my dad gave me</b>.', '나는 아빠가 주신 우산을 잃어버렸어요.'],
+      ],
     },
   ],
   quiz: [

@@ -27,7 +27,12 @@
   <nav class="tabs" id="tabs" role="tablist" aria-label="8품사"></nav>
 </header>
 
-<main id="main" class="main" tabindex="-1"></main>
+<div class="layout">
+  <aside class="side" id="side" aria-label="이 품사의 목차"></aside>
+  <main id="main" class="main" tabindex="-1"></main>
+</div>
+<div class="side-backdrop" id="sideBackdrop"></div>
+<button class="side-btn" id="sideBtn" type="button" aria-controls="side" aria-expanded="false">☰ 목차</button>
 
 <button class="to-top" id="toTop" aria-label="맨 위로">▲</button>
 

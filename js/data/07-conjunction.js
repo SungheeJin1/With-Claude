@@ -6,9 +6,9 @@ GRAMMAR.push({
   intro: '접속사는 단어와 단어, 문장과 문장을 <b>이어 주는 연결 고리</b>예요. “그리고, 그러나, 그래서, ~할 때, ~ 때문에” 같은 말이죠. 접속사가 있으면 짧은 문장들을 길고 멋진 문장으로 만들 수 있어요!',
   sections: [
     {
-      id: 'coordinating', title: '대등하게 잇기: and, but, or, so', en: 'Coordinating',
+      id: 'coordinating', title: '대등접속사 and, but, or, so', en: 'Coordinating conjunctions',
       html: `
-        <p>양쪽을 <b>똑같은 무게</b>로 이어 줘요. 단어는 단어끼리, 문장은 문장끼리!</p>
+        <p>양쪽을 <b>똑같은 무게(대등하게)</b>로 이어 줘서 <b>대등접속사</b>라고 해요. 단어는 단어끼리, 문장은 문장끼리!</p>
         ${H.table(['접속사', '뜻', '예'], [
           [en('and'), '그리고, ~와', en('I like pizza <b>and</b> chicken.')],
           [en('but'), '그러나, 하지만', en('It’s small, <b>but</b> it’s strong.')],
@@ -24,8 +24,9 @@ GRAMMAR.push({
       ],
     },
     {
-      id: 'correlative', title: '짝꿍 접속사', en: 'both A and B …',
+      id: 'correlative', title: '상관접속사 (짝꿍 접속사)', en: 'both A and B …',
       html: `
+        <p>두 단어가 짝을 이뤄 함께 다니는 접속사를 <b>상관접속사</b>라고 해요. 대등접속사의 짝꿍 버전이에요.</p>
         ${H.table(['표현', '뜻', '동사의 수'], [
           [en('both A and B'), 'A와 B 둘 다', '항상 복수'],
           [en('either A or B'), 'A 또는 B 둘 중 하나', '<b>B</b>에 맞춤'],
@@ -42,9 +43,9 @@ GRAMMAR.push({
       ],
     },
     {
-      id: 'subordinating', title: '시간·이유·조건을 붙이는 접속사', en: 'when, because, if …',
+      id: 'subordinating', title: '종속접속사 when, because, if …', en: 'Subordinating conjunctions',
       html: `
-        <p>이 접속사들은 <b>주인공 문장(주절)</b>에 <b>보조 문장(종속절)</b>을 붙여 줘요. 보조 문장은 앞에 와도 되고 뒤에 와도 돼요. 앞에 오면 쉼표(,)를 찍어요.</p>
+        <p>이 접속사들은 <b>주인공 문장(주절)</b>에 <b>보조 문장(종속절)</b>을 붙여 줘요. 보조 문장이 주절에 딸려(종속되어) 있어서 <b>종속접속사</b>라고 해요. 보조 문장은 앞에 와도 되고 뒤에 와도 돼요. 앞에 오면 쉼표(,)를 찍어요.</p>
         ${H.table(['종류', '접속사', '예'], [
           ['시간', en('when ~할 때, before ~ 전에, after ~ 후에, while ~하는 동안, until ~할 때까지'), en('<b>When</b> I was young, I lived in Ulsan.')],
           ['이유', en('because ~ 때문에, since ~이니까'), en('I’m tired <b>because</b> I ran a lot.')],
@@ -62,7 +63,7 @@ GRAMMAR.push({
       ],
     },
     {
-      id: 'if-will', title: '시간·조건 부사절에서는 현재가 미래를 대신해요', en: 'If it rains tomorrow, …',
+      id: 'if-will', title: '종속접속사 if·when 뒤에서는 현재가 미래를 대신해요', en: 'If it rains tomorrow, …',
       html: `
         <p>“내일 비가 오면, 나는 집에 있을 거야.” — 내일 일이니까 ${en('will rain')}이라고 쓰고 싶죠? 하지만 <span class="mark">${en('if, when, before, after, until')} 뒤의 “때·조건” 문장에서는 미래 대신 현재형</span>을 써요.</p>
         ${H.formula('If / When', '+', '주어', '+', '*현재형', ',', '주어', '+', '*will', '+', '동사원형')}
@@ -95,10 +96,12 @@ GRAMMAR.push({
       },
     },
     {
-      id: 'that', title: '문장을 통째로 담는 that', en: 'I think that …',
+      id: 'that', title: '종속접속사 that (문장을 통째로 담기)', en: 'I think that …',
       html: `
         <p>${en('that')}은 “<b>~라는 것</b>”이라는 뜻으로 문장 하나를 통째로 담아서 명사처럼 써요. 이때 ${en('that')}은 자주 생략해요.</p>
         ${H.formula('I think / know / hope / believe', '+', '*(that)', '+', '주어 + 동사')}
+        ${H.box('tip', `<b>접속사 that</b>과 <b>관계대명사 that</b> 구별하기<br>접속사 that 뒤에는 <b>빠진 것 없는 완전한 문장</b>: ${en('I know <b>that</b> she likes cats.')}<br>관계대명사 that은 앞에 <b>명사(선행사)</b>가 있고 뒤에 <b>빠진 자리</b>가 있어요: ${en('the cat <b>that</b> she likes ___')}`)}
+        ${H.box('more', `<b>관계대명사·관계부사도 이어 주는 말</b><br>${en('who, which, that')}(관계대명사)와 ${en('where, when')}(관계부사)도 두 문장을 하나로 이어 줘요. 관계대명사는 <b>접속사 + 대명사</b>, 관계부사는 <b>접속사 + 부사</b>의 일을 한꺼번에 해요. 자세한 내용은 대명사 탭과 부사 탭에 있어요.`)}
       `,
       examples: [
         ['I think <b>(that)</b> you are right.', '나는 네가 옳다고 생각해.'],
