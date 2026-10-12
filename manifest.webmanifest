@@ -1,0 +1,16 @@
+{
+  "name": "품사 탐험대 · 쉬운 영문법",
+  "short_name": "품사 탐험대",
+  "description": "초등학생도 이해하는 영어 8품사 문법 설명과 웹툰",
+  "lang": "ko",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d0f1c",
+  "theme_color": "#11132a",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

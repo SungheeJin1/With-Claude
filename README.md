@@ -9,6 +9,11 @@
 ## 실행
 빌드가 필요 없습니다. `index.html`을 브라우저로 열면 됩니다.
 
+## 웹앱
+GitHub Pages처럼 https 주소로 올리면 휴대폰에서 "홈 화면에 추가"로 앱처럼 설치할 수 있고(`manifest.webmanifest`), 한 번 연 뒤에는 인터넷 없이도 열립니다(`sw.js`).
+
+`python3 tools/build-artifact.py 출력.html` 은 사이트 전체를 HTML 파일 하나로 묶어 줍니다 (claude.ai 아티팩트용).
+
 ## 구조
 - `js/data/0N-*.js` — 품사별 내용 (설명 HTML, 예문, 웹툰 패널, 퀴즈)
 - `js/app.js` — 탭·웹툰·예문 렌더링

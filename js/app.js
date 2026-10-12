@@ -76,7 +76,7 @@
       }
       n++;
       const sid = `${t.id}-${s.id || i}`;
-      toc += `<a href="#${t.id}/${s.id || i}" class="${s.toon ? 'has-toon' : ''}">${s.title}</a>`;
+      toc += `<a href="#${t.id}.${s.id || i}" class="${s.toon ? 'has-toon' : ''}">${s.title}</a>`;
       body += `<section class="section" id="${sid}">
         <h3><span class="sec-no">${n}</span>${s.title}${s.en ? `<span class="sec-en">${s.en}</span>` : ''}</h3>
         ${s.html || ''}
@@ -89,7 +89,7 @@
     const quiz = t.quiz && t.quiz.length ? `<div class="quiz" id="${t.id}-quiz"><p class="eyebrow">Quiz · Check</p><h3>🧩 확인 퀴즈</h3>${t.quiz.map(([q, a], i) => `
       <div class="q"><div class="q-text">Q${i + 1}. ${q}</div>
       <button class="q-btn" type="button">정답 보기</button><div class="q-ans">${a}</div></div>`).join('')}</div>` : '';
-    toc += quiz ? `<a href="#${t.id}/quiz">🧩 퀴즈</a>` : '';
+    toc += quiz ? `<a href="#${t.id}.quiz">🧩 퀴즈</a>` : '';
 
     main.innerHTML = `
       <div class="hero" style="--tab-color:${t.color}" data-icon="${t.icon}">
@@ -103,7 +103,7 @@
   /* ---------- 라우팅 ---------- */
   let current = null;
   function route() {
-    const [id, sub] = decodeURIComponent(location.hash.slice(1)).split('/');
+    const [id, sub] = decodeURIComponent(location.hash.slice(1)).split(/[./]/);
     const t = data.find(d => d.id === id) || data[0];
     if (current !== t.id) {
       current = t.id;
