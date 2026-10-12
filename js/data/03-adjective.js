@@ -89,6 +89,17 @@ GRAMMAR.push({
           ['약간', en('<b>some / any</b> books'), en('<b>some / any</b> water'), '약간의'],
         ])}
         ${H.box('memo', '<b>a</b>가 있으면 “조금 <b>있네</b>!” 😊, <b>a</b>가 없으면 “거의 <b>없네</b>…” 😢')}
+        <p><b>“많은”을 나타내는 여러 표현</b></p>
+        ${H.table(['표현', '함께 쓰는 명사', '느낌', '예'], [
+          [en('a lot of / lots of'), '둘 다', '가장 흔하게 써요', en('I have <b>a lot of</b> friends.')],
+          [en('plenty of'), '둘 다', '충분히 많은, 넉넉한', en('We have <b>plenty of</b> time.')],
+          [en('a bunch of'), '셀 수 있는 명사 (대화체)', '한 무더기의, 잔뜩', en('I have <b>a bunch of</b> friends in Seoul.')],
+          [en('tons of'), '둘 다 (대화체)', '엄청 많은 (톤 단위로!)', en('She has <b>tons of</b> books.')],
+          [en('a number of'), '셀 수 있는 복수 명사', '많은 (조금 격식)', en('<b>A number of</b> students were absent.')],
+          [en('a great deal of'), '셀 수 없는 명사', '많은 양의 (격식)', en('It takes <b>a great deal of</b> effort.')],
+        ])}
+        ${H.box('tip', `${en('a bunch of')}는 원래 “한 <b>송이</b>, 한 <b>다발</b>”이라는 뜻이에요. ${en('a bunch of grapes')}(포도 한 송이), ${en('a bunch of flowers')}(꽃 한 다발)`)}
+        ${H.box('warn', `${en('a number of')}(많은)와 ${en('the number of')}(~의 수)는 달라요.<br>${en('<b>A number of</b> people <b>are</b> here.')} 많은 사람들이 여기 있다. / ${en('<b>The number of</b> people <b>is</b> 30.')} 사람 수는 30명이다.`)}
         ${H.box('tip', `수량형용사는 뒤에 <b>명사</b>가 와요. 뒤에 명사 없이 혼자 쓰이면 <b>수량대명사</b>예요. (대명사 탭)<br>${en('<b>Many people</b> came.')} (수량형용사) / ${en('<b>Many</b> came.')} (수량대명사)`)}
       `,
       examples: [

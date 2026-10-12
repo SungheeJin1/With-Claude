@@ -37,7 +37,8 @@ GRAMMAR.push({
           ['a cup of', '<span class="en">a cup of tea</span>', '차 한 잔'],
           ['a bottle of', '<span class="en">a bottle of water</span>', '물 한 병'],
           ['a piece of', '<span class="en">a piece of cake / paper / advice</span>', '케이크 한 조각 / 종이 한 장 / 충고 한마디'],
-          ['a slice of', '<span class="en">a slice of pizza / bread</span>', '피자 한 조각 / 빵 한 조각'],
+          ['a slice of', '<span class="en">a slice of pizza / bread</span>', '피자 한 조각 / 빵 한 조각(얇게 썬 것)'],
+          ['a loaf of', '<span class="en">a loaf of bread → two <b>loaves</b> of bread</span>', '빵 한 덩어리 → 두 덩어리 (loaf의 복수는 loaves)'],
           ['a bowl of', '<span class="en">a bowl of rice / soup</span>', '밥 한 공기 / 수프 한 그릇'],
         ])}
         ${H.box('warn', '<span class="en">bread</span>(빵), <span class="en">money</span>(돈), <span class="en">homework</span>(숙제), <span class="en">furniture</span>(가구)는 우리말로는 셀 수 있을 것 같지만 영어에서는 <b>셀 수 없는 명사</b>예요. <span class="strike en">a homework</span>, <span class="strike en">moneys</span> 라고 하면 안 돼요!')}
@@ -46,6 +47,7 @@ GRAMMAR.push({
         ['I have <b>two cats</b> and <b>a dog</b>.', '나는 고양이 두 마리와 개 한 마리가 있어요.'],
         ['Can I have <b>a glass of water</b>?', '물 한 잔 마실 수 있을까요?'],
         ['Mom bought <b>three bottles of juice</b>.', '엄마가 주스 세 병을 사셨어요.'],
+        ['We need <b>two loaves of bread</b> for the picnic.', '소풍에 빵 두 덩어리가 필요해요.'],
         ['I have <b>a lot of homework</b> today.', '나는 오늘 숙제가 많아요.'],
         ['I have <b>a water</b>.', '→ <span class="en">I have water.</span> 또는 <span class="en">I have a bottle of water.</span>', 'x'],
       ],
@@ -93,7 +95,7 @@ GRAMMAR.push({
           ['-s, -x, -sh, -ch, -o로 끝나면', '<b>+es</b> (발음이 편하도록 “이즈”)', '<span class="en">bus → buses, box → boxes, dish → dishes, watch → watches, potato → potatoes, tomato → tomatoes</span>'],
           ['자음 + y', 'y를 i로 바꾸고 <b>+es</b>', '<span class="en">baby → babies, city → cities, story → stories</span>'],
           ['모음 + y', '그냥 <b>+s</b>', '<span class="en">boy → boys, day → days, toy → toys, key → keys</span>'],
-          ['-f, -fe', 'f를 v로 바꾸고 <b>+es</b>', '<span class="en">leaf → leaves, wolf → wolves, knife → knives</span>'],
+          ['-f, -fe', 'f를 v로 바꾸고 <b>+es</b>', '<span class="en">leaf → leaves, wolf → wolves, loaf → loaves, knife → knives</span>'],
         ])}
         <p>규칙을 따르지 않는 <b>불규칙 복수형</b>도 있어요. 이건 외워야 해요!</p>
         ${H.table(['하나', '여럿', '하나', '여럿'], [
