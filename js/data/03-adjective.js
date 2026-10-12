@@ -149,7 +149,7 @@ GRAMMAR.push({
           ['불규칙', en('many / much'), en('more'), en('most')],
           ['불규칙', en('little'), en('less'), en('least')],
         ])}
-        ${H.box('tip', `<b>원급 비교</b>: “~만큼 …한”은 ${en('as + 원급 + as')}<br>${en('I am <b>as tall as</b> my mom.')} 나는 엄마만큼 키가 커요.<br>${en('I am <b>not as tall as</b> my dad.')} 나는 아빠만큼 크지 않아요.`)}
+        ${H.box('tip', `“~만큼 …한”(${en('as ~ as')})과 “~배 더 …한”(${en('twice as ~ as')})은 바로 다음 항목 <b>원급 비교와 배수 비교</b>에 있어요.`)}
         ${H.box('more', `비교급을 강조할 땐 ${en('much, even, far, a lot')}: ${en('much bigger')} (훨씬 더 큰). ${en('very bigger')}는 ✕!`)}
       `,
       examples: [
@@ -159,6 +159,51 @@ GRAMMAR.push({
         ['She is <b>the best</b> singer <b>of</b> us all.', '그녀는 우리 모두 중에서 노래를 제일 잘해요.'],
         ['My cold is <b>worse</b> today.', '오늘은 감기가 더 심해요.'],
       ],
+    },
+    {
+      id: 'as-as', title: '원급 비교와 배수 비교', en: 'as ~ as, twice as ~ as',
+      html: `
+        <p>비교급(<span class="en">-er than</span>) 말고도 <span class="en">as ~ as</span>로 비교할 수 있어요. 두 <span class="en">as</span> 사이에는 <b>원래 모양(원급)</b>이 들어가요.</p>
+        ${H.formula('A', '+', 'be', '+', '*as + 원급 + as', '+', 'B')}
+        ${H.table(['표현', '뜻', '예'], [
+          [en('as + 원급 + as'), 'B만큼 ~한', en('I am <b>as tall as</b> my mom.') + '<br>나는 엄마만큼 키가 커요.'],
+          [en('not as(so) + 원급 + as'), 'B만큼 ~하지 않은', en('I am <b>not as tall as</b> my dad.') + '<br>나는 아빠만큼 크지 않아요.'],
+          [en('<b>배수</b> + as + 원급 + as'), 'B보다 ~배 …한', en('My dog is <b>twice as big as</b> your dog.') + '<br>우리 개는 너희 개보다 두 배 커요.'],
+          [en('<b>배수</b> + 비교급 + than'), 'B보다 ~배 더 …한', en('This tower is <b>three times taller than</b> that one.') + '<br>이 탑은 저 탑보다 세 배 더 높아요.'],
+          [en('half as + 원급 + as'), 'B의 절반만큼 ~한', en('My room is <b>half as big as</b> yours.') + '<br>내 방은 네 방의 절반 크기야.'],
+          [en('as + 원급 + as possible'), '가능한 한 ~하게', en('Come <b>as soon as possible</b>.') + '<br>가능한 한 빨리 와.'],
+        ])}
+        ${H.table(['배수 말하는 법', '영어'], [
+          ['2배', en('<b>twice</b>') + ' (two times도 OK)'],
+          ['3배, 4배, 10배 …', en('<b>three times, four times, ten times</b> …')],
+          ['절반', en('<b>half</b>')],
+        ])}
+        ${H.box('tip', `<b>양이나 수</b>를 몇 배라고 할 때는 ${en('as much + 셀 수 없는 명사 + as')}, ${en('as many + 복수 명사 + as')}를 써요.<br>${en('Dad has <b>twice as much money as</b> I do.')} 아빠는 나보다 돈이 두 배 많아요.<br>${en('She read <b>three times as many books as</b> me.')} 그녀는 나보다 책을 세 배 많이 읽었어요.`)}
+        ${H.box('warn', `배수는 꼭 <b>첫 번째 as 앞</b>에 와요. <span class="strike en">as twice big as</span> → ${en('<b>twice</b> as big as')}`)}
+        ${H.box('more', `<b>the 비교급, the 비교급</b>: ~할수록 더 …하다<br>${en('<b>The more</b> you practice, <b>the better</b> you get.')} 연습할수록 더 잘하게 돼요.<br><b>최상급 뜻의 원급·비교급</b>: ${en('<b>No other</b> mountain in Korea is <b>as high as</b> Hallasan.')} = ${en('Hallasan is <b>higher than any other</b> mountain in Korea.')} (한라산이 가장 높다)`)}
+      `,
+      examples: [
+        ['This bag is <b>as heavy as</b> a rock!', '이 가방은 바위만큼 무거워!'],
+        ['The blue whale is <b>about thirty times as long as</b> a person.', '흰긴수염고래는 사람보다 약 서른 배 길어요.'],
+        ['I drink <b>twice as much water as</b> my brother.', '나는 남동생보다 물을 두 배 많이 마셔요.'],
+        ['Please speak <b>as slowly as you can</b>.', '할 수 있는 한 천천히 말해 주세요.'],
+      ],
+      toon: {
+        title: '몇 배인지 말하려면 배수를 맨 앞에!',
+        panels: [
+          { bg: 'sky', narr: '강아지 두 마리의 키를 재요. 똑같으면 as ~ as!',
+            cast: [{ e: '🐕', tag: 'Coco' }, { w: 'as tall as', c: 'teal', m: 'happy', say: '“~만큼” 키가 같다!' }, { e: '🐕', tag: 'Max' }],
+            line: { t: 'Coco is <u>as tall as</u> Max.', ok: true } },
+          { bg: 'sun', narr: '그런데 Coco가 쑥쑥 자라서 Max의 두 배가 되었어요.', fx: '쑥쑥!',
+            cast: [{ e: '🦮', tag: 'Coco' }, { w: 'twice', c: 'orange', m: 'smug', say: '몇 배인지는 내 담당! 나는 첫 번째 as 앞에 서.' }, { e: '🐕', tag: 'Max' }] },
+          { bg: 'rose', narr: 'twice가 as 사이에 끼어들려고 하면…',
+            cast: [{ w: 'as', c: 'teal', m: 'angry', st: 'small', say: '여긴 원급 자리야!' }, { w: 'twice', c: 'orange', m: 'dizzy', st: 'shake' }, { w: 'tall as', c: 'teal', m: 'normal' }],
+            line: { t: '<s>Coco is as twice tall as Max.</s>', ok: false } },
+          { bg: 'mint', narr: '배수는 맨 앞! 비교급으로 바꿔 말할 수도 있어요.',
+            cast: [{ w: 'twice', c: 'orange', m: 'cool' }, { w: 'as tall as', c: 'teal', m: 'happy' }, { e: '🦮🐕' }],
+            line: { t: 'Coco is <u>twice as tall as</u> Max. = Coco is <u>two times taller than</u> Max.', ok: true } },
+        ],
+      },
     },
     {
       id: 'ing-ed', title: '감정 형용사 -ing vs -ed', en: 'boring vs bored',
@@ -212,6 +257,7 @@ GRAMMAR.push({
     ['알맞은 것을 고르세요: <span class="en">This soup tastes (good / well).</span>', '<span class="en">good</span> — 감각동사 뒤는 형용사.'],
     ['어순을 바르게: <span class="en">I want (new something / something new).</span>', '<span class="en">something new</span>'],
     ['비교급을 쓰세요: <span class="en">hot, easy, good, famous</span>', '<span class="en">hotter, easier, better, more famous</span>'],
+    ['우리말에 맞게: “이 상자는 저 상자보다 세 배 무겁다.” <span class="en">This box is ( ) ( ) heavy ( ) that one.</span>', '<span class="en">three times as … as</span> → <span class="en">This box is three times as heavy as that one.</span>'],
     ['알맞은 것: <span class="en">There is (a little / a few) juice left.</span>', '<span class="en">a little</span> — juice는 셀 수 없어요.'],
     ['알맞은 것: <span class="en">I’m (interesting / interested) in robots.</span>', '<span class="en">interested</span> — 내가 관심을 느끼는 거예요.'],
   ],

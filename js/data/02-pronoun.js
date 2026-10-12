@@ -1,3 +1,6 @@
+(function () {
+const en = s => `<span class="en">${s}</span>`;
+
 GRAMMAR.push({
   id: 'pronoun', name: '대명사', en: 'Pronoun', icon: '🙋', color: '#f2558f',
   intro: '대명사는 명사를 <b>대신</b>하는 말이에요. “민수는… 민수가… 민수를…” 하고 계속 이름을 부르면 지루하죠? 그럴 때 <span class="en">he, him, his</span> 같은 대명사가 대신 나와 줘요.',
@@ -253,7 +256,7 @@ GRAMMAR.push({
         ])}
         ${H.box('warn', '<span class="en">what</span>은 선행사를 이미 품고 있어서 앞에 명사가 오면 안 돼요. <span class="strike en">the thing what I want</span> → <span class="en">the thing <b>that</b> I want</span> 또는 <span class="en"><b>what</b> I want</span>')}
         ${H.box('tip', '<b>의문대명사</b> who와 <b>관계대명사</b> who 구별하기: 질문하면 의문대명사(<span class="en">Who is he?</span>), 앞의 명사를 꾸며 주면 관계대명사(<span class="en">the boy who is tall</span>)예요.')}
-        ${H.box('more', `<b>계속적 용법</b>: 관계대명사 앞에 쉼표(,)를 찍으면 앞 문장에 “그런데 그 사람은…” 하고 설명을 덧붙여요. 이때 that은 쓸 수 없어요.<br><span class="en">I have a brother<b>, who</b> is a doctor.</span> 나는 형이 하나 있는데, 그는 의사야.<br><b>복합관계대명사</b>: <span class="en">whoever</span>(누구든), <span class="en">whatever</span>(무엇이든) <span class="en"><b>Whoever</b> comes first will win.</span>`)}
+        ${H.box('more', `<b>복합관계대명사</b>: <span class="en">whoever</span>(누구든), <span class="en">whatever</span>(무엇이든) <span class="en"><b>Whoever</b> comes first will win.</span>`)}
       `,
       examples: [
         ['The movie <b>(that)</b> we watched was scary.', '우리가 본 영화는 무서웠어요. (목적격 생략)'],
@@ -261,6 +264,47 @@ GRAMMAR.push({
         ['He is the tallest boy <b>that</b> I know.', '그는 내가 아는 가장 키 큰 남자아이예요.'],
         ['The man <b>who</b> lives next door <b>is</b> a chef.', '옆집에 사는 남자는 요리사예요. (동사는 선행사 the man에 맞춰 is)'],
       ],
+    },
+    {
+      id: 'relative-comma', title: '계속적 용법: 쉼표 + who / which', en: ', who  , which',
+      html: `
+        <p>관계대명사 앞에 <b>쉼표(,)</b>를 찍으면 <b>계속적 용법</b>이 돼요. 쉼표가 없으면 <b>한정적 용법</b>이에요. 쉼표 하나로 뜻이 달라져요!</p>
+        ${H.table(['', '한정적 용법 (쉼표 ✕)', '계속적 용법 (쉼표 ⭕)'], [
+          ['하는 일', '선행사를 <b>뒤에서 꾸며</b> 범위를 좁혀요', '선행사에 대해 <b>설명을 덧붙여요</b>'],
+          ['예', en('I have two sons <b>who</b> are doctors.'), en('I have two sons<b>, who</b> are doctors.')],
+          ['해석', '나는 <b>의사인</b> 아들이 둘 있다.<br>(의사가 아닌 아들이 더 있을 수도 있어요)', '나는 아들이 둘 있는데, <b>그들은</b> 의사다.<br>(아들은 딱 둘이에요)'],
+        ])}
+        <p><b>해석하는 법</b> — 계속적 용법은 <span class="mark">앞에서부터 차례로</span> 읽어요. 쉼표에서 한 번 끊고, 관계대명사를 “<b>그런데 그 ~는</b>”으로 풀어요.</p>
+        ${H.table(['모양', '바꿔 쓰기', '해석'], [
+          [en(', who'), en('and he / she / they …'), '그런데 그 사람은'],
+          [en(', which'), en('and it / they …'), '그런데 그것은'],
+          [en(', which') + ' (앞 문장 전체)', en('and that …'), '그런데 그 일(사실)은'],
+        ])}
+        ${H.box('tip', `${en(', which')}는 앞의 <b>명사 하나</b>뿐 아니라 <b>앞 문장 전체</b>를 받을 수도 있어요.<br>${en('He passed the test<b>, which</b> surprised everyone.')}<br>→ 그는 시험에 붙었는데, <b>그 일은</b> 모두를 놀라게 했다. (which = 그가 시험에 붙은 것)`)}
+        ${H.box('warn', `<b>쉼표 뒤에는 that을 쓸 수 없어요!</b> ${en('what')}도 안 돼요.<br><span class="strike en">I have a cat, that is very old.</span> → ${en('I have a cat<b>, which</b> is very old.')}`)}
+        ${H.box('more', `관계부사도 계속적 용법이 있어요: ${en(', where')} (그런데 거기서), ${en(', when')} (그런데 그때)<br>${en('We went to Jeju<b>, where</b> we rode horses.')} 우리는 제주에 갔는데, 거기서 말을 탔다.`)}
+      `,
+      examples: [
+        ['I met Mr. Kim<b>, who</b> is my old teacher.', '나는 김 선생님을 만났는데, 그분은 나의 예전 선생님이셔.'],
+        ['She gave me a book<b>, which</b> was very funny.', '그녀가 나에게 책을 줬는데, 그 책은 정말 웃겼어.'],
+        ['It rained all day<b>, which</b> made us sad.', '하루 종일 비가 왔는데, 그것 때문에 우리는 슬펐어. (앞 문장 전체)'],
+        ['I have a cat<b>, that</b> is very old.', '→ <span class="en">I have a cat<b>, which</b> is very old.</span> 쉼표 뒤에 that ✕', 'x'],
+      ],
+      toon: {
+        title: '쉼표 문 앞에서 that은 못 지나가요',
+        panels: [
+          { bg: 'sky', narr: '쉼표(,)는 “설명 덧붙이기 방”으로 들어가는 문이에요.',
+            cast: [{ w: ',', c: 'gray', m: 'cool', st: 'big', hat: '🚪', say: '여기부터는 덧붙이는 설명만 들어올 수 있어!' }] },
+          { bg: 'mint', narr: 'who와 which는 통과!',
+            cast: [{ w: ',', c: 'gray', m: 'happy', st: 'big', hat: '🚪' }, { w: 'who', c: 'purple', m: 'happy', say: '“그런데 그 사람은” 담당!' }, { w: 'which', c: 'blue', m: 'happy', say: '“그런데 그것은” 담당!' }] },
+          { bg: 'rose', narr: '그런데 that이 들어가려고 하자…', fx: '삐빅!',
+            cast: [{ w: ',', c: 'gray', m: 'angry', st: 'big', hat: '🚪', say: 'that은 출입 금지!' }, { w: 'that', c: 'gray', m: 'cry', st: 'x', say: '왜 나만…' }],
+            line: { t: 'I have a cat<s>, that</s> is old.', ok: false } },
+          { bg: 'lav', narr: 'which는 앞 문장 <b>전체</b>도 업고 갈 수 있어요.',
+            cast: [{ w: 'He passed!', c: 'orange', m: 'love' }, { w: ', which', c: 'blue', m: 'cool', say: '“그가 합격한 일” 전체를 내가 받을게!' }, { w: 'surprised us', c: 'yellow', m: 'surprised' }],
+            line: { t: 'He passed the test<u>, which</u> surprised us.', ok: true } },
+        ],
+      },
     },
   ],
   quiz: [
@@ -270,7 +314,10 @@ GRAMMAR.push({
     ['빈칸: <span class="en">He cut ( ) with a knife.</span> (그는 칼에 베였다)', '<span class="en">himself</span> — 주어와 목적어가 같은 사람이에요.'],
     ['두 문장을 관계대명사로 이으세요: <span class="en">I have an uncle. He lives in Canada.</span>', '<span class="en">I have an uncle <b>who</b> lives in Canada.</span> — 선행사가 사람, 주격.'],
     ['빈칸: <span class="en">This is the bag ( ) my mom bought.</span>', '<span class="en">which</span> 또는 <span class="en">that</span> (목적격이라 생략도 가능)'],
+    ['틀린 곳을 고치세요: <span class="en">I visited Seoul, that is a big city.</span>', '쉼표 뒤에는 that ✕ → <span class="en">I visited Seoul<b>, which</b> is a big city.</span>'],
+    ['해석하세요: <span class="en">She smiled at me, which made me happy.</span>', '그녀가 나에게 웃어 줬는데, 그 일이 나를 행복하게 했다. (which = 앞 문장 전체)'],
     ['알맞은 것: <span class="en">(What / That) I need is sleep.</span>', '<span class="en">What</span> — 선행사가 없고 “~하는 것”이에요.'],
     ['밑줄 친 말의 이름은? <span class="en"><u>This</u> cap is mine.</span> / <span class="en"><u>This</u> is mine.</span>', '앞은 <b>지시형용사</b>(뒤에 명사 cap), 뒤는 <b>지시대명사</b>(혼자 쓰임).'],
   ],
 });
+})();

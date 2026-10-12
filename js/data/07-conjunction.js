@@ -109,11 +109,38 @@ GRAMMAR.push({
         ['Did you know <b>(that)</b> octopuses have three hearts?', '문어는 심장이 세 개라는 거 알았어?'],
       ],
     },
+    {
+      id: 'appositive', title: '동격의 that', en: 'the news that …',
+      html: `
+        <p>“우리 팀이 이겼다는 <b>소식</b>”처럼, 명사 뒤에 that 문장이 와서 <b>그 명사의 내용</b>을 풀어 줄 때가 있어요. 명사 = that 문장 내용이라서 <b>동격</b>(같은 자격)의 that이라고 해요.</p>
+        ${H.formula('*명사', '+', '*that', '+', '완전한 문장', '→', '“~라는 (명사)”')}
+        ${H.table(['자주 쓰는 명사', '예', '해석'], [
+          [en('the fact'), en('the fact <b>that</b> the earth is round'), '지구가 둥글다는 사실'],
+          [en('the news'), en('the news <b>that</b> our team won'), '우리 팀이 이겼다는 소식'],
+          [en('the idea'), en('the idea <b>that</b> we can fly'), '우리가 날 수 있다는 생각'],
+          [en('the hope'), en('the hope <b>that</b> she will come back'), '그녀가 돌아올 거라는 희망'],
+          [en('the rumor'), en('the rumor <b>that</b> he is a spy'), '그가 스파이라는 소문'],
+        ])}
+        <p><b>동격의 that vs 관계대명사 that</b> — 둘 다 명사 뒤에 오지만, that 뒤 문장을 보면 구별할 수 있어요.</p>
+        ${H.table(['', '동격의 that (접속사)', '관계대명사 that'], [
+          ['that 뒤', '<b>완전한 문장</b> (빠진 것 없음)', '<b>빠진 자리</b>가 있음 (주어나 목적어)'],
+          ['예', en('the news <b>that</b> our team won'), en('the news <b>that</b> you told me ___')],
+          ['해석', '우리 팀이 이겼<b>다는</b> 소식', '네가 나에게 말해 <b>준</b> 소식'],
+        ])}
+        ${H.box('tip', '해석이 “<b>~라는</b> 명사”로 자연스러우면 동격의 that, “<b>~한/~하는</b> 명사”이고 뒤에 빈자리가 있으면 관계대명사 that이에요.')}
+      `,
+      examples: [
+        ['I heard <b>the news that</b> our school will have a festival.', '나는 우리 학교에서 축제를 한다는 소식을 들었어요.'],
+        ['<b>The fact that</b> he lied made me angry.', '그가 거짓말을 했다는 사실이 나를 화나게 했어요.'],
+        ['We never lost <b>the hope that</b> we would win.', '우리는 이길 거라는 희망을 결코 잃지 않았어요.'],
+      ],
+    },
   ],
   quiz: [
     ['빈칸에 and / but / or / so: <span class="en">I was tired, ( ) I went to bed early.</span>', '<span class="en">so</span> — 결과.'],
     ['알맞은 것: <span class="en">I couldn’t sleep (because / because of) the noise.</span>', '<span class="en">because of</span> — 뒤에 명사(the noise).'],
     ['틀린 곳을 고치세요: <span class="en">If you will come, I will be happy.</span>', '<span class="en">If you <b>come</b>, I will be happy.</span> — 조건절은 현재형.'],
+    ['동격의 that일까, 관계대명사 that일까? <span class="en">I like the idea that you gave me.</span> / <span class="en">I like the idea that we go camping.</span>', '앞은 관계대명사(gave의 목적어가 빠짐, “네가 준 아이디어”), 뒤는 동격의 that(완전한 문장, “캠핑 가자는 아이디어”).'],
     ['알맞은 것: <span class="en">Neither Tom nor I (am / is) hungry.</span>', '<span class="en">am</span> — 가까운 I에 맞춰요.'],
   ],
 });
