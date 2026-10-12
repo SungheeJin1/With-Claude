@@ -12,4 +12,5 @@
 ## 구조
 - `js/data/0N-*.js` — 품사별 내용 (설명 HTML, 예문, 웹툰 패널, 퀴즈)
 - `js/app.js` — 탭·웹툰·예문 렌더링
-- `css/style.css` — 디자인 및 웹툰 캐릭터(CSS로 그림)
+- `css/style.css` — 다크 글래스 디자인 및 웹툰 캐릭터(CSS로 그림)
+- `fonts/` — Pretendard 글꼴 (SIL OFL 1.1)

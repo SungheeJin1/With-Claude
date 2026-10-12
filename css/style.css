@@ -1,230 +1,289 @@
-/* ===== 기본 색상 토큰 ===== */
+/* Pretendard (SIL Open Font License 1.1, fonts/Pretendard-LICENSE.txt) */
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920; font-style: normal; font-display: swap;
+  src: url("../fonts/PretendardVariable.woff2") format("woff2-variations");
+}
+
+/* ===== 기본 토큰 (다크 + 글래스) ===== */
 :root {
-  --bg: #fffaf0;
-  --card: #ffffff;
-  --ink: #2b2a33;
+  --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --bg: #0d0f1c;
+  --glass: rgba(255, 255, 255, .055);
+  --glass-strong: rgba(255, 255, 255, .09);
+  --glass-line: rgba(255, 255, 255, .12);
+  --text: #ffffff;
+  --text-soft: rgba(255, 255, 255, .62);
+  --text-dim: rgba(255, 255, 255, .42);
+  --yellow: #f7d74a;
+  --yellow-ink: #1a1a22;
+  --good: #5fe3a1;
+  --bad: #ff7b7b;
+  --tip: #8fb4ff;
+  --purple: #b79cff;
+  --radius: 26px;
+  --blur: blur(18px) saturate(140%);
+  --tab-color: #f7d74a;
+  /* 웹툰 패널 안(밝은 만화 칸)에서 쓰는 잉크 색 */
+  --ink: #1d1e2c;
   --ink-soft: #5d5b6a;
-  --line: #ece5d6;
   --accent: #ff7a59;
-  --accent-soft: #ffe3d9;
-  --good: #1f9d67;
-  --good-soft: #dcf6e9;
-  --bad: #e5484d;
-  --bad-soft: #fde4e4;
-  --tip: #3f6fe0;
-  --tip-soft: #e3ebff;
   --hl: #fff1a8;
-  --tab-color: #ff7a59;
-  --radius: 18px;
-  --shadow: 0 4px 0 rgba(43, 42, 51, .08), 0 10px 24px rgba(43, 42, 51, .06);
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  margin: 0;
+  margin: 0; min-height: 100vh;
   background: var(--bg);
-  color: var(--ink);
-  font-family: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  font-size: 17px;
-  line-height: 1.75;
-  word-break: keep-all;
-  overflow-wrap: anywhere;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 17px; line-height: 1.75; letter-spacing: -0.01em;
+  word-break: keep-all; overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
 }
-h1, h2, h3, h4, .jua { font-family: "Jua", "Gowun Dodum", sans-serif; font-weight: 400; }
-.en, .ex-en, .ch-word, .wt-line, td.en { font-family: "Nunito", "Gowun Dodum", sans-serif; }
-b, strong { color: inherit; }
+/* 배경의 은은한 빛 번짐 */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(60vmax 45vmax at 85% 10%, rgba(92, 70, 190, .45), transparent 60%),
+    radial-gradient(50vmax 40vmax at 5% 45%, rgba(40, 60, 150, .40), transparent 60%),
+    radial-gradient(55vmax 40vmax at 70% 95%, rgba(150, 120, 40, .28), transparent 60%),
+    linear-gradient(180deg, #11132a 0%, #0d0f1c 50%, #10121f 100%);
+}
+h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.03em; }
+b, strong { font-weight: 700; color: inherit; }
 a { color: var(--tip); }
+
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+}
 
 /* ===== 헤더 & 탭 ===== */
 .site-header {
   position: sticky; top: 0; z-index: 20;
-  background: rgba(255, 250, 240, .96);
-  backdrop-filter: blur(6px);
-  border-bottom: 2px solid var(--line);
-  padding: 12px 16px 0;
+  background: rgba(16, 18, 36, .72);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  border-bottom: 1px solid var(--glass-line);
+  padding: 14px 16px 0;
 }
 .brand { display: flex; align-items: center; gap: 12px; max-width: 1080px; margin: 0 auto; }
-.brand h1 { margin: 0; font-size: 26px; line-height: 1.2; }
-.brand p { margin: 0; color: var(--ink-soft); font-size: 14px; }
+.brand h1 { margin: 0; font-size: 24px; line-height: 1.2; }
+.brand p { margin: 0; color: var(--text-soft); font-size: 14px; }
 .brand-logo {
   display: grid; place-items: center;
-  width: 48px; height: 48px; border-radius: 14px;
-  background: var(--accent); color: #fff;
-  font: 800 16px "Nunito", sans-serif; letter-spacing: 1px;
-  box-shadow: 0 3px 0 #d65a3c; transform: rotate(-6deg);
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--yellow); color: var(--yellow-ink);
+  font-weight: 900; font-size: 14px; letter-spacing: .5px;
 }
 .tabs {
-  display: flex; gap: 6px; overflow-x: auto;
-  max-width: 1080px; margin: 10px auto 0; padding-bottom: 10px;
-  scrollbar-width: thin;
+  display: flex; gap: 8px; overflow-x: auto;
+  max-width: 1080px; margin: 12px auto 0; padding-bottom: 12px;
+  scrollbar-width: none;
 }
+.tabs::-webkit-scrollbar { display: none; }
 .tab {
   flex: 0 0 auto;
   display: flex; flex-direction: column; align-items: center;
-  min-width: 82px; padding: 6px 12px 4px;
-  border: 2px solid var(--line); border-radius: 14px;
-  background: #fff; color: var(--ink); cursor: pointer;
-  font-family: "Jua", sans-serif; font-size: 17px; line-height: 1.3;
-  transition: transform .15s, background .15s;
+  min-width: 84px; padding: 8px 14px 6px;
+  border: 1px solid var(--glass-line); border-radius: 18px;
+  background: var(--glass); color: var(--text); cursor: pointer;
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  font-family: var(--font); font-weight: 700; font-size: 16px; line-height: 1.3;
+  transition: background .2s, transform .2s, border-color .2s;
 }
-.tab small { font: 600 11px "Nunito", sans-serif; color: var(--ink-soft); }
-.tab .tab-icon { font-size: 20px; }
-.tab:hover { transform: translateY(-2px); }
+.tab small { font-weight: 600; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); }
+.tab .tab-icon { font-size: 19px; margin-bottom: 2px; }
+.tab:hover { background: var(--glass-strong); transform: translateY(-1px); }
 .tab[aria-selected="true"] {
-  background: var(--c); border-color: var(--c); color: #fff;
-  box-shadow: 0 3px 0 rgba(0,0,0,.15);
+  background: var(--yellow); border-color: var(--yellow); color: var(--yellow-ink);
+  box-shadow: 0 8px 24px rgba(247, 215, 74, .25);
 }
-.tab[aria-selected="true"] small { color: rgba(255,255,255,.9); }
+.tab[aria-selected="true"] small { color: rgba(26, 26, 34, .65); }
 
 /* ===== 본문 ===== */
-.main { max-width: 1080px; margin: 0 auto; padding: 20px 16px 60px; outline: none; }
+.main { max-width: 1080px; margin: 0 auto; padding: 24px 16px 60px; outline: none; }
+.eyebrow, .hero .eyebrow {
+  margin: 0 0 6px !important; color: var(--yellow);
+  font-weight: 800; font-size: 14px; letter-spacing: .16em; text-transform: uppercase;
+}
 .hero {
-  background: var(--tab-color); color: #fff;
-  border-radius: 24px; padding: 24px 24px 20px; margin-bottom: 18px;
-  box-shadow: var(--shadow); position: relative; overflow: hidden;
+  position: relative; overflow: hidden;
+  background: var(--glass); border: 1px solid var(--glass-line);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  border-radius: var(--radius); padding: 30px 28px 26px; margin-bottom: 18px;
+}
+.hero::before { /* 탭 색깔의 은은한 빛 */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(420px 220px at 100% 0%, color-mix(in srgb, var(--tab-color) 35%, transparent), transparent 70%);
 }
 .hero::after {
-  content: attr(data-icon); position: absolute; right: 10px; bottom: -18px;
-  font-size: 110px; opacity: .25; transform: rotate(-12deg);
+  content: attr(data-icon); position: absolute; right: 18px; bottom: -14px;
+  font-size: 104px; opacity: .18; transform: rotate(-10deg);
 }
-.hero h2 { margin: 0 0 4px; font-size: 34px; line-height: 1.2; }
-.hero h2 span { font: 800 18px "Nunito", sans-serif; opacity: .9; margin-left: 6px; }
-.hero p { margin: 6px 0 0; max-width: 720px; position: relative; z-index: 1; }
+.hero h2 { margin: 0 0 6px; font-size: 38px; line-height: 1.2; position: relative; }
+.hero h2 span { font-weight: 600; font-size: 18px; color: var(--text-soft); margin-left: 8px; letter-spacing: 0; }
+.hero p { margin: 6px 0 0; max-width: 720px; position: relative; z-index: 1; color: var(--text-soft); }
+.hero p b { color: var(--text); }
 
 .toc {
   display: flex; flex-wrap: wrap; gap: 8px;
-  background: var(--card); border: 2px dashed var(--line);
-  border-radius: var(--radius); padding: 14px; margin-bottom: 22px;
+  background: var(--glass); border: 1px solid var(--glass-line);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 26px;
 }
-.toc-title { width: 100%; font-family: "Jua"; color: var(--ink-soft); }
+.toc-title { width: 100%; font-weight: 700; color: var(--text-soft); font-size: 15px; }
 .toc a {
-  text-decoration: none; color: var(--ink);
-  background: var(--bg); border: 2px solid var(--line);
-  border-radius: 999px; padding: 2px 12px; font-size: 15px;
+  text-decoration: none; color: var(--text);
+  background: rgba(255, 255, 255, .06); border: 1px solid var(--glass-line);
+  border-radius: 999px; padding: 4px 14px; font-size: 14.5px;
+  transition: background .2s, color .2s, border-color .2s;
 }
-.toc a:hover { border-color: var(--tab-color); color: var(--tab-color); }
+.toc a:hover { background: var(--yellow); color: var(--yellow-ink); border-color: var(--yellow); }
 .toc a.has-toon::after { content: " 🎞"; }
-.toc .toc-group { width: 100%; font-family: "Jua"; margin-top: 4px; color: var(--tab-color); }
+.toc .toc-group {
+  width: 100%; margin-top: 6px; color: var(--yellow);
+  font-weight: 800; font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
+}
 
 .group-banner {
-  display: flex; align-items: center; gap: 12px;
-  margin: 36px 0 16px; padding: 14px 18px;
+  display: flex; align-items: center; gap: 16px;
+  margin: 44px 0 18px; padding: 20px 24px;
   border-radius: var(--radius);
-  background: var(--accent-soft); border-left: 8px solid var(--tab-color);
+  background: linear-gradient(120deg, rgba(247, 215, 74, .14), rgba(255, 255, 255, .04));
+  border: 1px solid rgba(247, 215, 74, .3);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
 }
 .group-banner h2 { margin: 0; font-size: 28px; }
-.group-banner p { margin: 0; color: var(--ink-soft); }
+.group-banner p { margin: 2px 0 0; color: var(--text-soft); font-size: 15px; }
 .group-num {
   display: grid; place-items: center; flex: 0 0 auto;
-  width: 44px; height: 44px; border-radius: 50%;
-  background: var(--tab-color); color: #fff; font: 800 22px "Nunito";
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--yellow); color: var(--yellow-ink); font-weight: 900; font-size: 22px;
 }
 
 .section {
-  background: var(--card); border-radius: var(--radius);
-  border: 2px solid var(--line); box-shadow: var(--shadow);
-  padding: 22px 22px 16px; margin-bottom: 22px;
+  background: var(--glass); border: 1px solid var(--glass-line);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  border-radius: var(--radius);
+  padding: 28px 26px 22px; margin-bottom: 22px;
   scroll-margin-top: 170px;
 }
 .section > h3 {
-  margin: 0 0 10px; font-size: 25px; line-height: 1.35;
-  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  margin: 0 0 12px; font-size: 24px; line-height: 1.4;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }
 .section > h3 .sec-no {
-  font: 800 14px "Nunito"; color: #fff; background: var(--tab-color);
-  border-radius: 8px; padding: 0 8px; line-height: 1.7;
+  display: grid; place-items: center; flex: 0 0 auto;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--yellow); color: var(--yellow-ink);
+  font-weight: 900; font-size: 17px; letter-spacing: 0;
 }
-.section > h3 .sec-en { font: 800 15px "Nunito"; color: var(--ink-soft); }
+.section > h3 .sec-en { font-weight: 600; font-size: 14px; color: var(--text-dim); letter-spacing: 0; }
 .section p { margin: 8px 0; }
 .section ul, .section ol { padding-left: 22px; margin: 8px 0; }
-.section li { margin: 3px 0; }
-.mark { background: linear-gradient(transparent 55%, var(--hl) 55%); font-weight: 700; }
+.section li { margin: 4px 0; }
+.mark { background: linear-gradient(transparent 58%, rgba(247, 215, 74, .38) 58%); font-weight: 700; color: var(--text); }
 .red { color: var(--bad); font-weight: 700; }
 .blue { color: var(--tip); font-weight: 700; }
 .green { color: var(--good); font-weight: 700; }
-.strike { text-decoration: line-through; text-decoration-color: var(--bad); text-decoration-thickness: 2px; color: var(--ink-soft); }
+.strike { text-decoration: line-through; text-decoration-color: var(--bad); text-decoration-thickness: 2px; color: var(--text-dim); }
+.en { font-weight: 600; }
 
 /* 공식 상자 */
 .formula {
   display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
-  background: #2b2a33; color: #fff; border-radius: 14px;
-  padding: 12px 16px; margin: 12px 0; font-family: "Jua"; font-size: 19px;
+  background: rgba(0, 0, 0, .28); border: 1px solid var(--glass-line); border-radius: 18px;
+  padding: 12px 16px; margin: 12px 0; font-weight: 700; font-size: 17px;
 }
-.formula .fx { background: rgba(255,255,255,.12); border-radius: 8px; padding: 0 10px; }
-.formula .fx.k { background: var(--tab-color); }
-.formula .op { opacity: .7; }
+.formula .fx { background: rgba(255, 255, 255, .09); border-radius: 10px; padding: 1px 11px; }
+.formula .fx.k { background: var(--yellow); color: var(--yellow-ink); }
+.formula .op { color: var(--text-dim); }
 
 /* 팁/주의 박스 */
-.box { border-radius: 14px; padding: 12px 16px; margin: 12px 0; }
-.box::before { font-family: "Jua"; display: block; margin-bottom: 2px; }
-.box.tip { background: var(--tip-soft); }
-.box.tip::before { content: "💡 꿀팁"; color: var(--tip); }
-.box.warn { background: var(--bad-soft); }
-.box.warn::before { content: "⚠️ 조심!"; color: var(--bad); }
-.box.memo { background: var(--good-soft); }
-.box.memo::before { content: "📌 외워요"; color: var(--good); }
-.box.more { background: #f3eefe; }
-.box.more::before { content: "🚀 한 걸음 더"; color: #7a4fd6; }
+.box { border-radius: 18px; padding: 14px 18px; margin: 12px 0; border: 1px solid; }
+.box::before { display: block; margin-bottom: 2px; font-weight: 800; font-size: 13px; letter-spacing: .1em; }
+.box.tip { background: rgba(143, 180, 255, .1); border-color: rgba(143, 180, 255, .28); }
+.box.tip::before { content: "💡 TIP · 꿀팁"; color: var(--tip); }
+.box.warn { background: rgba(255, 123, 123, .1); border-color: rgba(255, 123, 123, .3); }
+.box.warn::before { content: "⚠️ CAREFUL · 조심!"; color: var(--bad); }
+.box.memo { background: rgba(95, 227, 161, .09); border-color: rgba(95, 227, 161, .28); }
+.box.memo::before { content: "📌 MEMO · 외워요"; color: var(--good); }
+.box.more { background: rgba(183, 156, 255, .1); border-color: rgba(183, 156, 255, .3); }
+.box.more::before { content: "🚀 MORE · 한 걸음 더"; color: var(--purple); }
 
 /* 표 */
-.tbl-wrap { overflow-x: auto; margin: 12px 0; border-radius: 12px; border: 2px solid var(--line); }
-table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 16px; background: #fff; }
-th, td { padding: 8px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-th { background: var(--accent-soft); font-family: "Jua"; font-weight: 400; white-space: nowrap; }
+.tbl-wrap { overflow-x: auto; margin: 14px 0; border-radius: 18px; border: 1px solid var(--glass-line); }
+table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 15.5px; background: rgba(0, 0, 0, .18); }
+th, td { overflow-wrap: normal; padding: 10px 14px; border-bottom: 1px solid rgba(255, 255, 255, .08); text-align: left; vertical-align: top; }
+th { background: rgba(255, 255, 255, .08); color: var(--yellow); font-weight: 700; white-space: nowrap; }
 tr:last-child td { border-bottom: 0; }
-tbody tr:nth-child(even) td { background: #fffdf7; }
+tbody tr:hover td { background: rgba(255, 255, 255, .03); }
 
 /* 예문 */
 .examples { list-style: none; padding: 0 !important; margin: 14px 0 6px; }
-.examples-title { font-family: "Jua"; color: var(--tab-color); margin: 16px 0 0; }
+.examples-title { font-weight: 800; color: var(--yellow); font-size: 14px; letter-spacing: .12em; margin: 20px 0 0; }
 .ex {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 12px; margin: 6px 0 !important;
-  background: var(--bg); border-radius: 12px; border: 1px solid var(--line);
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; margin: 8px 0 !important;
+  background: rgba(255, 255, 255, .045); border-radius: 16px; border: 1px solid rgba(255, 255, 255, .08);
 }
 .ex-body { flex: 1; min-width: 0; }
-.ex-en { font-size: 18px; font-weight: 600; line-height: 1.5; }
-.ex-en b { color: var(--tab-color); }
-.ex-ko { color: var(--ink-soft); font-size: 15px; line-height: 1.5; }
-.ex-no { color: var(--bad); }
-.ex.wrong .ex-en { text-decoration: line-through; text-decoration-color: var(--bad); opacity: .75; }
-.ex.wrong::before { content: "✗"; color: var(--bad); font: 800 18px "Nunito"; }
+.ex-en { font-size: 18px; font-weight: 700; line-height: 1.5; }
+.ex-en b { color: var(--yellow); }
+.ex-ko { color: var(--text-soft); font-size: 15px; line-height: 1.5; }
+.ex-ko .en { font-weight: 600; }
+.ex.wrong .ex-en { text-decoration: line-through; text-decoration-color: var(--bad); color: var(--text-dim); }
+.ex.wrong::before { content: "✕"; color: var(--bad); font-weight: 900; font-size: 18px; }
 .say-btn {
-  flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
-  border: 2px solid var(--line); background: #fff; cursor: pointer; font-size: 15px;
+  flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%;
+  border: 1px solid var(--glass-line); background: rgba(255, 255, 255, .08); color: #fff; cursor: pointer; font-size: 15px;
+  transition: background .2s;
 }
-.say-btn:hover { border-color: var(--tab-color); }
+.say-btn:hover { background: var(--yellow); }
 
 /* 퀴즈 */
-.quiz { background: var(--card); border-radius: var(--radius); border: 3px solid var(--tab-color); padding: 20px; margin-top: 30px; }
-.quiz h3 { margin: 0 0 10px; font-size: 25px; }
-.q { border-bottom: 1px dashed var(--line); padding: 10px 0; }
-.q:last-child { border-bottom: 0; }
-.q-text { font-weight: 700; }
-.q-text .en { font-weight: 700; }
-.q-btn {
-  margin-top: 6px; border: 0; border-radius: 999px; padding: 3px 14px;
-  background: var(--accent-soft); color: var(--ink); font-family: "Jua"; font-size: 15px; cursor: pointer;
+.quiz {
+  background: var(--glass); border: 1px solid rgba(247, 215, 74, .35);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  border-radius: var(--radius); padding: 26px; margin-top: 34px;
 }
-.q-ans { display: none; margin-top: 6px; background: var(--good-soft); border-radius: 10px; padding: 8px 12px; }
+.quiz h3 { margin: 0 0 10px; font-size: 26px; }
+.q { border-bottom: 1px solid rgba(255, 255, 255, .08); padding: 14px 0; }
+.q:last-child { border-bottom: 0; }
+.q-text { font-weight: 600; }
+.q-btn {
+  margin-top: 10px; border: 0; border-radius: 999px; padding: 8px 20px;
+  background: var(--yellow); color: var(--yellow-ink); font-family: var(--font); font-weight: 800; font-size: 14px; cursor: pointer;
+}
+.q.open .q-btn { background: rgba(255, 255, 255, .1); color: var(--text); }
+.q-ans { display: none; margin-top: 10px; background: rgba(95, 227, 161, .1); border: 1px solid rgba(95, 227, 161, .28); border-radius: 14px; padding: 10px 14px; }
 .q.open .q-ans { display: block; }
 
 /* ===== 웹툰 ===== */
 .webtoon {
-  margin: 18px auto 8px; max-width: 560px;
-  background: #fff; border: 3px solid var(--ink); border-radius: 16px;
-  padding: 0 0 12px; overflow: hidden;
+  margin: 22px auto 8px; max-width: 560px;
+  background: rgba(0, 0, 0, .3); border: 1px solid var(--glass-line); border-radius: 22px;
+  padding: 0 0 14px; overflow: hidden;
 }
 .wt-head {
-  background: var(--ink); color: #fff; padding: 8px 14px;
-  display: flex; align-items: center; gap: 8px; font-family: "Jua"; font-size: 19px;
+  background: rgba(255, 255, 255, .07); color: #fff; padding: 12px 16px;
+  border-bottom: 1px solid var(--glass-line);
+  display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; line-height: 1.4;
 }
-.wt-head .wt-badge { white-space: nowrap; flex: 0 0 auto; background: var(--tab-color); border-radius: 6px; padding: 0 8px; font-size: 14px; }
-.wt-toggle { white-space: nowrap; flex: 0 0 auto; margin-left: auto; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.5); border-radius: 8px; font: 14px "Jua"; cursor: pointer; padding: 0 8px; }
+.wt-head .wt-badge {
+  white-space: nowrap; flex: 0 0 auto; background: var(--yellow); color: var(--yellow-ink);
+  border-radius: 999px; padding: 1px 10px; font-size: 12px; letter-spacing: .08em;
+}
+.wt-toggle {
+  white-space: nowrap; flex: 0 0 auto; margin-left: auto; background: rgba(255, 255, 255, .08); color: #fff;
+  border: 1px solid var(--glass-line); border-radius: 999px; font: 600 13px var(--font); cursor: pointer; padding: 3px 12px;
+}
 .webtoon.folded .wt-panels { display: none; }
 .webtoon.folded { padding-bottom: 0; }
-.wt-panels { padding: 12px 12px 0; display: grid; gap: 12px; }
+.wt-panels { padding: 14px 14px 0; display: grid; gap: 12px; }
 
 .panel {
   position: relative; border: 3px solid var(--ink); border-radius: 6px;
@@ -240,12 +299,12 @@ tbody tr:nth-child(even) td { background: #fffdf7; }
 .panel.bg-night { background: linear-gradient(#2d2f5c, #4b4f8a); color: #fff; }
 .panel.bg-shock { background: repeating-conic-gradient(#fff3c4 0 10deg, #ffe08a 10deg 20deg); }
 .panel.bg-sepia { background: linear-gradient(#efe1c6, #f9f0df); }
-.panel.bg-sepia::before { content: "과거"; position: absolute; left: 8px; bottom: 6px; font: 13px "Jua"; color: #8a6b3c; opacity: .8; }
+.panel.bg-sepia::before { content: "과거"; position: absolute; left: 8px; bottom: 6px; font: 13px var(--font); color: #8a6b3c; opacity: .8; }
 .panel.bg-sepia.now::before { content: "지금"; }
 
 .panel-no {
   position: absolute; top: 0; left: 0; z-index: 2;
-  background: var(--ink); color: #fff; font: 800 12px "Nunito";
+  background: var(--ink); color: #fff; font: 800 12px var(--font);
   padding: 0 7px 1px; border-bottom-right-radius: 6px;
 }
 .narr {
@@ -254,9 +313,9 @@ tbody tr:nth-child(even) td { background: #fffdf7; }
   padding: 3px 10px; margin: 6px 0 4px 10px; font-size: 15px; line-height: 1.5;
   box-shadow: 2px 2px 0 var(--ink);
 }
-.fx {
+.wt-fx {
   position: absolute; right: 10px; top: 10px; z-index: 3;
-  font: 30px "Jua"; color: var(--accent); transform: rotate(10deg);
+  font: 30px var(--font); color: var(--accent); transform: rotate(10deg);
   -webkit-text-stroke: 1.5px var(--ink); paint-order: stroke fill;
   text-shadow: 2px 2px 0 var(--ink);
 }
@@ -292,7 +351,7 @@ tbody tr:nth-child(even) td { background: #fffdf7; }
   border: 8px solid transparent; border-top-color: var(--ink); border-bottom: 0;
 }
 .ch-say.think { border-style: dashed; border-radius: 22px; }
-.ch-say.shout { font-family: "Jua"; font-size: 16px; border-width: 3px; }
+.ch-say.shout { font-family: var(--font); font-size: 16px; border-width: 3px; }
 .ch-body {
   --cc: #8aa4ff;
   position: relative; min-width: 70px; height: 80px; padding: 0 12px;
@@ -340,7 +399,7 @@ tbody tr:nth-child(even) td { background: #fffdf7; }
 .m-love .eye { background: transparent; }
 .m-love .eye::after { content: "♥"; background: none; color: #ff3b6b; top: -6px; left: -1px; width: auto; height: auto; font-size: 14px; }
 .m-dizzy .eye { background: transparent; }
-.m-dizzy .eye::after { content: "@"; background: none; color: var(--ink); top: -7px; left: -1px; width: auto; height: auto; font: 800 13px "Nunito"; }
+.m-dizzy .eye::after { content: "@"; background: none; color: var(--ink); top: -7px; left: -1px; width: auto; height: auto; font: 800 13px var(--font); }
 .m-dizzy .mouth { border-radius: 50%; width: 10px; height: 6px; border: 3px solid var(--ink); }
 
 /* 캐릭터 색 */
@@ -364,7 +423,7 @@ tbody tr:nth-child(even) td { background: #fffdf7; }
 .st-big .ch-face { top: 20px; transform: translateX(-50%) scale(1.15); }
 .st-big .ch-word { font-size: 25px; }
 .st-ghost .ch-body { opacity: .4; border-style: dashed; }
-.st-x .ch-body::after { content: "✕"; right: auto; left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -55%); width: auto; height: auto; background: none; color: var(--bad); font: 800 70px/1 "Nunito"; opacity: .85; }
+.st-x .ch-body::after { content: "✕"; right: auto; left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -55%); width: auto; height: auto; background: none; color: var(--bad); font: 800 70px/1 var(--font); opacity: .85; }
 .st-jump .ch-body { transform: translateY(-14px) rotate(-6deg); }
 .st-tilt .ch-body { transform: rotate(8deg); }
 .st-flip .ch-body { transform: scaleX(-1); }
@@ -375,7 +434,7 @@ tbody tr:nth-child(even) td { background: #fffdf7; }
 .ch-hold {
   position: absolute; right: -16px; top: 30px; z-index: 2;
   background: #fff; border: 2px solid var(--ink); border-radius: 10px;
-  padding: 0 7px; font: 800 17px "Nunito"; color: var(--bad);
+  padding: 0 7px; font: 800 17px var(--font); color: var(--bad);
   transform: rotate(12deg); box-shadow: 2px 2px 0 var(--ink);
   white-space: nowrap;
 }
@@ -385,43 +444,46 @@ tbody tr:nth-child(even) td { background: #fffdf7; }
   font-size: 22px; line-height: 1;
 }
 .ch-tag {
-  margin-top: 14px; font: 13px "Jua"; color: var(--ink-soft); white-space: nowrap;
+  margin-top: 14px; font: 13px var(--font); color: var(--ink-soft); white-space: nowrap;
 }
 .bg-night .ch-tag { color: #e8e8ff; }
 
 .prop { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; font-size: 40px; line-height: 1.1; }
-.prop small { font: 13px "Jua"; color: var(--ink-soft); }
+.prop small { font: 13px var(--font); color: var(--ink-soft); }
 .prop .ch-say { font-size: 14px; }
 .bg-night .prop small { color: #e8e8ff; }
-.arrow { align-self: center; font: 800 30px "Nunito"; color: var(--ink); opacity: .7; }
+.arrow { align-self: center; font: 800 30px var(--font); color: var(--ink); opacity: .7; }
 .bg-night .arrow { color: #fff; }
+
 
 /* 맨 위로 */
 .to-top {
   position: fixed; right: 16px; bottom: 16px; z-index: 30;
-  width: 46px; height: 46px; border-radius: 50%; border: 0;
-  background: var(--tab-color); color: #fff; font-size: 18px; cursor: pointer;
-  box-shadow: 0 3px 0 rgba(0,0,0,.2); opacity: 0; pointer-events: none; transition: opacity .2s;
+  width: 48px; height: 48px; border-radius: 50%; border: 0;
+  background: var(--yellow); color: var(--yellow-ink); font-size: 16px; font-weight: 900; cursor: pointer;
+  box-shadow: 0 8px 24px rgba(247, 215, 74, .3); opacity: 0; pointer-events: none; transition: opacity .2s;
 }
 .to-top.show { opacity: 1; pointer-events: auto; }
 
-.site-footer { text-align: center; color: var(--ink-soft); font-size: 14px; padding: 0 16px 40px; }
+.site-footer { text-align: center; color: var(--text-dim); font-size: 14px; padding: 0 16px 40px; }
 
 @media (max-width: 640px) {
   body { font-size: 16px; }
-  .brand h1 { font-size: 22px; }
+  .brand h1 { font-size: 21px; }
   .brand p { display: none; }
-  .tab { min-width: 68px; padding: 4px 8px 2px; font-size: 15px; }
-  .hero { padding: 20px 18px 16px; }
-  .hero h2 { font-size: 28px; }
-  .section { padding: 18px 14px 12px; scroll-margin-top: 140px; }
-  .section > h3 { font-size: 22px; }
+  .tab { min-width: 70px; padding: 6px 10px 4px; font-size: 14.5px; }
+  .hero { padding: 24px 20px 20px; }
+  .hero h2 { font-size: 30px; }
+  .section { padding: 22px 16px 16px; scroll-margin-top: 140px; }
+  .section > h3 { font-size: 21px; }
+  .group-banner { padding: 16px 18px; }
+  .group-banner h2 { font-size: 23px; }
   .ch-body { min-width: 58px; height: 72px; padding: 0 8px; }
   .ch-word { font-size: 18px; }
   .ch-say { font-size: 13px; max-width: 130px; padding: 3px 7px; }
   .st-big .ch-body { min-width: 76px; height: 88px; }
   .st-big .ch-word { font-size: 21px; }
-  .fx { font-size: 24px; }
+  .wt-fx { font-size: 24px; }
   .prop { font-size: 32px; }
 }
 

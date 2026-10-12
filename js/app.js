@@ -40,7 +40,7 @@
         : `<div class="wt-line ${p.line.ok ? 'ok' : 'no'}">${p.line.t}</div>`) : '';
       return `<div class="panel bg-${p.bg || 'paper'}${p.now ? ' now' : ''}">
         <span class="panel-no">${i + 1}</span>
-        ${p.fx ? `<div class="fx">${p.fx}</div>` : ''}
+        ${p.fx ? `<div class="wt-fx">${p.fx}</div>` : ''}
         ${p.narr ? `<div class="narr">${p.narr}</div>` : ''}
         <div class="stage">${(p.cast || []).map(castHTML).join('')}</div>
         ${line}
@@ -86,13 +86,14 @@
         ${s.after || ''}
       </section>`;
     });
-    const quiz = t.quiz && t.quiz.length ? `<div class="quiz" id="${t.id}-quiz"><h3>🧩 확인 퀴즈</h3>${t.quiz.map(([q, a], i) => `
+    const quiz = t.quiz && t.quiz.length ? `<div class="quiz" id="${t.id}-quiz"><p class="eyebrow">Quiz · Check</p><h3>🧩 확인 퀴즈</h3>${t.quiz.map(([q, a], i) => `
       <div class="q"><div class="q-text">Q${i + 1}. ${q}</div>
       <button class="q-btn" type="button">정답 보기</button><div class="q-ans">${a}</div></div>`).join('')}</div>` : '';
     toc += quiz ? `<a href="#${t.id}/quiz">🧩 퀴즈</a>` : '';
 
     main.innerHTML = `
       <div class="hero" style="--tab-color:${t.color}" data-icon="${t.icon}">
+        <p class="eyebrow">Part ${String(data.indexOf(t) + 1).padStart(2, '0')} · ${t.en}</p>
         <h2>${t.name}<span>${t.en}</span></h2><p>${t.intro}</p>
       </div>
       <nav class="toc" aria-label="목차"><span class="toc-title">📚 이 탭에서 배울 것 (🎞 = 웹툰 있음)</span>${toc}</nav>
