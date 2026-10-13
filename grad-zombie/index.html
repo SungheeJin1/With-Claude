@@ -21,14 +21,15 @@
 <body>
 <header class="top">
   <button class="logo" type="button" data-go="home" aria-label="홈으로">논문-좀비</button>
-  <span class="top-streak" id="topStreak" hidden></span>
+  <button class="top-streak" id="topStreak" type="button" data-go="zombie" aria-label="좀비 추격 보기" hidden></button>
   <button class="burger" id="burger" type="button" aria-label="메뉴 열기" aria-controls="drawer" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 </header>
 
 <nav class="drawer" id="drawer" aria-label="메뉴" hidden>
-  <button type="button" data-go="home"><b>🧟</b> 오늘의 추격</button>
+  <button type="button" data-go="home"><b>✓</b> 오늘의 미션</button>
+  <button type="button" data-go="zombie"><b>🧟</b> 좀비 추격</button>
   <button type="button" data-go="library"><b>📚</b> 논문 서재</button>
   <button type="button" data-go="add"><b>＋</b> 논문 추가 · 분석</button>
   <button type="button" data-go="history"><b>📅</b> 출석 기록</button>

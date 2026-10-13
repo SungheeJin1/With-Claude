@@ -25,14 +25,14 @@ async function checkin(type, title = '') {
   await Store.saveProfile(S.profile);
   updateTop();
   if (first) toast('🏃 오늘 출석 완료! 좀비에게서 도망쳤어요');
-  if (currentView() === 'home') render();
+  if (['home', 'zombie'].includes(currentView())) render();
 }
 
 function updateTop() {
   const st = Chase.compute(S.profile);
   const el = $('#topStreak');
   el.hidden = !S.ready;
-  el.textContent = st.checkedToday ? `🔥 ${st.streak}일 연속` : `🧟 ${st.distance}칸`;
+  el.textContent = `🔥 ${st.streak}일 연속`;
 }
 
 /* ===== 라우팅 ===== */
@@ -45,7 +45,7 @@ window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); }
 
 function render() {
   closeDrawer();
-  if (!S.ready) { main.innerHTML = `<div class="card empty"><div class="big">🧟</div><p class="soft">좀비 깨우는 중…</p></div>`; return; }
+  if (!S.ready) { main.innerHTML = `<div class="card empty"><div class="big">📚</div><p class="soft">불러오는 중…</p></div>`; return; }
   const [view, arg] = location.hash.slice(1).split('/');
   $$('#drawer button').forEach(b => b.toggleAttribute('aria-current', b.dataset.go === (view || 'home')));
   switch (view) {
@@ -53,7 +53,8 @@ function render() {
     case 'add': main.innerHTML = viewAdd(); afterAdd(); break;
     case 'history': main.innerHTML = viewHistory(); afterHistory(); break;
     case 'settings': main.innerHTML = viewSettings(); afterSettings(); break;
-    default: main.innerHTML = viewHome(); afterHome();
+    case 'zombie': main.innerHTML = viewZombie(); afterZombie(); break;
+    default: main.innerHTML = viewHome();
   }
 }
 
@@ -75,10 +76,41 @@ function sceneHTML(st) {
 
 function viewHome() {
   const st = Chase.compute(S.profile);
-  const left = Chase.msUntilMidnight();
-  const hh = Math.floor(left / 3600000), mm = Math.floor(left % 3600000 / 60000);
   const today = S.profile.log[dayKey()] || [];
   const did = t => today.some(a => a.type === t || (t === 'analyze' && a.type === 'translate'));
+  const recent = [...S.papers].sort((a, b) => (b.openedAt || b.createdAt) - (a.openedAt || a.createdAt))[0];
+
+  return `
+  <section class="card">
+    <p class="eyebrow">Today's Mission</p>
+    <h2 class="h2">하나만 해도 출석이에요</h2>
+    <div class="status-line">
+      ${st.checkedToday ? '<span class="pill green">오늘 출석 ✓</span>' : '<span class="pill ghost">오늘 미출석</span>'}
+      <span class="dim">🔥 ${st.streak}일 연속 · 총 ${st.days}일</span>
+    </div>
+    <ul class="missions">
+      <li class="${did('open') ? 'done' : ''}"><span class="chk">${did('open') ? '✓' : '1'}</span>서재에서 논문 하나 펼쳐 보기</li>
+      <li class="${did('analyze') || did('add') ? 'done' : ''}"><span class="chk">${did('analyze') || did('add') ? '✓' : '2'}</span>새 논문 넣고 요약·전문 해석 받기</li>
+      <li class="${did('ask') ? 'done' : ''}"><span class="chk">${did('ask') ? '✓' : '3'}</span>논문에 대해 Claude에게 질문하기</li>
+    </ul>
+    <button class="btn" type="button" data-go="${S.papers.length ? 'library' : 'add'}">${S.papers.length ? '논문 서재 열기' : '첫 논문 넣으러 가기'}</button>
+  </section>
+
+  ${recent ? `
+  <section class="card glow">
+    <p class="eyebrow">Next · Keep Reading</p>
+    <h2 class="h2">${esc(recent.analysis?.titleKo || recent.title)}</h2>
+    <p class="soft" style="margin:0">${esc(recent.analysis?.oneLine || '아직 분석 전이에요. 펼쳐서 분석을 시작해 보세요.')}</p>
+    <p style="margin:14px 0 0">${progressPill(recent)}</p>
+    <button class="btn" type="button" data-open="${recent.id}">이어서 읽기</button>
+  </section>` : ''}
+
+  <p class="notice">안내 · 논문을 펼치거나, 분석·해석하거나, Claude에게 질문하면 그날 출석이 돼요. 출석을 거르면 무슨 일이 생기는지는 메뉴의 '좀비 추격'에서 확인하세요.</p>`;
+}
+function viewZombie() {
+  const st = Chase.compute(S.profile);
+  const left = Chase.msUntilMidnight();
+  const hh = Math.floor(left / 3600000), mm = Math.floor(left % 3600000 / 60000);
   let title, desc;
   if (st.caught) {
     title = '좀비에게 잡혔어요…';
@@ -91,7 +123,6 @@ function viewHome() {
     desc = `자정까지 <b>${hh}시간 ${mm}분</b>. 오늘 아무것도 안 하면 좀비가 ${st.ifMiss === 0 ? '<b>당신을 잡아요</b>' : `<b>${st.distance - st.ifMiss}칸</b> 다가와요 (→ ${st.ifMiss}칸)`}.`;
   }
   const danger = !st.checkedToday && st.distance <= 3;
-  const recent = [...S.papers].sort((a, b) => (b.openedAt || b.createdAt) - (a.openedAt || a.createdAt))[0];
 
   return `
   <section class="card glow">
@@ -111,33 +142,12 @@ function viewHome() {
       <div class="stat"><b>${st.days}일</b><span>총 출석</span></div>
     </div>
   </section>
-
-  <section class="card">
-    <p class="eyebrow">Today's Mission</p>
-    <h2 class="h2">하나만 해도 출석이에요</h2>
-    <ul class="missions">
-      <li class="${did('open') ? 'done' : ''}"><span class="chk">${did('open') ? '✓' : '1'}</span>서재에서 논문 하나 펼쳐 보기</li>
-      <li class="${did('analyze') || did('add') ? 'done' : ''}"><span class="chk">${did('analyze') || did('add') ? '✓' : '2'}</span>새 논문 넣고 요약·전문 해석 받기</li>
-      <li class="${did('ask') ? 'done' : ''}"><span class="chk">${did('ask') ? '✓' : '3'}</span>논문에 대해 Claude에게 질문하기</li>
-    </ul>
-    <button class="btn" type="button" data-go="${S.papers.length ? 'library' : 'add'}">${S.papers.length ? '논문 서재 열기' : '첫 논문 넣으러 가기'}</button>
-  </section>
-
-  ${recent ? `
-  <section class="card glow">
-    <p class="eyebrow">Next · Keep Reading</p>
-    <h2 class="h2">${esc(recent.analysis?.titleKo || recent.title)}</h2>
-    <p class="soft" style="margin:0">${esc(recent.analysis?.oneLine || '아직 분석 전이에요. 펼쳐서 분석을 시작해 보세요.')}</p>
-    <p style="margin:14px 0 0">${progressPill(recent)}</p>
-    <button class="btn" type="button" data-open="${recent.id}">이어서 읽기</button>
-  </section>` : ''}
-
   <p class="notice">안내 · 논문을 펼치거나, 분석·해석하거나, Claude에게 질문하면 그날 출석이 돼요. 출석하면 좀비에게서 2칸 도망치고, 하루를 그냥 보내면 좀비가 3칸 다가와요. 날짜는 이 기기 시간 기준 자정에 바뀌어요.</p>`;
 }
-function afterHome() {
+function afterZombie() {
   // 출석 전에는 1분마다 좀비가 조금씩 다가와요
   clearInterval(S.homeTimer);
-  S.homeTimer = setInterval(() => { if (currentView() === 'home') render(); else clearInterval(S.homeTimer); }, 60000);
+  S.homeTimer = setInterval(() => { if (currentView() === 'zombie') render(); else clearInterval(S.homeTimer); }, 60000);
 }
 
 function progressPill(p) {

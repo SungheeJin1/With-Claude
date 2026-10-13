@@ -64,7 +64,7 @@ a { color: var(--tip); }
   font-family: var(--hand); font-size: 34px; line-height: 1; color: #fff;
   transform: rotate(-3deg);
 }
-.top-streak {
+.top-streak { border: 0;
   margin-left: auto; font-size: 13px; font-weight: 700;
   padding: 4px 10px; border-radius: 999px;
   background: rgba(247, 215, 74, .14); color: var(--yellow);

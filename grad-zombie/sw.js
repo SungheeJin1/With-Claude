@@ -1,5 +1,5 @@
 /* 오프라인에서도 열리도록 앱 파일을 저장해 두는 서비스 워커 (Claude API 요청은 건드리지 않아요) */
-const CACHE = 'gz-v1';
+const CACHE = 'gz-v2';
 const FILES = [
   './', './index.html', './css/style.css', './manifest.webmanifest',
   '../fonts/PretendardVariable.woff2', './icons/icon-192.png', './icons/icon-512.png',
