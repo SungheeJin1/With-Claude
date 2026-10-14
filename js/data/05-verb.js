@@ -336,43 +336,6 @@ GRAMMAR.push({
         ['When I was little, my dad <b>would</b> read me a story every night.', '어렸을 때 아빠는 매일 밤 이야기책을 읽어 주시곤 했어요.'],
       ],
     },
-    {
-      id: 'modal-perfect', title: '조동사 + have p.p. (과거에 대한 추측·후회)', en: 'should have p.p. …',
-      html: `
-        <p>조동사 뒤에 <b>have + p.p.</b>를 붙이면 이미 지나간 <b>과거 일</b>에 대해 추측하거나 후회하는 말이 돼요.</p>
-        ${H.formula('주어', '+', '*조동사', '+', '*have', '+', 'p.p.')}
-        ${H.table(['표현', '뜻', '예'], [
-          [en('should have p.p.'), '~했어야 했는데 (안 해서 후회)', en('I <b>should have studied</b> harder.') + '<br>공부를 더 열심히 했어야 했는데.'],
-          [en('shouldn’t have p.p.'), '~하지 말았어야 했는데 (해서 후회)', en('I <b>shouldn’t have eaten</b> so much.') + '<br>그렇게 많이 먹지 말았어야 했는데.'],
-          [en('must have p.p.'), '~했음에 틀림없다 (강한 추측)', en('She <b>must have been</b> tired.') + '<br>그녀는 피곤했던 게 틀림없어.'],
-          [en('may / might have p.p.'), '~했을지도 모른다 (약한 추측)', en('He <b>may have missed</b> the bus.') + '<br>그는 버스를 놓쳤을지도 몰라.'],
-          [en('can’t have p.p.'), '~했을 리가 없다', en('She <b>can’t have said</b> that.') + '<br>그녀가 그런 말을 했을 리가 없어.'],
-          [en('could have p.p.'), '~할 수도 있었는데 (안 했음)', en('You <b>could have won</b>!') + '<br>너 이길 수도 있었는데!'],
-        ])}
-        ${H.box('tip', '<b>p.p.(과거분사)</b>가 처음이라면 다음 묶음 <b>3. 시제</b>의 <b>과거 시제</b> 항목에 있는 불규칙 동사 표를 먼저 보세요. 가정법 과거완료의 결과 쪽(<span class="en">would have p.p.</span>)도 같은 모양이라서, 시제 묶음의 <b>가정법 과거완료</b>와 함께 보면 좋아요.')}
-      `,
-      examples: [
-        ['I <b>should have brought</b> an umbrella. I’m all wet!', '우산을 가져왔어야 했는데. 다 젖었어!'],
-        ['The ground is wet. It <b>must have rained</b> last night.', '땅이 젖었네. 어젯밤에 비가 왔던 게 틀림없어.'],
-        ['I can’t find my key. I <b>might have left</b> it at school.', '열쇠를 못 찾겠어. 학교에 두고 왔을지도 몰라.'],
-      ],
-      toon: {
-        title: '후회할 땐 should have p.p.',
-        panels: [
-          { bg: 'sepia', narr: '어제, 우산을 안 가지고 나갔어요.',
-            cast: [{ w: 'I', c: 'orange', m: 'cool', say: '비 안 오겠지~' }, { e: '☀️' }] },
-          { bg: 'night', now: true, narr: '오늘 아침, 비에 쫄딱 젖어서…', fx: '주룩주룩',
-            cast: [{ w: 'I', c: 'orange', m: 'cry' }, { e: '🌧️' }] },
-          { bg: 'lav', narr: '이미 지나간 일을 후회할 땐 <b>should have + p.p.</b>!',
-            cast: [{ w: 'should', c: 'yellow', m: 'sad' }, { w: 'have', c: 'teal', m: 'sad' }, { w: 'brought', c: 'blue', m: 'cry', tag: 'p.p.' }, { e: '☂️' }],
-            line: { t: 'I <u>should have brought</u> an umbrella. (가져왔어야 했는데…)', ok: true } },
-          { bg: 'mint', narr: '친구가 젖은 나를 보고 추측해요. 확신이 들면 <b>must have p.p.</b>',
-            cast: [{ w: 'friend', c: 'green', m: 'surprised', say: '비 맞은 게 틀림없어!' }, { w: 'must have', c: 'red', m: 'cool' }, { w: 'been', c: 'gray', m: 'normal', tag: 'p.p.' }],
-            line: { t: 'You <u>must have been</u> caught in the rain!', ok: true } },
-        ],
-      },
-    },
-
     /* ================= 3. 시제 ================= */
     { group: '시제 (Tense)', no: '3', desc: '“언제” 일어난 일인지에 따라 동사 모양이 바뀌어요. 현재 → 현재진행 → 과거 → 과거진행 → 미래 → 현재완료 → 과거완료 → 가정법과거 → 가정법과거완료 순서로 배워요.' },
     {
@@ -808,7 +771,6 @@ GRAMMAR.push({
     ['틀린 곳을 고치세요: <span class="en">She cans play the piano.</span>', '조동사에는 s가 붙지 않아요 → <span class="en">She <b>can</b> play the piano.</span>'],
     ['뜻이 어떻게 다를까요? <span class="en">You must not go.</span> / <span class="en">You don’t have to go.</span>', '앞은 “가면 안 된다”(금지), 뒤는 “안 가도 된다”(필요 없음).'],
     ['빈칸: “나는 내년에 수영할 수 있을 것이다.” <span class="en">I will ( ) ( ) ( ) swim next year.</span>', '<span class="en">be able to</span> — will과 can은 같이 못 써요.'],
-    ['우리말에 맞게: “일찍 잤어야 했는데.” <span class="en">I ( ) ( ) ( ) to bed early.</span>', '<span class="en">should have gone</span>'],
   ],
 });
 })();
