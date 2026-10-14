@@ -1,9 +1,9 @@
 /* 오프라인에서도 열리도록 사이트 파일을 저장해 두는 서비스 워커 */
-const CACHE = 'pumsa-v5';
+const CACHE = 'pumsa-v6';
 const FILES = [
   './', './index.html', './css/style.css', './manifest.webmanifest',
   './fonts/PretendardVariable.woff2', './icons/icon-192.png', './icons/icon-512.png',
-  './js/helpers.js', './js/app.js', './js/pwa.js',
+  './js/helpers.js', './js/app.js', './js/search.js', './js/pwa.js',
   './js/data/01-noun.js', './js/data/02-pronoun.js', './js/data/03-adjective.js',
   './js/data/04-adverb.js', './js/data/05-verb.js', './js/data/06-preposition.js', './js/data/07-conjunction.js', './js/data/08-interjection.js',
 ];

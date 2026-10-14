@@ -174,8 +174,17 @@ GRAMMAR.push({
         ${H.table(['개수', '표현'], [
           ['2개 중', '<span class="en"><b>One</b> is red, and <b>the other</b> is blue.</span> 하나는 빨강, 나머지 하나는 파랑.'],
           ['3개 중', '<span class="en"><b>One</b> is ~, <b>another</b> is ~, and <b>the other</b> is ~.</span>'],
-          ['여럿 중', '<span class="en"><b>Some</b> like dogs, and <b>others</b> like cats.</span> 어떤 사람들은 개를, 다른 사람들은 고양이를 좋아해.'],
+          ['여럿 중 하나 + 나머지 전부', '<span class="en"><b>One</b> is red, and <b>the others</b> are blue.</span> 하나는 빨강, 나머지는 전부 파랑.'],
+          ['여럿 중 일부 + 다른 일부', '<span class="en"><b>Some</b> like dogs, and <b>others</b> like cats.</span> 어떤 사람들은 개를, 다른 사람들은 고양이를 좋아해.'],
+          ['여럿 중 일부 + 나머지 전부', '<span class="en"><b>Some</b> are boys, and <b>the others</b> are girls.</span> 일부는 남자아이고, 나머지는 전부 여자아이야.'],
         ])}
+        ${H.table(['단어', '뜻', '외우는 법'], [
+          ['<span class="en">another</span>', '(또) 다른 하나', '<span class="en">an + other</span>이라서 <b>단수</b>만! 아직 남은 것 중 아무거나 하나'],
+          ['<span class="en">the other</span>', '나머지 하나', '<span class="en">the</span> = 딱 정해진 것. 마지막 <b>하나</b>가 남았을 때'],
+          ['<span class="en">others</span>', '다른 것들(일부)', '<span class="en">the</span>가 없으니 <b>다 끝나지 않음</b>. 아직 더 남아 있어요'],
+          ['<span class="en">the others</span>', '나머지 전부', '<span class="en">the</span> + 복수 = 남은 것 <b>모두</b>'],
+        ])}
+        ${H.box('memo', '<b>the</b>가 붙으면 “남은 걸로 끝!”, <b>the</b>가 없으면 “아직 더 있어!”')}
         <p><b>수량대명사</b>: <span class="en">some, any, many, much, all, both, each</span>가 <b>뒤에 명사 없이 혼자</b> 쓰이면 수량대명사예요. 뒤에 명사가 오면 <b>수량형용사</b>(형용사 탭)예요.</p>
         ${H.table(['', '수량형용사 (+ 명사)', '수량대명사 (혼자)'], [
           ['many', '<span class="en"><b>Many students</b> like K-pop.</span>', '<span class="en"><b>Many</b> of them like K-pop.</span>'],
@@ -187,8 +196,28 @@ GRAMMAR.push({
       examples: [
         ['I have two brothers. <b>One</b> is ten, and <b>the other</b> is seven.', '나는 남동생이 둘 있어. 한 명은 열 살, 다른 한 명은 일곱 살이야.'],
         ['This cup is dirty. Can I have <b>another</b>?', '이 컵 더러워요. 다른 거 하나 주실래요?'],
+        ['There are five apples. <b>One</b> is green, and <b>the others</b> are red.', '사과가 다섯 개 있어. 하나는 초록색이고, 나머지는 모두 빨간색이야.'],
+        ['I have three pets. <b>One</b> is a dog, <b>another</b> is a cat, and <b>the other</b> is a fish.', '나는 반려동물이 셋 있어. 하나는 개, 또 하나는 고양이, 나머지 하나는 물고기야.'],
         ['Do you have <b>any</b> questions?', '질문 있나요?'],
       ],
+      toon: {
+        title: '사탕 나눠 먹기: one, another, the other, the others',
+        panels: [
+          { bg: 'sun', narr: '사탕이 세 개 있어요. 먼저 하나를 집어요. 아무거나 하나는 <b>one</b>!',
+            cast: [{ w: 'one', c: 'red', m: 'happy', say: '첫 번째 하나는 나!' }, { e: '🍬🍬🍬' }] },
+          { bg: 'sky', narr: '아직 두 개가 남았어요. 그중 또 하나를 집으면 <b>another</b>.',
+            cast: [{ w: 'one', c: 'red', m: 'happy', st: 'small' }, { w: 'another', c: 'blue', m: 'cool', say: '남은 것 중 또 하나! an + other라서 하나만 돼.' }, { e: '🍬🍬' }] },
+          { bg: 'mint', narr: '이제 딱 하나 남았어요. 마지막 하나는 정해져 있으니까 the가 붙어서 <b>the other</b>!',
+            cast: [{ w: 'one', c: 'red', m: 'happy', st: 'small' }, { w: 'another', c: 'blue', m: 'happy', st: 'small' }, { w: 'the other', c: 'purple', m: 'smug', say: '마지막 하나는 나야. 이걸로 끝!' }],
+            line: { t: '<u>One</u> is red, <u>another</u> is blue, and <u>the other</u> is purple.', ok: true } },
+          { bg: 'lav', narr: '사탕이 열 개라면? 하나를 빼고 <b>남은 걸 전부</b> 가리킬 땐 <b>the others</b>.',
+            cast: [{ w: 'one', c: 'red', m: 'happy', st: 'small' }, { w: 'the others', c: 'yellow', m: 'love', st: 'big', say: '나머지 아홉 개 전부 우리!' }, { e: '🍬🍬🍬', tag: '× 9개' }],
+            line: { t: '<u>One</u> is mine, and <u>the others</u> are yours.', ok: true } },
+          { bg: 'rose', narr: '일부만 말하고 <b>아직 더 남았다면</b> the 없이 <b>others</b>!',
+            cast: [{ w: 'some', c: 'green', m: 'happy', say: '어떤 애들은 딸기 맛,' }, { w: 'others', c: 'orange', m: 'happy', say: '다른 애들은 포도 맛. 근데 아직 다른 맛도 있어~' }],
+            line: { t: '<u>Some</u> like strawberry, and <u>others</u> like grape.', ok: true } },
+        ],
+      },
     },
     {
       id: 'wh', title: '의문대명사 who / what / which / whose', en: 'Question pronouns',
