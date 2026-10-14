@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>신경 갈림길</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column "slide" — oscilloscope trace on top, the question as the axon stem, two boutons (choices) at the fork below. */
+:root {
+  --bg: #f3f1f6;          /* glass slide */
+  --panel: #fbfaFD;
+  --ink: #221d2e;
+  --muted: #6c6479;
+  --line: #d9d3e2;
+  --accent: #6b3fa0;      /* cresyl violet (Nissl stain) */
+  --accent-soft: #ece4f6;
+  --good: #1f7a5a;
+  --good-soft: #e1f2ea;
+  --bad: #b8325a;         /* eosin */
+  --bad-soft: #f8e3ea;
+  --trace: #6b3fa0;
+  --f-display: "Nanum Myeongjo", "Noto Serif KR", "AppleMyungjo", serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12101a; --panel: #1b1826; --ink: #ece8f4; --muted: #a59db4; --line: #312c40;
+    --accent: #b591ec; --accent-soft: #2a2140; --good: #5fd3a6; --good-soft: #15302a;
+    --bad: #f07fa0; --bad-soft: #3a1a26; --trace: #b591ec; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12101a; --panel: #1b1826; --ink: #ece8f4; --muted: #a59db4; --line: #312c40;
+  --accent: #b591ec; --accent-soft: #2a2140; --good: #5fd3a6; --good-soft: #15302a;
+  --bad: #f07fa0; --bad-soft: #3a1a26; --trace: #b591ec; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+}
+.wrap { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 48px; display: grid; gap: 18px; }
+
+header.top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.7rem, 5vw, 2.3rem); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--accent); }
+.stats { display: flex; gap: 14px; font-family: var(--f-mono); font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.stats b { color: var(--ink); font-weight: 500; }
+.atp { letter-spacing: 2px; color: var(--accent); }
+.atp .off { color: var(--line); }
+
+/* oscilloscope */
+.scope { border: 1px solid var(--line); border-radius: 6px; background: var(--panel); padding: 8px 10px 4px; }
+.scope-head { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.scope svg { display: block; width: 100%; height: 86px; }
+
+/* zone strip */
+.zones { display: flex; gap: 4px; }
+.zones span { flex: 1; height: 4px; border-radius: 2px; background: var(--line); }
+.zones span.done { background: var(--accent); }
+.zones span.now { background: var(--accent); opacity: 0.45; }
+
+.stage { display: grid; gap: 0; }
+.eyebrow { font-family: var(--f-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.question { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; display: grid; gap: 6px; }
+.question h2 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: clamp(1.15rem, 3.4vw, 1.4rem); line-height: 1.5; text-wrap: balance; }
+.question .zone-sub { color: var(--muted); font-size: 0.85rem; }
+
+.fork { display: block; width: 100%; height: 70px; }
+.fork path { fill: none; stroke: var(--line); stroke-width: 6; stroke-linecap: round; }
+.fork path.stem { stroke: var(--accent); }
+.fork path.go { stroke: var(--accent); stroke-dasharray: 200; stroke-dashoffset: 200; animation: fire 0.45s ease-out forwards; }
+.fork path.go.bad { stroke: var(--bad); }
+@keyframes fire { to { stroke-dashoffset: 0; } }
+
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.choice {
+  font: inherit; color: var(--ink); text-align: left; cursor: pointer;
+  background: var(--panel); border: 1.5px solid var(--line); border-radius: 22px 22px 8px 8px;
+  padding: 14px 16px 16px; display: grid; gap: 6px; align-content: start; min-width: 0;
+  transition: border-color 0.15s, transform 0.15s, background 0.15s;
+}
+.choice:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-2px); }
+.choice:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.choice:disabled { cursor: default; }
+.choice .side { font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; }
+.choice .txt { font-size: 0.98rem; }
+.choice.right { border-color: var(--good); background: var(--good-soft); }
+.choice.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.choice.dim { opacity: 0.55; }
+
+.feedback { border-left: 4px solid var(--good); background: var(--panel); border-radius: 0 8px 8px 0; padding: 14px 18px; display: grid; gap: 8px; }
+.feedback.bad { border-left-color: var(--bad); }
+.feedback .verdict { font-weight: 600; }
+.feedback.good .verdict { color: var(--good); }
+.feedback.bad .verdict { color: var(--bad); }
+.feedback p { margin: 0; }
+
+.btn {
+  font: inherit; font-weight: 600; cursor: pointer; justify-self: start;
+  background: var(--accent); color: var(--panel); border: 0; border-radius: 6px; padding: 10px 18px;
+}
+.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.btn.ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+.hint { color: var(--muted); font-size: 0.8rem; font-family: var(--f-mono); }
+kbd { font-family: var(--f-mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 0.78rem; }
+
+/* intro + result */
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px 22px; display: grid; gap: 14px; }
+.card h2 { margin: 0; font-family: var(--f-display); font-size: 1.45rem; text-wrap: balance; }
+.card p { margin: 0; max-width: 62ch; }
+.rules { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.route { display: flex; flex-wrap: wrap; gap: 6px; }
+.route span { font-size: 0.8rem; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; color: var(--muted); }
+.big { font-family: var(--f-mono); font-size: 2.2rem; font-variant-numeric: tabular-nums; color: var(--accent); line-height: 1.1; }
+.review { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.review li { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 4px; }
+.review .q { font-weight: 600; }
+.review .ans { color: var(--good); font-size: 0.92rem; }
+.review .why { color: var(--muted); font-size: 0.9rem; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+@media (max-width: 540px) {
+  .choices { grid-template-columns: 1fr; }
+  .fork { height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fork path.go { animation: none; stroke-dashoffset: 0; }
+  .choice { transition: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>신경 <em>갈림길</em></h1>
+    <div class="stats" aria-live="polite">
+      <span>ATP <span class="atp" id="atp"></span></span>
+      <span>갈림길 <b id="stepNo">0</b>/<b id="stepTotal">16</b></span>
+      <span>점수 <b id="score">0</b></span>
+    </div>
+  </header>
+
+  <section class="scope" aria-label="막전위 기록">
+    <div class="scope-head"><span>V<sub>m</sub> 기록 · 전류고정</span><span id="scopeNote">+40 / −70 mV</span></div>
+    <svg id="scope" viewBox="0 0 640 86" preserveAspectRatio="none" aria-hidden="true"></svg>
+  </section>
+  <div class="zones" id="zones" aria-hidden="true"></div>
+
+  <main id="main"></main>
+</div>
+
+<script>
+// ───────── 문제 데이터: 8개 구역 × 여러 문항. a = 정답, b = 오답, why = 해설 ─────────
+const ZONES = [
+  { name: "막전위와 활동전위", sub: "수상돌기 → 축삭둔덕", qs: [
+    { q: "휴지막전위(약 −70 mV)를 만드는 데 가장 크게 기여하는 것은?",
+      a: "휴지 상태에서 열려 있는 K⁺ 누출 통로를 통한 K⁺ 유출",
+      b: "Na⁺/K⁺-ATPase가 3:2로 이온을 옮기며 직접 만드는 전위차",
+      why: "휴지막은 K⁺ 투과도가 가장 높아 막전위가 E_K(약 −90 mV) 쪽으로 끌려간다. 펌프의 기전성(electrogenic) 기여는 수 mV 정도이고, 펌프의 주된 역할은 농도 기울기 유지다." },
+    { q: "세포 밖 K⁺ 농도가 정상보다 높아지면(고칼륨혈증) 뉴런의 휴지막전위는?",
+      a: "탈분극된다 (덜 음수가 된다)",
+      b: "과분극된다 (더 음수가 된다)",
+      why: "Nernst 식에서 [K⁺]out이 커지면 E_K가 덜 음수가 되고, K⁺에 가장 투과적인 휴지막도 함께 탈분극된다. 지속되면 Na⁺ 통로 비활성화로 오히려 흥분성이 떨어진다." },
+    { q: "활동전위 직후 아무리 큰 자극을 줘도 새 활동전위가 생기지 않는 절대 불응기의 주원인은?",
+      a: "전압개폐 Na⁺ 통로의 비활성화 게이트(h gate)가 닫혀 있음",
+      b: "전압개폐 K⁺ 통로가 모두 닫혀 있음",
+      why: "비활성화된 Na⁺ 통로는 막이 재분극되어야 회복된다. 지연 정류 K⁺ 통로가 열려 있는 것은 상대 불응기(과분극 후전위)에 기여한다." },
+    { q: "도약 전도에서 전압개폐 Na⁺ 통로가 밀집해 있는 곳은?",
+      a: "랑비에 결절",
+      b: "수초로 덮인 결절 사이(internode)",
+      why: "수초는 막 정전용량을 줄이고 막저항을 높여 전류가 결절 사이를 빠르게 건너뛰게 한다. 재생은 Na⁺ 통로가 몰린 결절에서만 일어난다." },
+    { q: "활동전위 정점에서 막전위가 E_Na(약 +55 mV) 쪽으로 다가가는 이유는?",
+      a: "Na⁺ 투과도가 K⁺ 투과도보다 일시적으로 훨씬 커지기 때문",
+      b: "Na⁺ 농도 기울기가 일시적으로 역전되기 때문",
+      why: "Goldman–Hodgkin–Katz 식에서 막전위는 투과도의 가중 평균이다. 한 번의 활동전위로 이동하는 이온 수는 극히 적어 농도 기울기는 거의 변하지 않는다." },
+    { q: "무수 축삭의 지름이 커지면 전도 속도는?",
+      a: "빨라진다",
+      b: "느려진다",
+      why: "지름이 커지면 축삭 내부 저항이 줄어 길이상수(λ)가 커진다. 그래서 오징어 거대축삭처럼 굵은 축삭은 수초 없이도 빠르다(무수 축삭에서 속도 ∝ √지름)." },
+  ]},
+  { name: "시냅스 전달", sub: "축삭 말단", qs: [
+    { q: "축삭 말단에서 신경전달물질 방출을 직접 촉발하는 이온 유입은?",
+      a: "전압개폐 Ca²⁺ 통로를 통한 Ca²⁺ 유입",
+      b: "전압개폐 Na⁺ 통로를 통한 Na⁺ 유입",
+      why: "활동전위가 활성대(active zone)의 Ca²⁺ 통로를 열고, 국소적으로 치솟은 Ca²⁺가 소포 융합을 일으킨다. Na⁺ 통로를 TTX로 막아도 말단을 직접 탈분극시키면 방출은 일어난다." },
+    { q: "시냅스 소포 융합에서 Ca²⁺ 센서 역할을 하는 단백질은?",
+      a: "시냅토태그민(synaptotagmin)",
+      b: "시냅신(synapsin)",
+      why: "시냅토태그민의 C2 도메인이 Ca²⁺와 결합해 SNARE 복합체의 융합을 촉발한다. 시냅신은 예비 풀 소포를 액틴 골격에 묶어 두는 단백질이다." },
+    { q: "보툴리눔 독소가 근육 마비를 일으키는 기전은?",
+      a: "SNARE 단백질을 잘라 아세틸콜린 방출을 막는다",
+      b: "아세틸콜린에스터레이스를 억제해 ACh가 쌓이게 한다",
+      why: "보툴리눔·파상풍 독소는 SNAP-25·시냅토브레빈 등을 자르는 단백질분해효소다. 콜린에스터레이스 억제는 유기인계 살충제·신경작용제의 기전이다." },
+    { q: "한 시냅스에서 짧은 간격으로 연달아 생긴 EPSP가 겹쳐 커지는 현상은?",
+      a: "시간적 합산",
+      b: "공간적 합산",
+      why: "시간적 합산은 막 시간상수(τ) 안에 다음 입력이 도착할 때 일어난다. 공간적 합산은 서로 다른 위치의 시냅스 입력이 동시에 더해지는 것이다." },
+    { q: "신경근 접합부에서 자발적으로 생기는 미니 종판전위(mEPP)는 무엇에 해당하나?",
+      a: "소포 하나에 든 ACh가 만드는 반응 (1양자)",
+      b: "운동뉴런 활동전위 한 번이 만드는 반응",
+      why: "Katz는 유발 EPP 크기가 mEPP의 정수배로 분포함을 보여 양자 가설을 세웠다. 활동전위 한 번은 수백 개 소포를 방출한다." },
+    { q: "전기적 시냅스의 구조적 실체는?",
+      a: "코넥신으로 이루어진 간극 연접",
+      b: "리간드 개폐 이온 통로",
+      why: "코넥신 6개가 코넥손을 이루고, 두 세포의 코넥손이 맞붙어 이온이 직접 통과한다. 지연이 거의 없고 양방향이며 뉴런 집단의 동기화에 쓰인다." },
+  ]},
+  { name: "신경전달물질과 수용체", sub: "시냅스 틈", qs: [
+    { q: "NMDA 수용체가 이온을 통과시키려면 무엇이 필요한가?",
+      a: "글루탐산(+글라이신) 결합과, Mg²⁺ 차단을 풀어 줄 탈분극이 동시에",
+      b: "글루탐산 결합만 있으면 된다",
+      why: "휴지 전위에서는 Mg²⁺가 통로 구멍을 막는다. 그래서 NMDA 수용체는 시냅스전·후 활동이 동시에 있을 때만 열리는 '일치 검출기'로 작동한다." },
+    { q: "GABA_A 수용체의 정체는?",
+      a: "Cl⁻를 통과시키는 이온성(리간드 개폐) 수용체",
+      b: "G단백질을 거쳐 K⁺ 통로(GIRK)를 여는 대사성 수용체",
+      why: "GABA_A는 오량체 Cl⁻ 통로로 빠른 IPSP를 만든다. GIRK를 여는 느린 억제는 대사성인 GABA_B 수용체의 작용이다." },
+    { q: "벤조디아제핀의 작용 기전은?",
+      a: "GABA_A 수용체에 알로스테릭하게 결합해 GABA의 효과를 키운다",
+      b: "GABA 재흡수 수송체를 막아 시냅스의 GABA를 늘린다",
+      why: "벤조디아제핀은 α와 γ 소단위 사이에 결합해 GABA가 있을 때 통로 개방 빈도를 늘린다. GABA 없이는 통로를 열지 못한다. 재흡수 억제는 티아가빈(GAT-1 억제제)의 기전이다." },
+    { q: "SSRI(예: 플루옥세틴)의 1차 표적은?",
+      a: "세로토닌 수송체(SERT)",
+      b: "모노아민 산화효소(MAO)",
+      why: "SSRI는 SERT를 막아 시냅스 틈의 세로토닌을 늘린다. MAO 억제제는 별개의 항우울제 계열이다. 임상 효과가 몇 주 늦게 나타나는 것은 수용체 적응 때문으로 여겨진다." },
+    { q: "이온성 수용체와 비교한 대사성(GPCR) 수용체 반응의 특징은?",
+      a: "느리게 시작하고 더 오래 지속되며 2차 전달자로 신호가 증폭된다",
+      b: "밀리초 안에 시작하고 더 빨리 끝난다",
+      why: "GPCR은 G단백질, 효소, 2차 전달자를 차례로 거쳐 수십 ms~수 초에 걸쳐 작용한다. 대신 한 수용체가 많은 분자를 활성화해 신호가 증폭된다." },
+    { q: "도파민 D1 수용체가 활성화되면 세포 안 cAMP는?",
+      a: "증가한다 (Gs/olf 연결)",
+      b: "감소한다 (Gi/o 연결)",
+      why: "D1 계열(D1, D5)은 아데닐산 고리화효소를 자극한다. D2 계열(D2–D4)은 Gi/o를 거쳐 억제한다. 선조체의 직접/간접 경로가 이 차이로 나뉜다." },
+  ]},
+  { name: "감각계", sub: "망막·달팽이관·피부", qs: [
+    { q: "어둠 속에 있는 막대세포(광수용체)의 상태는?",
+      a: "탈분극되어 글루탐산을 계속 방출한다",
+      b: "과분극되어 글루탐산 방출을 멈춘다",
+      why: "어둠에서는 cGMP가 CNG 통로를 열어 둔 '암전류'가 흘러 막전위가 약 −40 mV다. 빛은 이 세포를 과분극시켜 방출을 줄인다." },
+    { q: "광자가 로돕신을 활성화하면 일어나는 일은?",
+      a: "트랜스듀신 → PDE 활성 → cGMP 감소 → CNG 통로가 닫힌다",
+      b: "아데닐산 고리화효소 활성 → cGMP 증가 → 통로가 열린다",
+      why: "광전달 연쇄는 로돕신, 트랜스듀신(Gt), cGMP 포스포다이에스터레이스(PDE6)를 거친다. 단계마다 증폭되어 막대세포는 광자 하나에도 반응한다." },
+    { q: "달팽이관 유모세포의 기계전달 통로가 열릴 때 주로 들어오는 이온은?",
+      a: "K⁺ (내림프는 K⁺ 농도가 매우 높다)",
+      b: "Na⁺ (일반적인 세포외액처럼)",
+      why: "스테레오실리아는 K⁺가 풍부하고 약 +80 mV인 내림프에 잠겨 있다. 그래서 K⁺가 들어오며 탈분극이 일어나고, 대사 비용 없이 큰 구동력을 얻는다." },
+    { q: "달팽이관 기저막에서 고주파 소리에 가장 크게 진동하는 곳은?",
+      a: "기저부(난원창 쪽, 좁고 뻣뻣한 부분)",
+      b: "첨부(꼭대기 쪽, 넓고 유연한 부분)",
+      why: "기저막의 폭과 강성이 위치마다 달라 주파수가 공간적으로 배열된다(tonotopy, von Békésy의 진행파). 첨부는 저주파를 담당한다." },
+    { q: "감각계에서 측면 억제(lateral inhibition)의 주된 기능은?",
+      a: "경계와 대비를 날카롭게 만든다",
+      b: "약한 자극을 넓게 퍼뜨려 감도를 높인다",
+      why: "활성화된 뉴런이 이웃을 억제하면 자극 가장자리의 차이가 커진다. 망막 수평세포가 만드는 중심-주변 수용장이 대표적인 예다(마하 띠 착시)." },
+    { q: "발가락을 찧었을 때 먼저 오는 날카롭고 위치가 분명한 통증을 전달하는 섬유는?",
+      a: "Aδ 섬유 (얇은 수초, 약 5–30 m/s)",
+      b: "C 섬유 (무수, 약 0.5–2 m/s)",
+      why: "통증은 두 번 온다. 첫 통증은 빠른 Aδ, 뒤따르는 둔하고 오래가는 통증은 느린 C 섬유가 전달한다." },
+    { q: "다른 감각과 구별되는 후각 경로의 특징은?",
+      a: "시상을 거치지 않고 후각망울에서 이상피질로 바로 간다",
+      b: "반드시 시상의 외측 슬상핵을 거친다",
+      why: "후각은 시상을 거치지 않고 1차 후각피질에 도달하는 유일한 감각이다(시상 경로는 이후 안와전두피질로 가는 가지에 있다). 외측 슬상핵은 시각 중계핵이다." },
+  ]},
+  { name: "운동계", sub: "척수·기저핵·소뇌", qs: [
+    { q: "근방추(muscle spindle)가 주로 감지하는 것은?",
+      a: "근육의 길이와 늘어나는 속도",
+      b: "힘줄에 걸리는 장력",
+      why: "근방추의 Ia 구심섬유가 신장을 감지해 신장 반사를 일으킨다. 장력은 힘줄의 골지 건 기관(Ib)이 감지한다." },
+    { q: "Henneman의 크기 원리에 따르면 힘을 점점 키울 때 운동단위는 어떤 순서로 동원되나?",
+      a: "작은 운동뉴런(지근, 피로 저항)부터 큰 운동뉴런 순",
+      b: "큰 운동뉴런(속근, 큰 힘)부터 작은 운동뉴런 순",
+      why: "작은 운동뉴런은 입력 저항이 커서 같은 시냅스 전류에도 먼저 역치에 도달한다. 그래서 약한 힘은 정밀하게, 강한 힘은 나중에 더해진다." },
+    { q: "파킨슨병의 핵심 병변은?",
+      a: "흑질 치밀부의 도파민 뉴런 소실",
+      b: "소뇌 퍼킨예 세포의 소실",
+      why: "흑질-선조체 경로의 도파민이 줄면 직접 경로는 약해지고 간접 경로는 강해진다. 그 결과 운동이 줄어드는 서동, 강직, 안정 시 떨림이 나타난다." },
+    { q: "소뇌 피질의 유일한 출력 뉴런인 퍼킨예 세포가 쓰는 전달물질은?",
+      a: "GABA (억제성)",
+      b: "글루탐산 (흥분성)",
+      why: "퍼킨예 세포는 소뇌 심부핵과 전정핵을 억제한다. 소뇌는 심부핵의 흥분성 출력을 이 억제로 조각하며 운동을 보정한다." },
+    { q: "상위 운동뉴런 손상을 시사하는 소견은?",
+      a: "바빈스키 징후 양성, 경직, 반사 항진",
+      b: "근섬유속연축, 심한 근위축, 반사 소실",
+      why: "피질척수로가 손상되면 척수 반사회로의 억제가 풀린다. 근섬유속연축과 위축은 하위 운동뉴런(전각세포·말초신경) 손상의 징후다." },
+  ]},
+  { name: "학습과 기억", sub: "해마·편도체", qs: [
+    { q: "해마 CA1 시냅스에서 LTP 유도에 꼭 필요한 사건은?",
+      a: "NMDA 수용체를 통한 시냅스후 Ca²⁺ 유입",
+      b: "시냅스전 말단의 GABA 방출 증가",
+      why: "강한 자극으로 탈분극되면 Mg²⁺ 차단이 풀리고, 들어온 Ca²⁺가 CaMKII를 활성화한다. APV 같은 NMDA 길항제는 LTP 유도를 막는다." },
+    { q: "초기 LTP(E-LTP)에서 시냅스가 강해지는 주된 방식은?",
+      a: "시냅스후막에 AMPA 수용체가 추가로 삽입된다",
+      b: "시냅스후막의 NMDA 수용체가 제거된다",
+      why: "CaMKII가 AMPA 수용체를 인산화하고 막으로의 이동을 촉진한다. 그래서 '침묵 시냅스'가 깨어나기도 한다. 후기 LTP에는 유전자 발현과 단백질 합성이 필요하다." },
+    { q: "양측 내측두엽을 제거한 환자 H.M.에게서 나타난 기억 양상은?",
+      a: "새로운 서술 기억은 못 만들지만 거울 따라 그리기 같은 운동 기술은 배운다",
+      b: "서술 기억과 절차 기억 모두 새로 만들지 못한다",
+      why: "H.M.은 심한 순행성 기억상실을 보였지만 연습할수록 거울 그리기 실력이 늘었다. 이 사례로 기억 체계가 해부학적으로 나뉜다는 것이 드러났다." },
+    { q: "군소(Aplysia)의 단기 민감화를 매개하는 신호 경로는?",
+      a: "세로토닌 → cAMP → PKA → 감각뉴런 말단의 방출 증가",
+      b: "아세틸콜린 감소 → 감각뉴런의 과분극",
+      why: "Kandel의 연구에서 꼬리 자극은 세로토닌을 방출시키고, PKA가 K⁺ 통로를 인산화해 활동전위를 넓혀 방출을 늘린다. 장기 민감화에는 CREB를 통한 유전자 발현이 필요하다." },
+    { q: "스파이크 타이밍 의존 가소성(STDP)에서 시냅스전 발화가 시냅스후 발화보다 수~수십 ms 앞서면?",
+      a: "LTP (강화)",
+      b: "LTD (약화)",
+      why: "입력이 출력을 '원인'처럼 앞서면 강화되고, 순서가 뒤집히면 약화된다. Hebb 규칙에 시간의 방향을 더한 형태다." },
+    { q: "조건화된 공포 기억(소리–전기충격 연합) 형성에 핵심적인 구조는?",
+      a: "편도체 (외측핵·기저외측 복합체)",
+      b: "시각피질 V1",
+      why: "청각 시상·피질 입력과 통증 입력이 외측 편도체에서 만나 연합된다. 중심핵 출력이 얼어붙기 같은 공포 반응을 일으킨다." },
+  ]},
+  { name: "발생·가소성·수면", sub: "평생에 걸친 변화", qs: [
+    { q: "새끼 고양이의 결정적 시기에 한쪽 눈을 가려 두면 1차 시각피질에서는?",
+      a: "가린 눈이 담당하는 안구 우세 기둥이 줄어든다",
+      b: "가린 눈이 담당하는 안구 우세 기둥이 넓어진다",
+      why: "Hubel과 Wiesel의 실험에서 두 눈의 입력은 피질 영역을 놓고 활동 의존적으로 경쟁했다. 덜 쓰인 눈은 영역을 잃고, 같은 차단을 성체에게 하면 효과가 거의 없다." },
+    { q: "신경관의 복측(배 쪽) 운명, 예컨대 운동뉴런을 유도하는 척삭 유래 신호는?",
+      a: "소닉 헤지호그(Shh)",
+      b: "골형성단백질(BMP)",
+      why: "척삭과 바닥판에서 나온 Shh가 농도 기울기를 만들어 복측 세포 유형을 정한다. 지붕판의 BMP·Wnt는 배측 운명을 유도한다." },
+    { q: "포유류의 일주기 리듬을 조율하는 중추 시계는?",
+      a: "시상하부의 시교차상핵(SCN)",
+      b: "송과선",
+      why: "SCN은 망막의 멜라놉신 신경절세포에서 빛 정보를 받아 시계를 맞춘다. 송과선은 SCN의 지시를 받아 밤에 멜라토닌을 분비하는 출력 기관이다." },
+    { q: "REM 수면의 특징으로 옳은 것은?",
+      a: "각성과 비슷한 빠르고 낮은 진폭의 EEG + 골격근 긴장 소실",
+      b: "고진폭 델타파 우세 + 근긴장 유지",
+      why: "REM 때는 뇌줄기(교뇌)가 척수 운동뉴런을 억제해 몸을 마비시킨다. 이 억제가 풀리면 REM 수면 행동장애가 생긴다. 델타파는 N3 서파 수면의 특징이다." },
+    { q: "중추신경계에서 수초를 만드는 세포는?",
+      a: "희소돌기아교세포",
+      b: "슈반세포",
+      why: "희소돌기아교세포 하나는 여러 축삭에 수초를 감는다. 말초의 슈반세포는 한 축삭의 한 마디만 감싼다. 말초 신경이 더 잘 재생되는 데에도 슈반세포가 기여한다." },
+  ]},
+  { name: "질환과 연구 기법", sub: "실험실과 병상", qs: [
+    { q: "알츠하이머병의 두 가지 대표 병리는?",
+      a: "아밀로이드-β 반 + 과인산화 타우의 신경섬유 엉킴",
+      b: "α-시누클레인 루이소체 + 흑질 탈색",
+      why: "Aβ는 APP가 β·γ-세크레테이스로 잘린 산물이다. 루이소체와 흑질 탈색은 파킨슨병과 루이소체 치매의 소견이다." },
+    { q: "헌팅턴병의 유전 양식과 원인은?",
+      a: "상염색체 우성, HTT 유전자의 CAG 반복 확장",
+      b: "상염색체 열성, 미토콘드리아 DNA 결손",
+      why: "폴리글루타민이 늘어난 헌팅틴은 특히 선조체의 중간가시뉴런을 손상시킨다. 반복 수가 많을수록 일찍 발병하고, 대를 거치며 반복이 늘어나는 표현 촉진이 나타난다." },
+    { q: "fMRI의 BOLD 신호가 직접 반영하는 것은?",
+      a: "혈중 탈산소헤모글로빈 비율의 변화 (혈류역학 반응)",
+      b: "뉴런의 전기적 활동 그 자체",
+      why: "활동이 늘면 혈류가 수요보다 많이 늘어 상자성인 탈산소헤모글로빈 비율이 줄고 신호가 커진다. 그래서 뉴런 활동의 간접 지표이고, 수 초 지연된다." },
+    { q: "패치클램프의 전압고정(voltage clamp) 모드에서 하는 일은?",
+      a: "막전위를 원하는 값에 고정하고 흐르는 전류를 잰다",
+      b: "전류를 주입하고 막전위 변화를 잰다",
+      why: "전압고정을 쓰면 전압 의존적인 통로 전류를 분리해 볼 수 있다(Hodgkin–Huxley의 바탕). 전류를 주고 전압을 재는 것은 전류고정 모드다." },
+    { q: "광유전학에서 채널로돕신-2(ChR2)를 발현한 뉴런에 청색광을 비추면?",
+      a: "양이온 통로가 열려 탈분극·발화한다",
+      b: "Cl⁻가 들어와 과분극·억제된다",
+      why: "ChR2는 빛으로 열리는 비선택적 양이온 통로다. 억제에는 황색광으로 Cl⁻를 퍼 넣는 할로로돕신(NpHR)이나 양성자 펌프인 Arch를 쓴다." },
+    { q: "다발성 경화증에 대한 설명으로 옳은 것은?",
+      a: "중추신경계 수초를 공격하는 자가면역 탈수초 질환",
+      b: "말초신경 수초를 공격하는 급성 탈수초 질환",
+      why: "MS는 뇌·척수·시신경에 시간과 공간을 달리해 병변이 생긴다. 급성 말초 탈수초는 길랭-바레 증후군이다." },
+  ]},
+];
+const PER_ZONE = 2;
+const MAX_ATP = 3;
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+let S = null; // game state
+
+function newRun() {
+  const steps = [];
+  ZONES.forEach((z, zi) => shuffle(z.qs).slice(0, PER_ZONE).forEach((q) => steps.push({ zi, ...q, left: Math.random() < 0.5 ? "a" : "b" })));
+  return { phase: "play", steps, i: 0, atp: MAX_ATP, score: 0, streak: 0, best: 0, picked: null, log: [] };
+}
+
+function renderStats() {
+  const total = S ? S.steps.length : ZONES.length * PER_ZONE;
+  const atp = S ? S.atp : MAX_ATP;
+  $("atp").innerHTML = "●".repeat(atp) + '<span class="off">' + "●".repeat(MAX_ATP - atp) + "</span>";
+  $("stepNo").textContent = S && S.phase !== "intro" ? Math.min(S.i + 1, total) : 0;
+  $("stepTotal").textContent = total;
+  $("score").textContent = S ? S.score : 0;
+  const zi = S && S.phase === "play" ? S.steps[S.i].zi : -1;
+  $("zones").innerHTML = ZONES.map((_, k) => {
+    const cls = S && (S.phase === "end" ? k <= (S.steps[Math.min(S.i, S.steps.length - 1)] || {}).zi : k < zi) ? "done" : k === zi ? "now" : "";
+    return `<span class="${cls}"></span>`;
+  }).join("");
+  renderScope();
+}
+
+// 막전위 기록: 정답 = 활동전위, 오답 = 역치하 EPSP
+function renderScope() {
+  const W = 640, H = 86, total = S ? S.steps.length : 16, slot = W / (total + 1);
+  const y = (mv) => H - 6 - ((mv + 80) / 125) * (H - 12);
+  let d = `M0 ${y(-70)}`;
+  const log = S ? S.log : [];
+  log.forEach((e, k) => {
+    const x = slot * (k + 0.6);
+    if (e.ok) d += ` L${x} ${y(-70)} L${x + 4} ${y(-55)} L${x + 9} ${y(40)} L${x + 15} ${y(-80)} L${x + 26} ${y(-70)}`;
+    else d += ` L${x} ${y(-70)} L${x + 6} ${y(-61)} L${x + 22} ${y(-70)}`;
+  });
+  d += ` L${W} ${y(-70)}`;
+  const grid = [-70, -55, 0, 40].map((mv) => `<line x1="0" x2="${W}" y1="${y(mv)}" y2="${y(mv)}" stroke="var(--line)" stroke-width="1" ${mv === -55 ? 'stroke-dasharray="4 4"' : ""}/>`).join("");
+  $("scope").innerHTML = grid + `<path d="${d}" fill="none" stroke="var(--trace)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
+  const fired = log.filter((e) => e.ok).length;
+  $("scopeNote").textContent = S && log.length ? `스파이크 ${fired} · 실패 ${log.length - fired}` : "+40 / −70 mV · 점선 = 역치";
+}
+
+function renderIntro() {
+  $("main").innerHTML = `
+    <section class="card">
+      <span class="eyebrow">대학 신경과학 · 갈림길 ${ZONES.length * PER_ZONE}개</span>
+      <h2>당신은 축삭둔덕에서 막 발화한 활동전위입니다</h2>
+      <p>축삭이 갈라지는 곳마다 두 갈래 중 하나를 골라야 해요. 맞는 갈래로 가면 신호가 다음 구역으로 전도되고, 틀린 갈래로 가면 역치에 못 미쳐 ATP를 하나 잃어요.</p>
+      <ul class="rules">
+        <li>ATP ${MAX_ATP}개가 모두 떨어지면 신호가 끊겨요.</li>
+        <li>정답 10점, 연속으로 맞히면 보너스가 붙어요.</li>
+        <li>고를 때마다 해설이 나오고, 끝나면 틀린 문제를 다시 볼 수 있어요.</li>
+      </ul>
+      <div class="route">${ZONES.map((z) => `<span>${esc(z.name)}</span>`).join("")}</div>
+      <button class="btn" id="startBtn" type="button">발화 시작</button>
+      <span class="hint"><kbd>←</kbd> <kbd>→</kbd> 로 갈래 선택 · <kbd>Enter</kbd> 로 다음</span>
+    </section>`;
+  $("startBtn").onclick = start;
+}
+
+function forkSvg(dir, ok) {
+  const L = "M160 4 C160 40, 70 40, 70 66", R = "M160 4 C160 40, 250 40, 250 66";
+  return `<svg class="fork" viewBox="0 0 320 70" preserveAspectRatio="none" aria-hidden="true">
+    <path d="${L}"/><path d="${R}"/>
+    ${dir ? `<path class="go ${ok ? "" : "bad"}" d="${dir === "L" ? L : R}"/>` : ""}
+  </svg>`;
+}
+
+function renderStep() {
+  const st = S.steps[S.i], z = ZONES[st.zi];
+  const sides = [["L", st.left], ["R", st.left === "a" ? "b" : "a"]];
+  const picked = S.picked; // { side, ok } or null
+  $("main").innerHTML = `
+    <div class="stage">
+      <section class="question">
+        <span class="eyebrow">구역 ${st.zi + 1} · ${esc(z.name)}</span>
+        <h2>${esc(st.q)}</h2>
+        <span class="zone-sub">${esc(z.sub)}</span>
+      </section>
+      ${forkSvg(picked && picked.side, picked && picked.ok)}
+      <div class="choices">
+        ${sides.map(([side, key]) => {
+          let cls = "";
+          if (picked) cls = key === "a" ? "right" : side === picked.side ? "wrong" : "dim";
+          return `<button class="choice ${cls}" type="button" data-side="${side}" ${picked ? "disabled" : ""}>
+            <span class="side">${side === "L" ? "← 왼쪽 가지" : "오른쪽 가지 →"}</span>
+            <span class="txt">${esc(st[key])}</span>
+          </button>`;
+        }).join("")}
+      </div>
+    </div>
+    ${picked ? `
+    <section class="feedback ${picked.ok ? "good" : "bad"}" aria-live="polite">
+      <span class="verdict">${picked.ok ? `전도 성공 · +${picked.gain}점${S.streak > 1 ? ` (연속 ${S.streak})` : ""}` : "역치 미달 · ATP −1"}</span>
+      <p>${esc(st.why)}</p>
+      <button class="btn" id="nextBtn" type="button">${S.atp === 0 ? "기록 보기" : S.i + 1 >= S.steps.length ? "시냅스 도착 · 결과 보기" : "다음 갈림길"}</button>
+    </section>` : `<span class="hint"><kbd>←</kbd> <kbd>→</kbd> 로도 고를 수 있어요</span>`}`;
+  document.querySelectorAll(".choice").forEach((b) => (b.onclick = () => choose(b.dataset.side)));
+  if (picked) { const n = $("nextBtn"); n.onclick = next; n.focus({ preventScroll: true }); }
+}
+
+function choose(side) {
+  if (!S || S.phase !== "play" || S.picked) return;
+  const st = S.steps[S.i];
+  const key = side === "L" ? st.left : st.left === "a" ? "b" : "a";
+  const ok = key === "a";
+  let gain = 0;
+  if (ok) { S.streak++; S.best = Math.max(S.best, S.streak); gain = 10 + (S.streak - 1) * 2; S.score += gain; }
+  else { S.streak = 0; S.atp--; }
+  S.log.push({ ok, idx: S.i });
+  S.picked = { side, ok, gain };
+  render();
+}
+
+function next() {
+  if (!S.picked) return;
+  S.picked = null;
+  if (S.atp === 0 || S.i + 1 >= S.steps.length) { S.phase = "end"; render(); return; }
+  S.i++;
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderEnd() {
+  const n = S.log.length, okN = S.log.filter((e) => e.ok).length;
+  const finished = S.atp > 0;
+  const missed = S.log.filter((e) => !e.ok).map((e) => S.steps[e.idx]);
+  const grade = !finished ? "전도 차단" : okN === n ? "완벽한 도약 전도" : okN / n >= 0.8 ? "빠른 유수 섬유" : okN / n >= 0.6 ? "무수 C 섬유 속도" : "간신히 역치 도달";
+  $("main").innerHTML = `
+    <section class="card">
+      <span class="eyebrow">${finished ? "축삭 말단 도착" : `구역 ${S.steps[S.i].zi + 1}에서 신호 소실`}</span>
+      <h2>${grade}</h2>
+      <div class="row" style="gap:28px">
+        <div><div class="big">${S.score}</div><span class="hint">점수</span></div>
+        <div><div class="big">${okN}/${n}</div><span class="hint">맞힌 갈림길</span></div>
+        <div><div class="big">${S.best}</div><span class="hint">최고 연속</span></div>
+      </div>
+      ${missed.length ? `<h3 style="margin:6px 0 0;font-size:1rem">다시 볼 개념</h3>
+      <ol class="review">${missed.map((m) => `<li><span class="q">${esc(m.q)}</span><span class="ans">정답 · ${esc(m.a)}</span><span class="why">${esc(m.why)}</span></li>`).join("")}</ol>`
+      : `<p>틀린 갈림길이 없어요. 다시 하면 다른 문제가 섞여 나와요.</p>`}
+      <div class="row">
+        <button class="btn" id="againBtn" type="button">다시 발화</button>
+        ${missed.length ? `<button class="btn ghost" id="retryBtn" type="button">틀린 문제만 다시</button>` : ""}
+      </div>
+    </section>`;
+  $("againBtn").onclick = start;
+  if (missed.length) $("retryBtn").onclick = () => {
+    S = { phase: "play", steps: shuffle(missed).map((m) => ({ ...m, left: Math.random() < 0.5 ? "a" : "b" })), i: 0, atp: MAX_ATP, score: 0, streak: 0, best: 0, picked: null, log: [] };
+    render();
+  };
+}
+
+function render() {
+  renderStats();
+  if (!S || S.phase === "intro") renderIntro();
+  else if (S.phase === "play") renderStep();
+  else renderEnd();
+}
+function start() { S = newRun(); render(); window.scrollTo({ top: 0 }); }
+
+document.addEventListener("keydown", (e) => {
+  if (!S || S.phase !== "play" || e.altKey || e.ctrlKey || e.metaKey) return;
+  if (!S.picked && (e.key === "ArrowLeft" || e.key === "1")) { e.preventDefault(); choose("L"); }
+  else if (!S.picked && (e.key === "ArrowRight" || e.key === "2")) { e.preventDefault(); choose("R"); }
+});
+
+// 아티팩트 뷰어가 페이지를 갱신해도 진행 상태를 유지
+window.claude?.hot?.snapshot?.(() => ({ S }));
+const boot = (data) => { S = (data && data.S) || null; render(); };
+window.claude?.hot?.ready ? window.claude.hot.ready(boot) : boot(window.claude?.hot?.data ?? {});
+</script>
+</body>
+</html>
