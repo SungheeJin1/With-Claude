@@ -16,7 +16,7 @@ const irregular = [
 
 GRAMMAR.push({
   id: 'verb', name: '동사', en: 'Verb', icon: '🏃', color: '#3f6fe0',
-  intro: '동사는 문장의 <b>심장</b>이에요. “달리다, 먹다, 좋아하다, ~이다”처럼 움직임이나 상태를 나타내요. 동사는 <b>① 수</b>(주어가 하나냐 여럿이냐), <b>② 시제</b>(언제 일어났냐), <b>③ 태</b>(하는 쪽이냐 당하는 쪽이냐)에 따라 모양이 바뀌어요. 마지막으로 동사를 도와주는 <b>④ 조동사</b>까지, 이 순서대로 배워 봐요!',
+  intro: '동사는 문장의 <b>심장</b>이에요. “달리다, 먹다, 좋아하다, ~이다”처럼 움직임이나 상태를 나타내요. 동사는 <b>① 수</b>(주어가 하나냐 여럿이냐)에 따라 모양이 바뀌고, <b>② 조동사</b>의 도움을 받아 뜻이 더해지고, <b>③ 시제</b>(언제 일어났냐)와 <b>④ 태</b>(하는 쪽이냐 당하는 쪽이냐)에 따라 또 모양이 바뀌어요. 이 순서대로 배워 봐요!',
   sections: [
     {
       id: 'basic', title: '동사의 두 가족: be동사와 일반동사', en: 'be verbs & action verbs',
@@ -188,8 +188,193 @@ GRAMMAR.push({
       ],
     },
 
-    /* ================= 2. 시제 ================= */
-    { group: '시제 (Tense)', no: '2', desc: '“언제” 일어난 일인지에 따라 동사 모양이 바뀌어요. 현재 → 현재진행 → 과거 → 과거진행 → 미래 → 현재완료 → 과거완료 → 가정법과거 → 가정법과거완료 순서로 배워요.' },
+    /* ================= 2. 조동사 ================= */
+    { group: '조동사 (Modal verbs)', no: '2', desc: '동사 앞에서 “~할 수 있다, ~해야 한다, ~일지도 모른다”처럼 능력·의무·추측의 뜻을 더해 주는 도우미예요.' },
+    {
+      id: 'modal-basic', title: '조동사의 기본 규칙', en: 'Modal + base verb',
+      html: `
+        <p>조동사(助動詞)는 동사를 <b>도와주는(助)</b> 동사예요. 혼자서는 못 쓰고 꼭 동사와 함께 다녀요.</p>
+        ${H.formula('주어', '+', '*조동사', '+', '동사원형')}
+        ${H.table(['규칙', '⭕', '❌'], [
+          ['① 뒤에는 항상 <b>동사원형</b>', en('She can <b>swim</b>.'), `<span class="strike en">She can swims.</span>`],
+          ['② 주어가 3인칭 단수여도 조동사에 <b>s를 붙이지 않음</b>', en('He <b>can</b> dance.'), `<span class="strike en">He cans dance.</span>`],
+          ['③ 부정문: 조동사 뒤에 <b>not</b>', en('I <b>cannot(can’t)</b> swim.'), `<span class="strike en">I don’t can swim.</span>`],
+          ['④ 의문문: 조동사가 <b>맨 앞</b>으로', en('<b>Can</b> you swim?'), `<span class="strike en">Do you can swim?</span>`],
+          ['⑤ 조동사 두 개를 <b>연달아 쓰지 않음</b>', en('I will <b>be able to</b> swim.'), `<span class="strike en">I will can swim.</span>`],
+        ])}
+        ${H.table(['조동사', '부정형', '줄임말'], [
+          [en('can'), en('cannot'), en('can’t')],
+          [en('could'), en('could not'), en('couldn’t')],
+          [en('will'), en('will not'), en('won’t')],
+          [en('would'), en('would not'), en('wouldn’t')],
+          [en('should'), en('should not'), en('shouldn’t')],
+          [en('must'), en('must not'), en('mustn’t')],
+          [en('may'), en('may not'), '(잘 줄이지 않아요)'],
+        ])}
+        ${H.box('tip', `조동사 대신 쓸 수 있는 짝꿍 표현도 있어요. 다른 조동사와 함께 쓰거나 시제를 바꿀 때 편해요.<br>${en('can = be able to')} / ${en('must = have to')} / ${en('will = be going to')}`)}
+      `,
+      examples: [
+        ['My grandma <b>can speak</b> three languages.', '우리 할머니는 3개 국어를 하실 수 있어요.'],
+        ['You <b>shouldn’t eat</b> too much candy.', '사탕을 너무 많이 먹으면 안 돼.'],
+        ['<b>May</b> I <b>use</b> your eraser?', '네 지우개 써도 될까?'],
+      ],
+    },
+    {
+      id: 'can', title: 'can / could / be able to', en: '능력 · 허락 · 가능성',
+      html: `
+        ${H.table(['뜻', '예', '해석'], [
+          ['능력 (~할 수 있다)', en('I <b>can</b> ride a bike.'), '나는 자전거를 탈 수 있어.'],
+          ['허락 (~해도 된다)', en('You <b>can</b> go home now.'), '이제 집에 가도 돼.'],
+          ['요청 (~해 줄래?)', en('<b>Can</b> you help me?'), '나 좀 도와줄래?'],
+          ['공손한 요청', en('<b>Could</b> you open the door?'), '문 좀 열어 주시겠어요?'],
+          ['과거의 능력', en('I <b>could</b> swim when I was five.'), '나는 다섯 살 때 수영할 수 있었어.'],
+          ['가능성 (~일 수도 있다)', en('It <b>could</b> rain tonight.'), '오늘 밤 비가 올 수도 있어.'],
+        ])}
+        ${H.table(['시제', '능력 “~할 수 있다”'], [
+          ['현재', en('can / am·is·are able to')],
+          ['과거', en('could / was·were able to')],
+          ['미래', en('<b>will be able to</b>') + ' (will can ✕)'],
+          ['현재완료', en('<b>have been able to</b>')],
+        ])}
+        ${H.box('tip', `${en('Could you ~?')}는 과거가 아니라 ${en('Can you ~?')}보다 <b>더 공손한</b> 부탁이에요. 선생님이나 어른께 쓰면 좋아요.`)}
+      `,
+      examples: [
+        ['Penguins <b>can’t fly</b>, but they <b>can swim</b> very fast.', '펭귄은 날 수 없지만 아주 빨리 헤엄칠 수 있어요.'],
+        ['<b>Could</b> you say that again, please?', '다시 한번 말씀해 주시겠어요?'],
+        ['After a lot of practice, she <b>was able to</b> win the race.', '연습을 많이 한 끝에 그녀는 경주에서 이길 수 있었어요.'],
+        ['I <b>will be able to</b> read English books next year.', '나는 내년에 영어책을 읽을 수 있을 거예요.'],
+      ],
+    },
+    {
+      id: 'may', title: 'may / might', en: '허락 · 추측',
+      html: `
+        ${H.table(['뜻', '예', '해석'], [
+          ['허락 (~해도 된다)', en('You <b>may</b> sit down.'), '앉아도 좋아요.'],
+          ['허락 구하기 (공손)', en('<b>May</b> I come in?'), '들어가도 될까요?'],
+          ['추측 (~일지도 모른다)', en('He <b>may</b> be at home.'), '그는 집에 있을지도 몰라.'],
+          ['약한 추측', en('It <b>might</b> snow tomorrow.'), '내일 눈이 올지도 몰라. (may보다 확신이 덜함)'],
+        ])}
+        ${H.box('tip', `${en('May I ~?')}는 ${en('Can I ~?')}보다 공손해요. 대답은 ${en('Yes, you may. / Sure. / No, you may not.')}`)}
+      `,
+      examples: [
+        ['<b>May</b> I borrow your pencil?', '연필 좀 빌려도 될까요?'],
+        ['Take an umbrella. It <b>might rain</b>.', '우산 가져가. 비가 올지도 몰라.'],
+      ],
+    },
+    {
+      id: 'must', title: 'must / have to', en: '의무 · 강한 추측',
+      html: `
+        ${H.table(['뜻', '예', '해석'], [
+          ['의무 (~해야 한다)', en('You <b>must</b> wear a seat belt.'), '안전벨트를 꼭 매야 해요.'],
+          ['의무 (~해야 한다)', en('I <b>have to</b> finish my homework.') + '<br>' + en('She <b>has to</b> get up early.'), '숙제를 끝내야 해. / 그녀는 일찍 일어나야 해.'],
+          ['과거의 의무', en('I <b>had to</b> wait for an hour.'), '나는 한 시간 동안 기다려야 했어. (must의 과거형은 없어요)'],
+          ['미래의 의무', en('You <b>will have to</b> study hard.'), '너는 열심히 공부해야 할 거야.'],
+          ['강한 추측 (~임에 틀림없다)', en('She <b>must</b> be tired.'), '그녀는 피곤한 게 틀림없어.'],
+          ['강한 부정 추측 (~일 리가 없다)', en('It <b>can’t</b> be true.'), '그게 사실일 리가 없어.'],
+        ])}
+        <p>여기서 제일 헷갈리는 부분! 긍정일 땐 뜻이 같은데, <span class="mark">부정이 되면 뜻이 완전히 달라져요.</span></p>
+        ${H.table(['', '긍정', '부정'], [
+          [en('must'), '~해야 한다', en('<b>must not</b>') + ' = <b>~하면 안 된다</b> (금지 🚫)'],
+          [en('have to'), '~해야 한다', en('<b>don’t have to</b>') + ' = <b>~할 필요 없다</b> (해도 되고 안 해도 됨 🙆)'],
+        ])}
+      `,
+      examples: [
+        ['You <b>must not</b> run in the hallway.', '복도에서 뛰면 안 돼요. (금지)'],
+        ['You <b>don’t have to</b> bring lunch. We’ll have pizza!', '점심 안 가져와도 돼. 피자 먹을 거야! (필요 없음)'],
+        ['He <b>has to</b> take care of his little brother today.', '그는 오늘 남동생을 돌봐야 해요.'],
+        ['You walked 10 km? You <b>must</b> be hungry!', '10km를 걸었다고? 배고프겠다! (강한 추측)'],
+      ],
+      toon: {
+        title: 'must not과 don’t have to는 달라요',
+        panels: [
+          { bg: 'sky', narr: '긍정일 때 must와 have to는 쌍둥이처럼 뜻이 같아요.',
+            cast: [{ w: 'must', c: 'red', m: 'cool', say: '~해야 해!' }, { w: 'have to', c: 'orange', m: 'cool', say: '나도 ~해야 해!' }],
+            line: 'You must / have to wear a helmet.' },
+          { bg: 'rose', narr: '그런데 must에 not이 붙으면…', fx: '🚫',
+            cast: [{ w: 'must not', c: 'red', m: 'angry', st: 'big', say: '절대 하면 안 돼! 금지!' }, { e: '🏃‍♂️❌', tag: '복도에서 뛰기' }],
+            line: { t: 'You <u>must not</u> run here. (~하면 안 된다)', ok: true } },
+          { bg: 'mint', narr: 'have to에 not이 붙으면 전혀 다른 뜻이 돼요.',
+            cast: [{ w: "don't have to", c: 'orange', m: 'happy', say: '안 해도 괜찮아~ 해도 되고!' }, { e: '🍱', tag: '도시락' }],
+            line: { t: 'You <u>don’t have to</u> bring lunch. (~할 필요 없다)', ok: true } },
+          { bg: 'lav', narr: '외우는 법: <b>must not은 빨간불</b> 🔴, <b>don’t have to는 자유</b> 🟢',
+            cast: [{ w: 'must not', c: 'red', m: 'angry', tag: '금지 🔴' }, { w: "don't have to", c: 'green', m: 'love', tag: '필요 없음 🟢' }] },
+        ],
+      },
+    },
+    {
+      id: 'should', title: 'should / had better / ought to', en: '충고 · 조언',
+      html: `
+        ${H.table(['표현', '느낌', '예'], [
+          [en('should'), '~하는 게 좋겠다 (부드러운 충고)', en('You <b>should</b> go to bed early.')],
+          [en('ought to'), 'should와 비슷 (조금 격식)', en('You <b>ought to</b> say sorry.')],
+          [en('had better'), '~하는 게 낫다 (안 하면 곤란해져요!)', en('You <b>had better</b> hurry, or you’ll be late.')],
+        ])}
+        ${H.box('warn', `${en('had better')}의 부정은 ${en('had better <b>not</b>')}이에요. <span class="strike en">had not better</span><br>${en('had better')}는 과거가 아니라 <b>지금·앞으로</b>의 충고예요. 줄여서 ${en('You’d better …')}`)}
+      `,
+      examples: [
+        ['You look tired. You <b>should</b> take a rest.', '피곤해 보여. 좀 쉬는 게 좋겠어.'],
+        ['We <b>shouldn’t</b> waste water.', '우리는 물을 낭비하면 안 돼요.'],
+        ['You’d <b>better not</b> touch that dog. It bites!', '그 개 안 만지는 게 좋아. 물거든!'],
+      ],
+    },
+    {
+      id: 'would', title: 'would / would like to / used to', en: '공손한 부탁 · 바람 · 과거 습관',
+      html: `
+        ${H.table(['표현', '뜻', '예'], [
+          [en('Would you ~?'), '~해 주시겠어요? (공손한 부탁)', en('<b>Would</b> you pass me the salt?')],
+          [en('would like + 명사'), '~을 원하다 (want보다 공손)', en('I<b>’d like</b> a glass of water.')],
+          [en('would like to + 동사원형'), '~하고 싶다', en('I<b>’d like to</b> visit London.')],
+          [en('used to + 동사원형'), '(예전에) ~하곤 했다 / ~였다 (지금은 아님)', en('I <b>used to</b> live in Daegu.')],
+          [en('would + 동사원형'), '(예전에) ~하곤 했다 (반복한 행동만)', en('We <b>would</b> play outside every day.')],
+        ])}
+        ${H.box('warn', `${en('used to')}는 상태와 행동 모두 OK, ${en('would')}는 반복한 <b>행동</b>에만 써요.<br>${en('There <b>used to</b> be a park here.')} ⭕ / <span class="strike en">There would be a park here.</span> (과거 습관의 뜻으로는 ✕)`)}
+        ${H.box('more', `${en('be used to + -ing')}는 “~에 익숙하다”라는 전혀 다른 표현이에요.<br>${en('I <b>used to get</b> up early.')} 예전엔 일찍 일어나곤 했다. / ${en('I <b>am used to getting</b> up early.')} 나는 일찍 일어나는 데 익숙하다.`)}
+      `,
+      examples: [
+        ['<b>Would</b> you like some cookies?', '쿠키 좀 드실래요?'],
+        ['I <b>used to</b> be afraid of dogs, but now I love them.', '예전엔 개를 무서워했는데, 지금은 정말 좋아해요.'],
+        ['When I was little, my dad <b>would</b> read me a story every night.', '어렸을 때 아빠는 매일 밤 이야기책을 읽어 주시곤 했어요.'],
+      ],
+    },
+    {
+      id: 'modal-perfect', title: '조동사 + have p.p. (과거에 대한 추측·후회)', en: 'should have p.p. …',
+      html: `
+        <p>조동사 뒤에 <b>have + p.p.</b>를 붙이면 이미 지나간 <b>과거 일</b>에 대해 추측하거나 후회하는 말이 돼요.</p>
+        ${H.formula('주어', '+', '*조동사', '+', '*have', '+', 'p.p.')}
+        ${H.table(['표현', '뜻', '예'], [
+          [en('should have p.p.'), '~했어야 했는데 (안 해서 후회)', en('I <b>should have studied</b> harder.') + '<br>공부를 더 열심히 했어야 했는데.'],
+          [en('shouldn’t have p.p.'), '~하지 말았어야 했는데 (해서 후회)', en('I <b>shouldn’t have eaten</b> so much.') + '<br>그렇게 많이 먹지 말았어야 했는데.'],
+          [en('must have p.p.'), '~했음에 틀림없다 (강한 추측)', en('She <b>must have been</b> tired.') + '<br>그녀는 피곤했던 게 틀림없어.'],
+          [en('may / might have p.p.'), '~했을지도 모른다 (약한 추측)', en('He <b>may have missed</b> the bus.') + '<br>그는 버스를 놓쳤을지도 몰라.'],
+          [en('can’t have p.p.'), '~했을 리가 없다', en('She <b>can’t have said</b> that.') + '<br>그녀가 그런 말을 했을 리가 없어.'],
+          [en('could have p.p.'), '~할 수도 있었는데 (안 했음)', en('You <b>could have won</b>!') + '<br>너 이길 수도 있었는데!'],
+        ])}
+        ${H.box('tip', '<b>p.p.(과거분사)</b>가 처음이라면 다음 묶음 <b>3. 시제</b>의 <b>과거 시제</b> 항목에 있는 불규칙 동사 표를 먼저 보세요. 가정법 과거완료의 결과 쪽(<span class="en">would have p.p.</span>)도 같은 모양이라서, 시제 묶음의 <b>가정법 과거완료</b>와 함께 보면 좋아요.')}
+      `,
+      examples: [
+        ['I <b>should have brought</b> an umbrella. I’m all wet!', '우산을 가져왔어야 했는데. 다 젖었어!'],
+        ['The ground is wet. It <b>must have rained</b> last night.', '땅이 젖었네. 어젯밤에 비가 왔던 게 틀림없어.'],
+        ['I can’t find my key. I <b>might have left</b> it at school.', '열쇠를 못 찾겠어. 학교에 두고 왔을지도 몰라.'],
+      ],
+      toon: {
+        title: '후회할 땐 should have p.p.',
+        panels: [
+          { bg: 'sepia', narr: '어제, 우산을 안 가지고 나갔어요.',
+            cast: [{ w: 'I', c: 'orange', m: 'cool', say: '비 안 오겠지~' }, { e: '☀️' }] },
+          { bg: 'night', now: true, narr: '오늘 아침, 비에 쫄딱 젖어서…', fx: '주룩주룩',
+            cast: [{ w: 'I', c: 'orange', m: 'cry' }, { e: '🌧️' }] },
+          { bg: 'lav', narr: '이미 지나간 일을 후회할 땐 <b>should have + p.p.</b>!',
+            cast: [{ w: 'should', c: 'yellow', m: 'sad' }, { w: 'have', c: 'teal', m: 'sad' }, { w: 'brought', c: 'blue', m: 'cry', tag: 'p.p.' }, { e: '☂️' }],
+            line: { t: 'I <u>should have brought</u> an umbrella. (가져왔어야 했는데…)', ok: true } },
+          { bg: 'mint', narr: '친구가 젖은 나를 보고 추측해요. 확신이 들면 <b>must have p.p.</b>',
+            cast: [{ w: 'friend', c: 'green', m: 'surprised', say: '비 맞은 게 틀림없어!' }, { w: 'must have', c: 'red', m: 'cool' }, { w: 'been', c: 'gray', m: 'normal', tag: 'p.p.' }],
+            line: { t: 'You <u>must have been</u> caught in the rain!', ok: true } },
+        ],
+      },
+    },
+
+    /* ================= 3. 시제 ================= */
+    { group: '시제 (Tense)', no: '3', desc: '“언제” 일어난 일인지에 따라 동사 모양이 바뀌어요. 현재 → 현재진행 → 과거 → 과거진행 → 미래 → 현재완료 → 과거완료 → 가정법과거 → 가정법과거완료 순서로 배워요.' },
     {
       id: 'tense-map', title: '시제 한눈에 보기', en: 'Tense map',
       html: `
@@ -522,8 +707,8 @@ GRAMMAR.push({
       },
     },
 
-    /* ================= 3. 태 ================= */
-    { group: '태 (Voice)', no: '3', desc: '주인공이 “하는 쪽”이면 능동태, “당하는 쪽”이면 수동태예요.' },
+    /* ================= 4. 태 ================= */
+    { group: '태 (Voice)', no: '4', desc: '주인공이 “하는 쪽”이면 능동태, “당하는 쪽”이면 수동태예요.' },
     {
       id: 'passive', title: '능동태와 수동태', en: 'Active / Passive',
       html: `
@@ -609,190 +794,6 @@ GRAMMAR.push({
       ],
     },
 
-    /* ================= 4. 조동사 ================= */
-    { group: '조동사 (Modal verbs)', no: '4', desc: '동사 앞에서 “~할 수 있다, ~해야 한다, ~일지도 모른다”처럼 능력·의무·추측의 뜻을 더해 주는 도우미예요.' },
-    {
-      id: 'modal-basic', title: '조동사의 기본 규칙', en: 'Modal + base verb',
-      html: `
-        <p>조동사(助動詞)는 동사를 <b>도와주는(助)</b> 동사예요. 혼자서는 못 쓰고 꼭 동사와 함께 다녀요.</p>
-        ${H.formula('주어', '+', '*조동사', '+', '동사원형')}
-        ${H.table(['규칙', '⭕', '❌'], [
-          ['① 뒤에는 항상 <b>동사원형</b>', en('She can <b>swim</b>.'), `<span class="strike en">She can swims.</span>`],
-          ['② 주어가 3인칭 단수여도 조동사에 <b>s를 붙이지 않음</b>', en('He <b>can</b> dance.'), `<span class="strike en">He cans dance.</span>`],
-          ['③ 부정문: 조동사 뒤에 <b>not</b>', en('I <b>cannot(can’t)</b> swim.'), `<span class="strike en">I don’t can swim.</span>`],
-          ['④ 의문문: 조동사가 <b>맨 앞</b>으로', en('<b>Can</b> you swim?'), `<span class="strike en">Do you can swim?</span>`],
-          ['⑤ 조동사 두 개를 <b>연달아 쓰지 않음</b>', en('I will <b>be able to</b> swim.'), `<span class="strike en">I will can swim.</span>`],
-        ])}
-        ${H.table(['조동사', '부정형', '줄임말'], [
-          [en('can'), en('cannot'), en('can’t')],
-          [en('could'), en('could not'), en('couldn’t')],
-          [en('will'), en('will not'), en('won’t')],
-          [en('would'), en('would not'), en('wouldn’t')],
-          [en('should'), en('should not'), en('shouldn’t')],
-          [en('must'), en('must not'), en('mustn’t')],
-          [en('may'), en('may not'), '(잘 줄이지 않아요)'],
-        ])}
-        ${H.box('tip', `조동사 대신 쓸 수 있는 짝꿍 표현도 있어요. 다른 조동사와 함께 쓰거나 시제를 바꿀 때 편해요.<br>${en('can = be able to')} / ${en('must = have to')} / ${en('will = be going to')}`)}
-      `,
-      examples: [
-        ['My grandma <b>can speak</b> three languages.', '우리 할머니는 3개 국어를 하실 수 있어요.'],
-        ['You <b>shouldn’t eat</b> too much candy.', '사탕을 너무 많이 먹으면 안 돼.'],
-        ['<b>May</b> I <b>use</b> your eraser?', '네 지우개 써도 될까?'],
-      ],
-    },
-    {
-      id: 'can', title: 'can / could / be able to', en: '능력 · 허락 · 가능성',
-      html: `
-        ${H.table(['뜻', '예', '해석'], [
-          ['능력 (~할 수 있다)', en('I <b>can</b> ride a bike.'), '나는 자전거를 탈 수 있어.'],
-          ['허락 (~해도 된다)', en('You <b>can</b> go home now.'), '이제 집에 가도 돼.'],
-          ['요청 (~해 줄래?)', en('<b>Can</b> you help me?'), '나 좀 도와줄래?'],
-          ['공손한 요청', en('<b>Could</b> you open the door?'), '문 좀 열어 주시겠어요?'],
-          ['과거의 능력', en('I <b>could</b> swim when I was five.'), '나는 다섯 살 때 수영할 수 있었어.'],
-          ['가능성 (~일 수도 있다)', en('It <b>could</b> rain tonight.'), '오늘 밤 비가 올 수도 있어.'],
-        ])}
-        ${H.table(['시제', '능력 “~할 수 있다”'], [
-          ['현재', en('can / am·is·are able to')],
-          ['과거', en('could / was·were able to')],
-          ['미래', en('<b>will be able to</b>') + ' (will can ✕)'],
-          ['현재완료', en('<b>have been able to</b>')],
-        ])}
-        ${H.box('tip', `${en('Could you ~?')}는 과거가 아니라 ${en('Can you ~?')}보다 <b>더 공손한</b> 부탁이에요. 선생님이나 어른께 쓰면 좋아요.`)}
-      `,
-      examples: [
-        ['Penguins <b>can’t fly</b>, but they <b>can swim</b> very fast.', '펭귄은 날 수 없지만 아주 빨리 헤엄칠 수 있어요.'],
-        ['<b>Could</b> you say that again, please?', '다시 한번 말씀해 주시겠어요?'],
-        ['After a lot of practice, she <b>was able to</b> win the race.', '연습을 많이 한 끝에 그녀는 경주에서 이길 수 있었어요.'],
-        ['I <b>will be able to</b> read English books next year.', '나는 내년에 영어책을 읽을 수 있을 거예요.'],
-      ],
-    },
-    {
-      id: 'may', title: 'may / might', en: '허락 · 추측',
-      html: `
-        ${H.table(['뜻', '예', '해석'], [
-          ['허락 (~해도 된다)', en('You <b>may</b> sit down.'), '앉아도 좋아요.'],
-          ['허락 구하기 (공손)', en('<b>May</b> I come in?'), '들어가도 될까요?'],
-          ['추측 (~일지도 모른다)', en('He <b>may</b> be at home.'), '그는 집에 있을지도 몰라.'],
-          ['약한 추측', en('It <b>might</b> snow tomorrow.'), '내일 눈이 올지도 몰라. (may보다 확신이 덜함)'],
-        ])}
-        ${H.box('tip', `${en('May I ~?')}는 ${en('Can I ~?')}보다 공손해요. 대답은 ${en('Yes, you may. / Sure. / No, you may not.')}`)}
-      `,
-      examples: [
-        ['<b>May</b> I borrow your pencil?', '연필 좀 빌려도 될까요?'],
-        ['Take an umbrella. It <b>might rain</b>.', '우산 가져가. 비가 올지도 몰라.'],
-      ],
-    },
-    {
-      id: 'must', title: 'must / have to', en: '의무 · 강한 추측',
-      html: `
-        ${H.table(['뜻', '예', '해석'], [
-          ['의무 (~해야 한다)', en('You <b>must</b> wear a seat belt.'), '안전벨트를 꼭 매야 해요.'],
-          ['의무 (~해야 한다)', en('I <b>have to</b> finish my homework.') + '<br>' + en('She <b>has to</b> get up early.'), '숙제를 끝내야 해. / 그녀는 일찍 일어나야 해.'],
-          ['과거의 의무', en('I <b>had to</b> wait for an hour.'), '나는 한 시간 동안 기다려야 했어. (must의 과거형은 없어요)'],
-          ['미래의 의무', en('You <b>will have to</b> study hard.'), '너는 열심히 공부해야 할 거야.'],
-          ['강한 추측 (~임에 틀림없다)', en('She <b>must</b> be tired.'), '그녀는 피곤한 게 틀림없어.'],
-          ['강한 부정 추측 (~일 리가 없다)', en('It <b>can’t</b> be true.'), '그게 사실일 리가 없어.'],
-        ])}
-        <p>여기서 제일 헷갈리는 부분! 긍정일 땐 뜻이 같은데, <span class="mark">부정이 되면 뜻이 완전히 달라져요.</span></p>
-        ${H.table(['', '긍정', '부정'], [
-          [en('must'), '~해야 한다', en('<b>must not</b>') + ' = <b>~하면 안 된다</b> (금지 🚫)'],
-          [en('have to'), '~해야 한다', en('<b>don’t have to</b>') + ' = <b>~할 필요 없다</b> (해도 되고 안 해도 됨 🙆)'],
-        ])}
-      `,
-      examples: [
-        ['You <b>must not</b> run in the hallway.', '복도에서 뛰면 안 돼요. (금지)'],
-        ['You <b>don’t have to</b> bring lunch. We’ll have pizza!', '점심 안 가져와도 돼. 피자 먹을 거야! (필요 없음)'],
-        ['He <b>has to</b> take care of his little brother today.', '그는 오늘 남동생을 돌봐야 해요.'],
-        ['You walked 10 km? You <b>must</b> be hungry!', '10km를 걸었다고? 배고프겠다! (강한 추측)'],
-      ],
-      toon: {
-        title: 'must not과 don’t have to는 달라요',
-        panels: [
-          { bg: 'sky', narr: '긍정일 때 must와 have to는 쌍둥이처럼 뜻이 같아요.',
-            cast: [{ w: 'must', c: 'red', m: 'cool', say: '~해야 해!' }, { w: 'have to', c: 'orange', m: 'cool', say: '나도 ~해야 해!' }],
-            line: 'You must / have to wear a helmet.' },
-          { bg: 'rose', narr: '그런데 must에 not이 붙으면…', fx: '🚫',
-            cast: [{ w: 'must not', c: 'red', m: 'angry', st: 'big', say: '절대 하면 안 돼! 금지!' }, { e: '🏃‍♂️❌', tag: '복도에서 뛰기' }],
-            line: { t: 'You <u>must not</u> run here. (~하면 안 된다)', ok: true } },
-          { bg: 'mint', narr: 'have to에 not이 붙으면 전혀 다른 뜻이 돼요.',
-            cast: [{ w: "don't have to", c: 'orange', m: 'happy', say: '안 해도 괜찮아~ 해도 되고!' }, { e: '🍱', tag: '도시락' }],
-            line: { t: 'You <u>don’t have to</u> bring lunch. (~할 필요 없다)', ok: true } },
-          { bg: 'lav', narr: '외우는 법: <b>must not은 빨간불</b> 🔴, <b>don’t have to는 자유</b> 🟢',
-            cast: [{ w: 'must not', c: 'red', m: 'angry', tag: '금지 🔴' }, { w: "don't have to", c: 'green', m: 'love', tag: '필요 없음 🟢' }] },
-        ],
-      },
-    },
-    {
-      id: 'should', title: 'should / had better / ought to', en: '충고 · 조언',
-      html: `
-        ${H.table(['표현', '느낌', '예'], [
-          [en('should'), '~하는 게 좋겠다 (부드러운 충고)', en('You <b>should</b> go to bed early.')],
-          [en('ought to'), 'should와 비슷 (조금 격식)', en('You <b>ought to</b> say sorry.')],
-          [en('had better'), '~하는 게 낫다 (안 하면 곤란해져요!)', en('You <b>had better</b> hurry, or you’ll be late.')],
-        ])}
-        ${H.box('warn', `${en('had better')}의 부정은 ${en('had better <b>not</b>')}이에요. <span class="strike en">had not better</span><br>${en('had better')}는 과거가 아니라 <b>지금·앞으로</b>의 충고예요. 줄여서 ${en('You’d better …')}`)}
-      `,
-      examples: [
-        ['You look tired. You <b>should</b> take a rest.', '피곤해 보여. 좀 쉬는 게 좋겠어.'],
-        ['We <b>shouldn’t</b> waste water.', '우리는 물을 낭비하면 안 돼요.'],
-        ['You’d <b>better not</b> touch that dog. It bites!', '그 개 안 만지는 게 좋아. 물거든!'],
-      ],
-    },
-    {
-      id: 'would', title: 'would / would like to / used to', en: '공손한 부탁 · 바람 · 과거 습관',
-      html: `
-        ${H.table(['표현', '뜻', '예'], [
-          [en('Would you ~?'), '~해 주시겠어요? (공손한 부탁)', en('<b>Would</b> you pass me the salt?')],
-          [en('would like + 명사'), '~을 원하다 (want보다 공손)', en('I<b>’d like</b> a glass of water.')],
-          [en('would like to + 동사원형'), '~하고 싶다', en('I<b>’d like to</b> visit London.')],
-          [en('used to + 동사원형'), '(예전에) ~하곤 했다 / ~였다 (지금은 아님)', en('I <b>used to</b> live in Daegu.')],
-          [en('would + 동사원형'), '(예전에) ~하곤 했다 (반복한 행동만)', en('We <b>would</b> play outside every day.')],
-        ])}
-        ${H.box('warn', `${en('used to')}는 상태와 행동 모두 OK, ${en('would')}는 반복한 <b>행동</b>에만 써요.<br>${en('There <b>used to</b> be a park here.')} ⭕ / <span class="strike en">There would be a park here.</span> (과거 습관의 뜻으로는 ✕)`)}
-        ${H.box('more', `${en('be used to + -ing')}는 “~에 익숙하다”라는 전혀 다른 표현이에요.<br>${en('I <b>used to get</b> up early.')} 예전엔 일찍 일어나곤 했다. / ${en('I <b>am used to getting</b> up early.')} 나는 일찍 일어나는 데 익숙하다.`)}
-      `,
-      examples: [
-        ['<b>Would</b> you like some cookies?', '쿠키 좀 드실래요?'],
-        ['I <b>used to</b> be afraid of dogs, but now I love them.', '예전엔 개를 무서워했는데, 지금은 정말 좋아해요.'],
-        ['When I was little, my dad <b>would</b> read me a story every night.', '어렸을 때 아빠는 매일 밤 이야기책을 읽어 주시곤 했어요.'],
-      ],
-    },
-    {
-      id: 'modal-perfect', title: '조동사 + have p.p. (과거에 대한 추측·후회)', en: 'should have p.p. …',
-      html: `
-        <p>조동사 뒤에 <b>have + p.p.</b>를 붙이면 이미 지나간 <b>과거 일</b>에 대해 추측하거나 후회하는 말이 돼요.</p>
-        ${H.formula('주어', '+', '*조동사', '+', '*have', '+', 'p.p.')}
-        ${H.table(['표현', '뜻', '예'], [
-          [en('should have p.p.'), '~했어야 했는데 (안 해서 후회)', en('I <b>should have studied</b> harder.') + '<br>공부를 더 열심히 했어야 했는데.'],
-          [en('shouldn’t have p.p.'), '~하지 말았어야 했는데 (해서 후회)', en('I <b>shouldn’t have eaten</b> so much.') + '<br>그렇게 많이 먹지 말았어야 했는데.'],
-          [en('must have p.p.'), '~했음에 틀림없다 (강한 추측)', en('She <b>must have been</b> tired.') + '<br>그녀는 피곤했던 게 틀림없어.'],
-          [en('may / might have p.p.'), '~했을지도 모른다 (약한 추측)', en('He <b>may have missed</b> the bus.') + '<br>그는 버스를 놓쳤을지도 몰라.'],
-          [en('can’t have p.p.'), '~했을 리가 없다', en('She <b>can’t have said</b> that.') + '<br>그녀가 그런 말을 했을 리가 없어.'],
-          [en('could have p.p.'), '~할 수도 있었는데 (안 했음)', en('You <b>could have won</b>!') + '<br>너 이길 수도 있었는데!'],
-        ])}
-        ${H.box('tip', '가정법 과거완료의 결과 쪽(<span class="en">would have p.p.</span>)도 같은 모양이에요. 시제 묶음의 <b>가정법 과거완료</b>와 함께 보면 좋아요.')}
-      `,
-      examples: [
-        ['I <b>should have brought</b> an umbrella. I’m all wet!', '우산을 가져왔어야 했는데. 다 젖었어!'],
-        ['The ground is wet. It <b>must have rained</b> last night.', '땅이 젖었네. 어젯밤에 비가 왔던 게 틀림없어.'],
-        ['I can’t find my key. I <b>might have left</b> it at school.', '열쇠를 못 찾겠어. 학교에 두고 왔을지도 몰라.'],
-      ],
-      toon: {
-        title: '후회할 땐 should have p.p.',
-        panels: [
-          { bg: 'sepia', narr: '어제, 우산을 안 가지고 나갔어요.',
-            cast: [{ w: 'I', c: 'orange', m: 'cool', say: '비 안 오겠지~' }, { e: '☀️' }] },
-          { bg: 'night', now: true, narr: '오늘 아침, 비에 쫄딱 젖어서…', fx: '주룩주룩',
-            cast: [{ w: 'I', c: 'orange', m: 'cry' }, { e: '🌧️' }] },
-          { bg: 'lav', narr: '이미 지나간 일을 후회할 땐 <b>should have + p.p.</b>!',
-            cast: [{ w: 'should', c: 'yellow', m: 'sad' }, { w: 'have', c: 'teal', m: 'sad' }, { w: 'brought', c: 'blue', m: 'cry', tag: 'p.p.' }, { e: '☂️' }],
-            line: { t: 'I <u>should have brought</u> an umbrella. (가져왔어야 했는데…)', ok: true } },
-          { bg: 'mint', narr: '친구가 젖은 나를 보고 추측해요. 확신이 들면 <b>must have p.p.</b>',
-            cast: [{ w: 'friend', c: 'green', m: 'surprised', say: '비 맞은 게 틀림없어!' }, { w: 'must have', c: 'red', m: 'cool' }, { w: 'been', c: 'gray', m: 'normal', tag: 'p.p.' }],
-            line: { t: 'You <u>must have been</u> caught in the rain!', ok: true } },
-        ],
-      },
-    },
   ],
   quiz: [
     ['알맞은 것을 고르세요: <span class="en">She (don’t / doesn’t) (like / likes) spicy food.</span>', '<span class="en">doesn’t like</span> — does가 s를 가져가면 뒤 동사는 원형!'],
