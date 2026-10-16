@@ -842,3 +842,9 @@ a.side-other:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2
 }
 body .icon-btn, body .home-btn.icon-btn { width: 30px; height: 30px; font-size: 14px; }
 body .brand { min-height: 35px; }
+
+/* 두 문장 합치기 */
+.quiz.combine { margin-top: 22px; padding: 20px 18px 8px; border-color: rgba(143, 180, 255, .45); }
+.quiz.combine h3 { font-size: 21px; }
+.cb-pair { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.cb-plus { color: var(--yellow); font-weight: 900; }

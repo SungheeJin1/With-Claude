@@ -230,6 +230,13 @@ GRAMMAR.push({
     },
     {
       id: 'relative', title: '관계대명사 who / which / that', en: 'Relative pronouns',
+      combine: [
+        { q: 'I have a friend. + She lives in Jeju.', hint: '사람 + 주격', sentence: ['I have a friend who lives in Jeju.', 'I have a friend that lives in Jeju.'], exp: 'a friend = She(사람, 주어 자리) → who' },
+        { q: 'This is the dog. + It saved the boy.', hint: '동물 + 주격', sentence: ['This is the dog which saved the boy.', 'This is the dog that saved the boy.'], exp: 'the dog = It(동물, 주어 자리) → which' },
+        { q: 'I know a girl. + Her dad is a pilot.', hint: '“~의” 자리', sentence: ['I know a girl whose dad is a pilot.'], exp: 'Her(그녀의) 자리 → whose. whose 뒤에는 명사(dad)가 와요.' },
+        { q: 'The cake was yummy. + Mom made it.', hint: '물건 + 목적격', sentence: ['The cake which Mom made was yummy.', 'The cake that Mom made was yummy.', 'The cake Mom made was yummy.'], exp: 'it(목적어 자리)을 which로 바꿔 the cake 바로 뒤에 붙여요. 목적격이라 빼도 돼요.' },
+        { q: 'The boy is my cousin. + He is wearing a red cap.', hint: '문장 가운데 끼우기', sentence: ['The boy who is wearing a red cap is my cousin.', 'The boy that is wearing a red cap is my cousin.'], exp: '선행사 The boy 바로 뒤에 who 부분을 끼워 넣고, 원래 동사 is my cousin은 그 뒤에 이어요.' },
+      ],
       html: `
         <p>“나는 친구가 있어. 그 친구는 제주에 살아.” 이렇게 두 문장으로 말하면 뚝뚝 끊기죠? <b>관계대명사</b>를 쓰면 “나는 <b>제주에 사는</b> 친구가 있어.”처럼 한 문장으로 이을 수 있어요.</p>
         <p>관계대명사는 <span class="mark">1인 2역</span>을 해요. ① 두 문장을 <b>이어 주는 접속사</b> 역할 + ② 앞에 나온 명사를 <b>대신하는 대명사</b> 역할. 이때 관계대명사가 대신하는 앞의 명사를 <b>선행사</b>(앞에 가는 말)라고 불러요.</p>

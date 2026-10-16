@@ -234,6 +234,29 @@
     }
   }
 
+  /* ---------- 두 문장 합치기 연습 (문장 쓰기, 확인 퀴즈와 같은 채점) ---------- */
+  function combineHTML(t, s) {
+    if (!s.combine || !s.combine.length) return '';
+    const items = s.combine.map((q, i) => {
+      const key = `cb-${t.id}-${s.id}-${i}`;
+      quizData[key] = { sentence: q.sentence, exp: q.exp, q: q.q };
+      const [a, b] = q.q.split(' + ');
+      return `<div class="q" data-qkey="${key}">
+        <div class="q-text"><span class="q-kind">${q.hint}</span>Q${i + 1}.
+          <span class="cb-pair"><span class="en">${esc(a)}</span><span class="cb-plus">+</span><span class="en">${esc(b)}</span></span></div>
+        <div class="us-row">
+          <label class="sr-only" for="${key}">Q${i + 1} 합친 문장</label>
+          <input id="${key}" class="us-input q-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="한 문장으로 합쳐 쓰세요">
+          <button type="button" class="us-check q-check">답 입력</button></div>
+        <div class="q-result" aria-live="polite"></div>
+      </div>`;
+    }).join('');
+    return `<div class="quiz combine"><p class="eyebrow">Practice · Combine</p>
+      <h3>✍️ 두 문장 합치기 <span class="quiz-score">맞힌 문제 <b>0</b> / ${s.combine.length}</span></h3>
+      <p class="us-help">관계대명사로 두 문장을 한 문장으로 합쳐 쓰고 <b>엔터</b>를 누르세요. 대문자와 문장부호까지 채점해요.</p>
+      ${items}</div>`;
+  }
+
   /* ---------- 탭 내용 ---------- */
   function render(t) {
     document.body.classList.remove('is-home');
@@ -250,8 +273,8 @@
       }
       n++;
       const sid = `${t.id}-${s.id || i}`;
-      toc += `<a href="#${t.id}.${s.id || i}" class="${s.toon ? 'has-toon' : ''}${s.unscramble ? ' has-us' : ''}">${s.title}</a>`;
-      side += `<li><a href="#${t.id}.${s.id || i}" data-target="${sid}"><span class="side-no">${n}</span><span>${s.title}${s.toon ? ' 🎞' : ''}${s.unscramble ? ' 🧩' : ''}</span></a></li>`;
+      toc += `<a href="#${t.id}.${s.id || i}" class="${s.toon ? 'has-toon' : ''}${s.unscramble ? ' has-us' : ''}">${s.title}${s.combine ? ' ✍️' : ''}</a>`;
+      side += `<li><a href="#${t.id}.${s.id || i}" data-target="${sid}"><span class="side-no">${n}</span><span>${s.title}${s.toon ? ' 🎞' : ''}${s.combine ? ' ✍️' : ''}${s.unscramble ? ' 🧩' : ''}</span></a></li>`;
       body += `<section class="section" id="${sid}">
         <h3><span class="sec-no">${n}</span>${s.title}${s.en ? `<span class="sec-en">${s.en}</span>` : ''}</h3>
         ${s.html || ''}
@@ -259,6 +282,7 @@
         ${exHTML(s.examples, s.exTitle)}
         ${!s.toonFirst && s.toon ? toonHTML(s.toon, sid + '-toon') : ''}
         ${s.after || ''}
+        ${combineHTML(t, s)}
         ${usHTML(t.id, s)}
       </section>`;
     });
