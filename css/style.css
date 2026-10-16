@@ -618,16 +618,11 @@ tbody tr:hover td { background: rgba(255, 255, 255, .03); }
 .us-no { flex: 0 0 auto; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--yellow); color: var(--yellow-ink); font-size: 13px; font-weight: 900; }
 .us-words { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 .us-chip {
-  padding: 4px 12px; border-radius: 10px; cursor: pointer;
-  border: 1px solid var(--glass-line); background: rgba(255, 255, 255, .08); color: var(--text);
-  font: 700 15px var(--font);
+  padding: 4px 12px; border-radius: 10px;
+  border: 1px dashed var(--glass-line); background: rgba(255, 255, 255, .05); color: var(--text);
+  font: 700 15px var(--font); user-select: none;
 }
-.us-chip:hover { background: rgba(247, 215, 74, .2); }
-.us-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px; }
-@media (max-width: 640px) {
-  .us-row { grid-template-columns: 1fr 1fr; }
-  .us-row .us-input { grid-column: 1 / -1; }
-}
+.us-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; }
 .us-input {
   width: 100%; min-width: 0; height: 42px; padding: 0 14px;
   border-radius: 12px; border: 1px solid var(--glass-line);

@@ -75,18 +75,17 @@
       usData[key] = q;
       return `<li class="us-item" data-key="${key}">
         <p class="us-ko"><span class="us-no">${i + 1}</span>${q.ko}</p>
-        <div class="us-words">${q.words.map(w => `<button type="button" class="us-chip">${esc(w)}</button>`).join('')}</div>
+        <div class="us-words" aria-label="섞인 단어">${q.words.map(w => `<span class="us-chip">${esc(w)}</span>`).join('')}</div>
         <div class="us-row">
           <label class="sr-only" for="${key}">${i + 1}번 답</label>
-          <input id="${key}" class="us-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="단어를 순서대로 써 보세요">
-          <button type="button" class="us-clear" aria-label="${i + 1}번 답 지우기">지우기</button>
+          <input id="${key}" class="us-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="여기에 문장을 쓰세요">
           <button type="button" class="us-check">답 입력</button>
         </div>
         <div class="us-result" aria-live="polite"></div>
       </li>`;
     }).join('');
     return `<div class="unscramble${bare ? ' bare' : ''}">${bare ? '' : '<p class="us-title">🧩 단어 순서 맞히기</p>'}
-      <p class="us-help">우리말에 맞게 단어를 순서대로 써 보세요. 단어 카드를 누르면 자동으로 들어가요. 대문자와 마침표는 신경 쓰지 않아도 돼요.</p>
+      <p class="us-help">우리말에 맞게 단어를 순서대로 직접 써 보고 <b>엔터</b>를 누르세요. 대문자와 마침표는 신경 쓰지 않아도 돼요.</p>
       <ol class="us-list">${items}</ol></div>`;
   }
   function usGrade(item) {
@@ -234,18 +233,6 @@
   main.addEventListener('click', e => {
     const item = e.target.closest('.us-item');
     if (item) {
-      const input = item.querySelector('.us-input');
-      if (e.target.closest('.us-chip')) {
-        input.value = (input.value.trim() ? input.value.trim() + ' ' : '') + e.target.textContent;
-        return;
-      }
-      if (e.target.closest('.us-clear')) {
-        input.value = '';
-        item.classList.remove('us-ok', 'us-no-ok');
-        item.querySelector('.us-result').innerHTML = '';
-        input.focus();
-        return;
-      }
       if (e.target.closest('.us-check')) { usGrade(item); return; }
       if (e.target.closest('.us-show')) {
         e.target.hidden = true;
