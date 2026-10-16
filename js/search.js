@@ -33,7 +33,7 @@
       index.push({ tab: t, key: s.id || String(i), title: s.title, text: norm(parts.filter(Boolean).map(plain).join(' · ')) });
     });
     if (t.quiz && t.quiz.length) {
-      index.push({ tab: t, key: 'quiz', title: '확인 퀴즈', text: norm(t.quiz.map(([q, a]) => plain(q) + ' ' + plain(a)).join(' · ')) });
+      index.push({ tab: t, key: 'quiz', title: '확인 퀴즈', text: norm(t.quiz.map(q => [plain(q.q), plain(q.exp), ...(q.word || q.sentence || [])].join(' ')).join(' · ')) });
     }
   });
 

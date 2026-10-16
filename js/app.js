@@ -138,6 +138,67 @@
         : `❌ 아쉬워요. 다시 해 보세요. <button type="button" class="us-show">정답 보기</button><span class="us-answer en" hidden>${esc(q.answer)}</span>`;
   }
 
+  /* ---------- 확인 퀴즈: O/X 버튼 + 타이핑 ---------- */
+  const quizData = {};
+  const wordNorm = v => v.toLowerCase().replace(/[’‘`]/g, "'").replace(/[.!?]/g, ' ').replace(/[,/]/g, ' ').replace(/\s+/g, ' ').trim();
+  function quizHTML(t) {
+    const items = t.quiz.map((q, i) => {
+      const key = `qz-${t.id}-${i}`;
+      quizData[key] = q;
+      const control = 'ox' in q
+        ? `<div class="ox-row" role="group" aria-label="Q${i + 1} O 또는 X">
+            <button type="button" class="ox-btn" data-v="o" aria-pressed="false">O</button>
+            <button type="button" class="ox-btn" data-v="x" aria-pressed="false">X</button></div>`
+        : `<div class="us-row">
+            <label class="sr-only" for="${key}">Q${i + 1} 답</label>
+            <input id="${key}" class="us-input q-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="${q.sentence ? '문장 전체를 쓰세요' : '답을 쓰세요'}">
+            <button type="button" class="us-check q-check">답 입력</button></div>`;
+      return `<div class="q" data-qkey="${key}">
+        <div class="q-text"><span class="q-kind">${'ox' in q ? 'O/X' : q.sentence ? '문장 쓰기' : '빈칸·고르기'}</span>Q${i + 1}. ${q.q}</div>
+        ${control}
+        <div class="q-result" aria-live="polite"></div>
+      </div>`;
+    }).join('');
+    return `<div class="quiz" id="${t.id}-quiz"><p class="eyebrow">Quiz · Check</p>
+      <h3>✅ 확인 퀴즈 <span class="quiz-score">맞힌 문제 <b>0</b> / ${t.quiz.length}</span></h3>
+      <p class="us-help">O/X 문제는 버튼을 누르고, 나머지는 답을 쓴 뒤 <b>엔터</b>를 누르세요. 빈칸이 여러 개면 순서대로 쉼표(,)로 나눠 써요. <b>문장 쓰기</b> 문제는 대문자와 문장부호까지 채점해요.</p>
+      ${items}</div>`;
+  }
+  function quizMark(el, ok, html, cls) {
+    el.dataset.ok = ok ? '1' : '0';
+    el.classList.toggle('q-ok', ok);
+    el.classList.toggle('q-no', !ok);
+    const box = el.querySelector('.q-result');
+    box.className = 'q-result ' + (cls || (ok ? 'ok' : 'no'));
+    box.innerHTML = html;
+    const quiz = el.closest('.quiz');
+    quiz.querySelector('.quiz-score b').textContent = quiz.querySelectorAll('.q[data-ok="1"]').length;
+  }
+  function quizGrade(el, pick) {
+    const q = quizData[el.dataset.qkey];
+    const exp = q.exp ? `<span class="q-exp">${q.exp}</span>` : '';
+    if ('ox' in q) {
+      el.querySelectorAll('.ox-btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === pick));
+      const ok = (pick === 'o') === q.ox;
+      quizMark(el, ok, ok ? `<span>⭕ 정답이에요!</span>${exp}` : `<span>❌ 아쉬워요. 정답은 <b>${q.ox ? 'O' : 'X'}</b>예요.</span>${exp}`);
+      return;
+    }
+    const input = el.querySelector('.q-input');
+    if (!input.value.trim()) { el.querySelector('.q-result').className = 'q-result'; el.querySelector('.q-result').textContent = '먼저 답을 써 주세요.'; input.focus(); return; }
+    const answers = q.sentence || q.word;
+    const show = `<button type="button" class="us-show q-show">정답 보기</button><span class="q-answer" hidden>정답: <span class="en">${esc(answers[0])}</span>${exp}</span>`;
+    if (q.sentence) {
+      const ok = answers.some(a => usStrict(a) === usStrict(input.value));
+      const near = !ok && answers.some(a => usLoose(a) === usLoose(input.value));
+      quizMark(el, ok, ok ? `<span>⭕ 정답이에요!</span>${exp}`
+        : near ? `<span>🟡 단어는 맞았어요! <b>대문자</b>와 <b>문장부호(. , ? !)</b>를 다시 확인해 보세요.</span>${show}`
+        : `<span>❌ 아쉬워요. 다시 해 보세요.</span>${show}`, near ? 'near' : '');
+    } else {
+      const ok = answers.some(a => wordNorm(a) === wordNorm(input.value));
+      quizMark(el, ok, ok ? `<span>⭕ 정답이에요!</span>${exp}` : `<span>❌ 아쉬워요. 다시 해 보세요.</span>${show}`);
+    }
+  }
+
   /* ---------- 탭 내용 ---------- */
   function render(t) {
     document.body.classList.remove('is-home');
@@ -174,9 +235,7 @@
         ${usHTML(t.id, { id: 'review', unscramble: t.unscrambleEnd }, true)}
       </section>`;
     }
-    const quiz = t.quiz && t.quiz.length ? `<div class="quiz" id="${t.id}-quiz"><p class="eyebrow">Quiz · Check</p><h3>🧩 확인 퀴즈</h3>${t.quiz.map(([q, a], i) => `
-      <div class="q"><div class="q-text">Q${i + 1}. ${q}</div>
-      <button class="q-btn" type="button">정답 보기</button><div class="q-ans">${a}</div></div>`).join('')}</div>` : '';
+    const quiz = t.quiz && t.quiz.length ? quizHTML(t) : '';
     toc += quiz ? `<a href="#${t.id}.quiz">🧩 퀴즈</a>` : '';
     if (quiz) side += `<li class="side-quiz"><a href="#${t.id}.quiz" data-target="${t.id}-quiz">🧩 확인 퀴즈</a></li>`;
     const others = data.map(o => o.id === t.id
@@ -288,12 +347,12 @@
       speechSynthesis.speak(u);
       return;
     }
-    const qb = e.target.closest('.q-btn');
-    if (qb) {
-      const q = qb.parentElement;
-      q.classList.toggle('open');
-      qb.textContent = q.classList.contains('open') ? '정답 숨기기' : '정답 보기';
-      return;
+    const qEl = e.target.closest('.quiz .q');
+    if (qEl) {
+      const ox = e.target.closest('.ox-btn');
+      if (ox) { quizGrade(qEl, ox.dataset.v); return; }
+      if (e.target.closest('.q-check')) { quizGrade(qEl); return; }
+      if (e.target.closest('.q-show')) { e.target.hidden = true; qEl.querySelector('.q-answer').hidden = false; return; }
     }
     const tg = e.target.closest('.wt-toggle');
     if (tg) {
@@ -306,7 +365,10 @@
   });
 
   main.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.target.classList.contains('us-input')) {
+    if (e.key === 'Enter' && e.target.classList.contains('q-input')) {
+      e.preventDefault();
+      quizGrade(e.target.closest('.q'));
+    } else if (e.key === 'Enter' && e.target.classList.contains('us-input')) {
       e.preventDefault();
       usGrade(e.target.closest('.us-item'));
     }
