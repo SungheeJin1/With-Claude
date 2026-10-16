@@ -715,3 +715,5 @@ tbody tr:hover td { background: rgba(255, 255, 255, .03); }
   .header-hidden .site-header { transform: translateY(calc(-100% - env(safe-area-inset-top, 0px))); }
 }
 @media (prefers-reduced-motion: reduce) { .site-header { transition: none; } }
+.us-result.near { color: var(--yellow); }
+.us-item.us-near { border-color: rgba(247, 215, 74, .5); }

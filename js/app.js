@@ -92,9 +92,11 @@
   }
 
   /* ---------- 단어 순서 맞히기 (언스크램블) ---------- */
-  /* 비교할 때 대문자·마침표·물음표·느낌표는 무시해요. 쉼표는 keepComma 문제에서만 따져요 */
-  const usNorm = (v, keepComma) => v.toLowerCase().replace(/[’‘`]/g, "'")
-    .replace(keepComma ? /[.!?]/g : /[.,!?]/g, ' ').replace(/\s*,\s*/g, ', ').replace(/\s+/g, ' ').trim();
+  /* 채점: 대문자와 문장부호까지 정확해야 정답이에요.
+     봐주는 것은 띄어쓰기 개수, 문장부호 앞 빈칸, 휴대폰 키보드의 둥근 따옴표(’)뿐이에요. */
+  const usStrict = v => v.replace(/[’‘`]/g, "'").replace(/\s+([.,!?])/g, '$1').replace(/\s+/g, ' ').trim();
+  /* 힌트용: 대문자·문장부호를 빼고 단어 순서만 비교 */
+  const usLoose = v => v.toLowerCase().replace(/[’‘`]/g, "'").replace(/[.,!?]/g, ' ').replace(/\s+/g, ' ').trim();
   const usData = {};
   function usHTML(tabId, s, bare) {
     if (!s.unscramble || !s.unscramble.length) return '';
@@ -113,22 +115,27 @@
       </li>`;
     }).join('');
     return `<div class="unscramble${bare ? ' bare' : ''}">${bare ? '' : '<p class="us-title">🧩 단어 순서 맞히기</p>'}
-      <p class="us-help">우리말에 맞게 단어를 순서대로 직접 써 보고 <b>엔터</b>를 누르세요. 대문자와 마침표는 신경 쓰지 않아도 돼요.</p>
+      <p class="us-help">우리말에 맞게 단어를 순서대로 직접 써 보고 <b>엔터</b>를 누르세요. <b>문장 첫 글자는 대문자</b>로 쓰고, 쉼표와 <b>마침표(.)·물음표(?)·느낌표(!)</b>도 정확히 넣어야 정답이에요.</p>
       <ol class="us-list">${items}</ol></div>`;
   }
   function usGrade(item) {
     const q = usData[item.dataset.key];
     const input = item.querySelector('.us-input');
     const box = item.querySelector('.us-result');
-    const given = usNorm(input.value, q.keepComma);
+    const given = usStrict(input.value);
     if (!given) { box.className = 'us-result'; box.textContent = '먼저 답을 써 주세요.'; input.focus(); return; }
-    const ok = [q.answer, ...(q.alt || [])].some(a => usNorm(a, q.keepComma) === given);
+    const answers = [q.answer, ...(q.alt || [])];
+    const ok = answers.some(a => usStrict(a) === given);
+    const orderOk = !ok && answers.some(a => usLoose(a) === usLoose(given));
     item.classList.toggle('us-ok', ok);
-    item.classList.toggle('us-no-ok', !ok);
-    box.className = 'us-result ' + (ok ? 'ok' : 'no');
+    item.classList.toggle('us-near', orderOk);
+    item.classList.toggle('us-no-ok', !ok && !orderOk);
+    box.className = 'us-result ' + (ok ? 'ok' : orderOk ? 'near' : 'no');
     box.innerHTML = ok
       ? `⭕ 정답이에요! <span class="en">${esc(q.answer)}</span>`
-      : `❌ 아쉬워요. 다시 해 보세요. <button type="button" class="us-show">정답 보기</button><span class="us-answer en" hidden>${esc(q.answer)}</span>`;
+      : orderOk
+        ? `<span>🟡 단어 순서는 맞았어요! <b>대문자</b>와 <b>문장부호(. , ? !)</b>를 다시 확인해 보세요.</span> <button`
+        : `❌ 아쉬워요. 다시 해 보세요. <button type="button" class="us-show">정답 보기</button><span class="us-answer en" hidden>${esc(q.answer)}</span>`;
   }
 
   /* ---------- 탭 내용 ---------- */
