@@ -1,7 +1,7 @@
 /* 용어 검색: 입력한 말이 그대로 들어 있는 항목만 보여 줘요 (자동완성 없음) */
 (function () {
-  const form = document.getElementById('searchForm');
-  const input = document.getElementById('searchInput');
+  /* 검색창은 시작 페이지에만 있고 페이지를 오갈 때마다 새로 그려지므로, 그때그때 찾아 써요 */
+  const getInput = () => document.getElementById('searchInput');
   const panel = document.getElementById('searchPanel');
   const title = document.getElementById('searchTitle');
   const list = document.getElementById('searchResults');
@@ -41,8 +41,10 @@
   }
 
   let lastQuery = '';
-  form.addEventListener('submit', e => {
+  document.addEventListener('submit', e => {
+    if (e.target.id !== 'searchForm') return;
     e.preventDefault();
+    const input = getInput();
     const q = norm(input.value);
     if (!q) { input.focus(); return; }
     lastQuery = q;
@@ -72,7 +74,7 @@
   }
   document.getElementById('searchClose').addEventListener('click', close);
   panel.addEventListener('click', e => { if (e.target === panel) close(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) { close(); input.focus(); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) { close(); const i = getInput(); if (i) i.focus(); } });
 
   /* 결과를 누르면 그 항목으로 이동하고, 찾은 말을 노랗게 표시 */
   list.addEventListener('click', e => {

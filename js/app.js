@@ -1,18 +1,46 @@
 (function () {
-  const tabsEl = document.getElementById('tabs');
   const main = document.getElementById('main');
   const data = window.GRAMMAR;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-  /* ---------- 탭 ---------- */
-  tabsEl.innerHTML = data.map(t => `
-    <button class="tab" role="tab" id="tab-${t.id}" data-id="${t.id}" style="--c:${t.color}" aria-selected="false">
-      <span class="tab-icon" aria-hidden="true">${t.icon}</span>${t.name}<small>${t.en}</small>
-    </button>`).join('');
-  tabsEl.addEventListener('click', e => {
-    const b = e.target.closest('.tab');
-    if (b) location.hash = b.dataset.id;
-  });
+  /* ---------- 시작 페이지: 품사 고르기 + 용어 검색 ---------- */
+  const firstSentence = html => {
+    const d = document.createElement('div'); d.innerHTML = html;
+    return d.textContent.split(/(?<=[.!?])\s/)[0];
+  };
+  function renderHome() {
+    document.body.classList.add('is-home');
+    document.documentElement.style.setProperty('--tab-color', '#f7d74a');
+    sideEl.innerHTML = '';
+    document.getElementById('crumb').textContent = '';
+    const cards = data.map((t, i) => {
+      const secs = t.sections.filter(s => !s.group);
+      const toons = secs.filter(s => s.toon).length;
+      const us = secs.filter(s => s.unscramble).length + (t.unscrambleEnd ? 1 : 0);
+      return `<a class="pos-card" href="#${t.id}" style="--c:${t.color}">
+        <span class="pos-top"><span class="pos-icon" aria-hidden="true">${t.icon}</span><span class="pos-no">${String(i + 1).padStart(2, '0')}</span></span>
+        <strong>${t.name}</strong><small>${t.en}</small>
+        <span class="pos-desc">${esc(firstSentence(t.intro))}</span>
+        <span class="pos-meta">챕터 ${secs.length} · 웹툰 ${toons} · 🧩 ${us}</span>
+      </a>`;
+    }).join('');
+    main.innerHTML = `
+      <section class="home">
+        <div class="home-hero">
+          <p class="eyebrow">English Grammar · 8 Parts of Speech</p>
+          <h2>오늘은 어떤 품사를 탐험할까요?</h2>
+          <p>품사를 골라 설명과 웹툰, 문제를 살펴보세요. 궁금한 용어가 있으면 검색해도 돼요.</p>
+          <form class="search home-search" id="searchForm" role="search" autocomplete="off">
+            <label class="sr-only" for="searchInput">용어 검색</label>
+            <input id="searchInput" type="search" placeholder="용어 검색 (예: 관계대명사, 현재완료)" enterkeyhint="search" spellcheck="false">
+            <button type="submit">검색</button>
+          </form>
+        </div>
+        <h3 class="home-sub">품사 고르기</h3>
+        <nav class="pos-grid" aria-label="8품사">${cards}</nav>
+      </section>`;
+    document.title = '품사 탐험대';
+  }
 
   /* ---------- 웹툰 ---------- */
   function castHTML(c) {
@@ -105,6 +133,8 @@
 
   /* ---------- 탭 내용 ---------- */
   function render(t) {
+    document.body.classList.remove('is-home');
+    document.getElementById('crumb').innerHTML = `<span aria-hidden="true">${t.icon}</span> ${t.name}`;
     document.documentElement.style.setProperty('--tab-color', t.color);
     let n = 0, toc = '', body = '', side = '';
     t.sections.forEach((s, i) => {
@@ -209,15 +239,14 @@
   let current = null;
   function route() {
     const [id, sub] = decodeURIComponent(location.hash.slice(1)).split(/[./]/);
-    const t = data.find(d => d.id === id) || data[0];
+    const t = data.find(d => d.id === id);
+    if (!t) {
+      if (current !== 'home') { current = 'home'; renderHome(); window.scrollTo(0, 0); }
+      return;
+    }
     if (current !== t.id) {
       current = t.id;
       render(t);
-      tabsEl.querySelectorAll('.tab').forEach(b => {
-        const on = b.dataset.id === t.id;
-        b.setAttribute('aria-selected', on);
-        if (on) b.scrollIntoView({ block: 'nearest', inline: 'center' });
-      });
       document.title = `${t.name} (${t.en}) · 품사 탐험대`;
       if (!sub) window.scrollTo(0, 0);
     }

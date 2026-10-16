@@ -646,3 +646,65 @@ tbody tr:hover td { background: rgba(255, 255, 255, .03); }
 .us-answer[hidden], .us-show[hidden] { display: none; }
 .unscramble.bare { margin-top: 0; padding: 0; border: 0; background: none; }
 .section.review { border-color: rgba(247, 215, 74, .35); }
+
+/* ===== 헤더: 처음으로 ===== */
+.brand-link { display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; min-width: 0; }
+.brand-link:focus-visible, .home-btn:focus-visible, .pos-card:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; border-radius: 14px; }
+.brand { padding-bottom: 14px; }
+.crumb { flex: 1; min-width: 0; font-weight: 800; font-size: 17px; color: var(--text-soft); padding-left: 14px; border-left: 1px solid var(--glass-line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.crumb:empty { border: 0; }
+.home-btn {
+  flex: 0 0 auto; display: inline-flex; align-items: center; height: 40px; padding: 0 16px;
+  border-radius: 999px; border: 1px solid var(--glass-line); background: rgba(255, 255, 255, .08);
+  color: var(--text); text-decoration: none; font-weight: 800; font-size: 14px;
+}
+.home-btn:hover { background: var(--yellow); color: var(--yellow-ink); border-color: var(--yellow); }
+.is-home .home-btn, .is-home .side, .is-home .side-btn, .is-home .side-backdrop { display: none; }
+
+/* ===== 시작 페이지 ===== */
+.home { display: grid; gap: 18px; }
+.home-hero {
+  position: relative; overflow: hidden; border-radius: var(--radius);
+  padding: 34px 28px 30px; background: var(--glass); border: 1px solid var(--glass-line);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+}
+.home-hero::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(460px 240px at 100% 0%, rgba(247, 215, 74, .22), transparent 70%);
+}
+.home-hero h2 { position: relative; margin: 0 0 6px; font-size: clamp(28px, 5vw, 40px); line-height: 1.25; text-wrap: balance; }
+.home-hero > p:not(.eyebrow) { position: relative; margin: 0 0 18px; color: var(--text-soft); max-width: 60ch; }
+.home-search { position: relative; max-width: 620px; }
+.home-search input { height: 50px; font-size: 16px; padding: 0 18px; }
+.home-search button { height: 50px; padding: 0 22px; font-size: 15px; }
+.home-sub { margin: 10px 4px 0; font-size: 14px; letter-spacing: .14em; color: var(--yellow); text-transform: uppercase; }
+.pos-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.pos-card {
+  display: flex; flex-direction: column; gap: 2px; min-width: 0;
+  padding: 18px 18px 16px; border-radius: 22px; text-decoration: none; color: var(--text);
+  background: var(--glass); border: 1px solid var(--glass-line);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  transition: transform .15s, border-color .15s, background .15s;
+}
+.pos-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--c) 70%, transparent); background: color-mix(in srgb, var(--c) 12%, rgba(255, 255, 255, .04)); }
+.pos-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.pos-icon { font-size: 30px; line-height: 1; }
+.pos-no { font-size: 12px; font-weight: 800; letter-spacing: .1em; color: var(--text-dim); }
+.pos-card strong { font-size: 22px; letter-spacing: -0.02em; }
+.pos-card small { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--c); }
+.pos-desc { margin-top: 8px; font-size: 14px; line-height: 1.55; color: var(--text-soft); }
+.pos-meta { margin-top: auto; padding-top: 10px; font-size: 12px; font-weight: 700; color: var(--text-dim); }
+
+@media (max-width: 900px) { .pos-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .brand { flex-wrap: nowrap; }
+  .crumb { font-size: 15px; padding-left: 10px; }
+  .home-btn { height: 36px; padding: 0 12px; font-size: 13px; }
+  .home-hero { padding: 26px 18px 22px; }
+  .home-search { flex-wrap: nowrap; }
+  .home-search input, .home-search button { height: 46px; }
+  .pos-card { padding: 14px 14px 12px; }
+  .pos-card strong { font-size: 19px; }
+  .pos-desc { font-size: 13px; }
+}
+@media (max-width: 380px) { .brand-link div { display: none; } }

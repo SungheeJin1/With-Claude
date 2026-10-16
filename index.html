@@ -18,18 +18,16 @@
 <body>
 <header class="site-header">
   <div class="brand">
-    <span class="brand-logo">ABC</span>
-    <div>
-      <h1>품사 탐험대</h1>
-      <p>영어 문장을 만드는 8명의 친구들을 만나 보아요!</p>
-    </div>
-    <form class="search" id="searchForm" role="search" autocomplete="off">
-      <label class="sr-only" for="searchInput">용어 검색</label>
-      <input id="searchInput" type="search" placeholder="용어 검색 (예: 관계대명사)" enterkeyhint="search" spellcheck="false">
-      <button type="submit">검색</button>
-    </form>
+    <a class="brand-link" href="#home" aria-label="품사 탐험대 처음 화면">
+      <span class="brand-logo">ABC</span>
+      <div>
+        <h1>품사 탐험대</h1>
+        <p>영어 문장을 만드는 8명의 친구들을 만나 보아요!</p>
+      </div>
+    </a>
+    <span class="crumb" id="crumb"></span>
+    <a class="home-btn" href="#home">🏠 처음으로</a>
   </div>
-  <nav class="tabs" id="tabs" role="tablist" aria-label="8품사"></nav>
 </header>
 
 <div class="layout">
