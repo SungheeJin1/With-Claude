@@ -63,6 +63,45 @@
       </li>`).join('')}</ul>`;
   }
 
+  /* ---------- 단어 순서 맞히기 (언스크램블) ---------- */
+  const usNorm = v => v.toLowerCase().replace(/[’‘`]/g, "'").replace(/[.,!?]/g, ' ').replace(/\s+/g, ' ').trim();
+  const usData = {};
+  function usHTML(tabId, s) {
+    if (!s.unscramble || !s.unscramble.length) return '';
+    const items = s.unscramble.map((q, i) => {
+      const key = `us-${tabId}-${s.id}-${i}`;
+      usData[key] = q;
+      return `<li class="us-item" data-key="${key}">
+        <p class="us-ko"><span class="us-no">${i + 1}</span>${q.ko}</p>
+        <div class="us-words">${q.words.map(w => `<button type="button" class="us-chip">${esc(w)}</button>`).join('')}</div>
+        <div class="us-row">
+          <label class="sr-only" for="${key}">${i + 1}번 답</label>
+          <input id="${key}" class="us-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="단어를 순서대로 써 보세요">
+          <button type="button" class="us-clear" aria-label="${i + 1}번 답 지우기">지우기</button>
+          <button type="button" class="us-check">답 입력</button>
+        </div>
+        <div class="us-result" aria-live="polite"></div>
+      </li>`;
+    }).join('');
+    return `<div class="unscramble"><p class="us-title">🧩 단어 순서 맞히기</p>
+      <p class="us-help">우리말에 맞게 단어를 순서대로 써 보세요. 단어 카드를 누르면 자동으로 들어가요. 대문자와 마침표는 신경 쓰지 않아도 돼요.</p>
+      <ol class="us-list">${items}</ol></div>`;
+  }
+  function usGrade(item) {
+    const q = usData[item.dataset.key];
+    const input = item.querySelector('.us-input');
+    const box = item.querySelector('.us-result');
+    const given = usNorm(input.value);
+    if (!given) { box.className = 'us-result'; box.textContent = '먼저 답을 써 주세요.'; input.focus(); return; }
+    const ok = [q.answer, ...(q.alt || [])].some(a => usNorm(a) === given);
+    item.classList.toggle('us-ok', ok);
+    item.classList.toggle('us-no-ok', !ok);
+    box.className = 'us-result ' + (ok ? 'ok' : 'no');
+    box.innerHTML = ok
+      ? `⭕ 정답이에요! <span class="en">${esc(q.answer)}</span>`
+      : `❌ 아쉬워요. 다시 해 보세요. <button type="button" class="us-show">정답 보기</button><span class="us-answer en" hidden>${esc(q.answer)}</span>`;
+  }
+
   /* ---------- 탭 내용 ---------- */
   function render(t) {
     document.documentElement.style.setProperty('--tab-color', t.color);
@@ -86,6 +125,7 @@
         ${exHTML(s.examples, s.exTitle)}
         ${!s.toonFirst && s.toon ? toonHTML(s.toon, sid + '-toon') : ''}
         ${s.after || ''}
+        ${usHTML(t.id, s)}
       </section>`;
     });
     const quiz = t.quiz && t.quiz.length ? `<div class="quiz" id="${t.id}-quiz"><p class="eyebrow">Quiz · Check</p><h3>🧩 확인 퀴즈</h3>${t.quiz.map(([q, a], i) => `
@@ -182,6 +222,27 @@
 
   /* ---------- 상호작용 ---------- */
   main.addEventListener('click', e => {
+    const item = e.target.closest('.us-item');
+    if (item) {
+      const input = item.querySelector('.us-input');
+      if (e.target.closest('.us-chip')) {
+        input.value = (input.value.trim() ? input.value.trim() + ' ' : '') + e.target.textContent;
+        return;
+      }
+      if (e.target.closest('.us-clear')) {
+        input.value = '';
+        item.classList.remove('us-ok', 'us-no-ok');
+        item.querySelector('.us-result').innerHTML = '';
+        input.focus();
+        return;
+      }
+      if (e.target.closest('.us-check')) { usGrade(item); return; }
+      if (e.target.closest('.us-show')) {
+        e.target.hidden = true;
+        item.querySelector('.us-answer').hidden = false;
+        return;
+      }
+    }
     const say = e.target.closest('.say-btn');
     if (say && 'speechSynthesis' in window) {
       speechSynthesis.cancel();
@@ -204,6 +265,13 @@
       const folded = w.classList.contains('folded');
       tg.textContent = folded ? '펼치기' : '접기';
       tg.setAttribute('aria-expanded', !folded);
+    }
+  });
+
+  main.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.classList.contains('us-input')) {
+      e.preventDefault();
+      usGrade(e.target.closest('.us-item'));
     }
   });
 

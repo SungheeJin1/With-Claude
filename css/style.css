@@ -601,3 +601,49 @@ tbody tr:hover td { background: rgba(255, 255, 255, .03); }
 }
 .search-panel[hidden] { display: none; }
 .group-banner, .quiz { scroll-margin-top: calc(var(--header-h, 170px) + 12px); }
+
+/* ===== 단어 순서 맞히기 (언스크램블) ===== */
+.unscramble {
+  margin-top: 22px; padding: 18px 18px 8px;
+  border-radius: 20px; border: 1px solid rgba(247, 215, 74, .3);
+  background: linear-gradient(135deg, rgba(247, 215, 74, .08), rgba(255, 255, 255, .03));
+}
+.us-title { margin: 0 !important; font-weight: 800; font-size: 18px; }
+.us-help { margin: 4px 0 10px !important; color: var(--text-soft); font-size: 14px; }
+.us-list { list-style: none; margin: 0; padding: 0 !important; display: grid; gap: 12px; }
+.us-item { padding: 14px; margin: 0 !important; border-radius: 16px; background: rgba(0, 0, 0, .2); border: 1px solid rgba(255, 255, 255, .08); }
+.us-item.us-ok { border-color: rgba(95, 227, 161, .5); }
+.us-item.us-no-ok { border-color: rgba(255, 123, 123, .5); }
+.us-ko { display: flex; gap: 10px; align-items: baseline; margin: 0 0 8px !important; font-weight: 700; }
+.us-no { flex: 0 0 auto; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--yellow); color: var(--yellow-ink); font-size: 13px; font-weight: 900; }
+.us-words { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.us-chip {
+  padding: 4px 12px; border-radius: 10px; cursor: pointer;
+  border: 1px solid var(--glass-line); background: rgba(255, 255, 255, .08); color: var(--text);
+  font: 700 15px var(--font);
+}
+.us-chip:hover { background: rgba(247, 215, 74, .2); }
+.us-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px; }
+@media (max-width: 640px) {
+  .us-row { grid-template-columns: 1fr 1fr; }
+  .us-row .us-input { grid-column: 1 / -1; }
+}
+.us-input {
+  width: 100%; min-width: 0; height: 42px; padding: 0 14px;
+  border-radius: 12px; border: 1px solid var(--glass-line);
+  background: rgba(255, 255, 255, .07); color: var(--text); font: 600 16px var(--font);
+}
+.us-input::placeholder { color: var(--text-dim); font-weight: 500; }
+.us-input:focus { outline: 2px solid var(--yellow); outline-offset: 1px; }
+.us-clear, .us-check, .us-show { height: 42px; padding: 0 16px; border-radius: 12px; cursor: pointer; font: 800 14px var(--font); }
+.us-clear { border: 1px solid var(--glass-line); background: transparent; color: var(--text-soft); }
+.us-check { border: 0; background: var(--yellow); color: var(--yellow-ink); }
+.us-chip:focus-visible, .us-clear:focus-visible, .us-check:focus-visible, .us-show:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+.us-result { margin-top: 8px; font-weight: 700; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.us-result:empty { display: none; }
+.us-result.ok { color: var(--good); }
+.us-result.no { color: var(--bad); }
+.us-result .en { color: var(--text); }
+.us-show { height: 32px; padding: 0 12px; border: 1px solid var(--glass-line); background: rgba(255, 255, 255, .08); color: var(--text); font-size: 13px; }
+.us-answer { color: var(--text); }
+.us-answer[hidden], .us-show[hidden] { display: none; }

@@ -4,6 +4,11 @@ GRAMMAR.push({
   sections: [
     {
       id: 'what', title: '명사란 무엇일까요?', en: 'What is a noun?',
+      unscramble: [
+        { ko: "지민이는 부산에 살아요.", words: ["lives", "Busan", "Jimin", "in"], answer: "Jimin lives in Busan." },
+        { ko: "우리 개는 뼈다귀를 좋아해요.", words: ["likes", "my", "bones", "dog"], answer: "My dog likes bones." },
+        { ko: "사랑은 사람들을 행복하게 해요.", words: ["happy", "makes", "love", "people"], answer: "Love makes people happy." },
+      ],
       html: `
         <p>여러분 이름이 있죠? 연필에도, 학교에도, 강아지에게도 이름이 있어요. 이렇게 <span class="mark">무언가를 부르는 이름</span>이 바로 명사예요.</p>
         ${H.table(['종류', '뜻', '예'], [
@@ -23,6 +28,11 @@ GRAMMAR.push({
     },
     {
       id: 'count', title: '셀 수 있는 명사 vs 셀 수 없는 명사', en: 'Countable / Uncountable',
+      unscramble: [
+        { ko: "물 한 잔 마실 수 있을까요?", words: ["a", "water", "I", "of", "can", "glass", "have"], answer: "Can I have a glass of water?" },
+        { ko: "엄마가 주스 세 병을 사셨어요.", words: ["juice", "bought", "of", "three", "Mom", "bottles"], answer: "Mom bought three bottles of juice." },
+        { ko: "나는 오늘 숙제가 많아요.", words: ["homework", "a", "today", "have", "of", "lot", "I"], answer: "I have a lot of homework today.", alt: ["Today I have a lot of homework."] },
+      ],
       html: `
         <p>영어는 명사를 <b>“하나, 둘 셀 수 있느냐?”</b>로 두 팀으로 나눠요. 이게 아주 중요해요. 왜냐하면 팀에 따라 <span class="en">a/an</span>을 붙일 수 있는지, <span class="en">-s</span>를 붙일 수 있는지가 달라지거든요.</p>
         ${H.table(['', '셀 수 있는 명사 🍎', '셀 수 없는 명사 💧'], [
@@ -70,6 +80,11 @@ GRAMMAR.push({
     },
     {
       id: 'a-an', title: 'a와 an, 무엇을 붙일까?', en: 'a / an',
+      unscramble: [
+        { ko: "나는 매일 아침 달걀 하나를 먹어요.", words: ["every", "an", "I", "morning", "eat", "egg"], answer: "I eat an egg every morning.", alt: ["Every morning I eat an egg."] },
+        { ko: "우리는 한 시간 동안 기다렸어요.", words: ["an", "waited", "hour", "we", "for"], answer: "We waited for an hour." },
+        { ko: "그녀는 대학생이에요.", words: ["a", "student", "is", "she", "university"], answer: "She is a university student." },
+      ],
       html: `
         <p>셀 수 있는 명사가 <b>하나</b>일 때는 앞에 <span class="en">a</span>나 <span class="en">an</span>을 붙여요. 어떤 걸 붙일지는 <span class="mark">철자가 아니라 소리</span>로 정해요.</p>
         ${H.formula('*a', '+', '자음 소리로 시작')}${H.formula('*an', '+', '모음 소리(아, 에, 이, 오, 우)로 시작')}
@@ -88,6 +103,11 @@ GRAMMAR.push({
     },
     {
       id: 'plural', title: '복수형 만들기 (여러 개일 때)', en: 'Plural nouns',
+      unscramble: [
+        { ko: "탁자 위에 상자가 세 개 있어요.", words: ["boxes", "the", "are", "there", "on", "three", "table"], answer: "There are three boxes on the table." },
+        { ko: "아이들이 공원에서 놀고 있어요.", words: ["playing", "the", "in", "children", "are", "the", "park"], answer: "The children are playing in the park." },
+        { ko: "나는 매 식사 후에 이를 닦아요.", words: ["teeth", "every", "I", "after", "my", "meal", "brush"], answer: "I brush my teeth after every meal.", alt: ["After every meal I brush my teeth."] },
+      ],
       html: `
         <p>셀 수 있는 명사가 <b>두 개 이상</b>이면 모양이 바뀌어요. 대부분은 <span class="en">-s</span>만 붙이면 되지만, 몇 가지 규칙이 있어요.</p>
         ${H.table(['규칙', '만드는 법', '예'], [
@@ -117,6 +137,11 @@ GRAMMAR.push({
     },
     {
       id: 'role', title: '명사는 문장에서 어디에 올까?', en: 'Subject · Object · Complement',
+      unscramble: [
+        { ko: "고양이가 자고 있어요.", words: ["sleeping", "cat", "the", "is"], answer: "The cat is sleeping." },
+        { ko: "우리 엄마는 의사예요.", words: ["a", "is", "doctor", "my", "mom"], answer: "My mom is a doctor." },
+        { ko: "형은 방과 후에 축구를 해요.", words: ["soccer", "after", "my", "plays", "school", "brother"], answer: "My brother plays soccer after school.", alt: ["After school my brother plays soccer."] },
+      ],
       html: `
         <p>명사는 문장에서 세 가지 자리에 앉을 수 있어요.</p>
         ${H.table(['자리', '하는 일', '예 (굵은 글씨가 명사)'], [
@@ -134,6 +159,11 @@ GRAMMAR.push({
     },
     {
       id: 'possessive', title: '명사의 소유격 ’s', en: "Possessive 's",
+      unscramble: [
+        { ko: "이건 민지의 필통이에요.", words: ["pencil", "Minji's", "this", "case", "is"], answer: "This is Minji's pencil case." },
+        { ko: "오늘의 점심은 카레야!", words: ["curry", "lunch", "is", "today's"], answer: "Today's lunch is curry!" },
+        { ko: "학생들의 그림이 벽에 걸려 있어요.", words: ["on", "students'", "the", "wall", "drawings", "are", "the"], answer: "The students' drawings are on the wall." },
+      ],
       html: `
         <p>“톰<b>의</b> 가방”처럼 <b>누구의 것</b>인지 말할 때는 명사 뒤에 <span class="en">'s</span>(어퍼스트로피 에스)를 붙여요.</p>
         ${H.table(['경우', '만드는 법', '예'], [
@@ -151,6 +181,11 @@ GRAMMAR.push({
     },
     {
       id: 'the', title: '“그” 명사! 정관사 the', en: 'a vs the',
+      unscramble: [
+        { ko: "나는 피아노를 쳐요.", words: ["the", "play", "piano", "I"], answer: "I play the piano." },
+        { ko: "오늘 밤 달이 밝아요.", words: ["bright", "the", "tonight", "moon", "is"], answer: "The moon is bright tonight.", alt: ["Tonight the moon is bright."] },
+        { ko: "문 좀 닫아 주세요.", words: ["please", "the", "close", "door"], answer: "Close the door, please.", alt: ["Please close the door."] },
+      ],
       html: `
         <p><span class="en">a</span>는 “아무거나 하나”, <span class="en">the</span>는 “<b>우리 둘 다 아는 바로 그것</b>”이에요.</p>
         ${H.table(['the를 쓰는 경우', '예'], [
