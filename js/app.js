@@ -127,6 +127,7 @@
     const answers = [q.answer, ...(q.alt || [])];
     const ok = answers.some(a => usStrict(a) === given);
     const orderOk = !ok && answers.some(a => usLoose(a) === usLoose(given));
+    if (ok) cheer(item.querySelector('.us-row'));
     item.classList.toggle('us-ok', ok);
     item.classList.toggle('us-near', orderOk);
     item.classList.toggle('us-no-ok', !ok && !orderOk);
@@ -136,6 +137,13 @@
       : orderOk
         ? `<span>🟡 단어 순서는 맞았어요! <b>대문자</b>와 <b>문장부호(. , ? !)</b>를 다시 확인해 보세요.</span> <button`
         : `❌ 아쉬워요. 다시 해 보세요. <button type="button" class="us-show">정답 보기</button><span class="us-answer en" hidden>${esc(q.answer)}</span>`;
+  }
+
+  /* 정답이면 답을 쓴 곳에서 축하 효과(celebrate.js) */
+  function cheer(el) {
+    if (!window.celebrate || !el) return;
+    const r = el.getBoundingClientRect();
+    window.celebrate(r.left + r.width / 2, r.top + r.height / 2);
   }
 
   /* ---------- 확인 퀴즈: O/X 버튼 + 타이핑 ---------- */
@@ -165,6 +173,7 @@
       ${items}</div>`;
   }
   function quizMark(el, ok, html, cls) {
+    if (ok) cheer(el.querySelector('.ox-row, .us-row'));
     el.dataset.ok = ok ? '1' : '0';
     el.classList.toggle('q-ok', ok);
     el.classList.toggle('q-no', !ok);
