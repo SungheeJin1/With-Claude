@@ -1,5 +1,5 @@
 /* 오프라인에서도 열리도록 사이트 파일을 저장해 두는 서비스 워커 */
-const CACHE = 'pumsa-v20';
+const CACHE = 'pumsa-v21';
 const FILES = [
   './', './index.html', './css/style.css', './manifest.webmanifest',
   './fonts/PretendardVariable.woff2', './icons/icon-192.png', './icons/icon-512.png',

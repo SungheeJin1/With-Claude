@@ -179,7 +179,11 @@
       <button class="q-btn" type="button">정답 보기</button><div class="q-ans">${a}</div></div>`).join('')}</div>` : '';
     toc += quiz ? `<a href="#${t.id}.quiz">🧩 퀴즈</a>` : '';
     if (quiz) side += `<li class="side-quiz"><a href="#${t.id}.quiz" data-target="${t.id}-quiz">🧩 확인 퀴즈</a></li>`;
-    sideEl.innerHTML = `<p class="side-title"><span>${t.icon}</span>${t.name} <small>${t.en}</small></p><ol class="side-list">${side}</ol>`;
+    const others = data.map(o => o.id === t.id
+      ? `<li><span class="side-other on" aria-current="page"><span aria-hidden="true">${o.icon}</span>${o.name} <small>${o.en}</small></span></li>`
+      : `<li><a class="side-other" href="#${o.id}"><span aria-hidden="true">${o.icon}</span>${o.name} <small>${o.en}</small></a></li>`).join('');
+    sideEl.innerHTML = `<p class="side-title"><span>${t.icon}</span>${t.name} <small>${t.en}</small></p><ol class="side-list">${side}</ol>
+      <p class="side-title side-others-title">다른 품사</p><ul class="side-others">${others}</ul>`;
 
     main.innerHTML = `
       <div class="hero" style="--tab-color:${t.color}" data-icon="${t.icon}">
@@ -209,7 +213,7 @@
     if (!a) return;
     const [, sub] = a.getAttribute('href').slice(1).split('.');
     const el = sub && document.getElementById(`${current}-${sub}`);
-    if (!el) return;
+    if (!el) { if (!sub) setSide(false); return; }  /* 다른 품사로 가는 링크는 그대로 이동, 목차만 닫기 */
     e.preventDefault();
     el.scrollIntoView();
     try { history.replaceState(null, '', a.getAttribute('href')); } catch (_) {}
