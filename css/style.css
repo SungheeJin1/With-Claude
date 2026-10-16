@@ -833,3 +833,10 @@ a.side-other:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2
   .cele-badge { animation: cele-fade 1s ease forwards; transform: translate(-50%, -50%); }
   @keyframes cele-fade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
 }
+
+/* 홈 화면 앱(standalone)에서는 화면이 시계·배터리 줄 밑까지 올라가요.
+   페이지 전체를 그만큼 내려서, 붙어 있는 상단 바가 아래 내용을 덮지 않게 해요. */
+@media (display-mode: standalone) {
+  body { padding-top: env(safe-area-inset-top, 0px); }
+  .to-top { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+}
