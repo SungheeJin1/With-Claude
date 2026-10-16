@@ -301,6 +301,17 @@
     }
   });
 
+  /* 휴대폰·태블릿: 아래로 읽어 내려가면 헤더를 숨기고, 위로 올리면 다시 보여 줘요 */
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY, root = document.body;
+    const can = window.innerWidth < 1000 && !root.classList.contains('is-home') && !root.classList.contains('side-open');
+    if (!can || y < 80) root.classList.remove('header-hidden');
+    else if (y > lastY + 6) root.classList.add('header-hidden');
+    else if (y < lastY - 6) root.classList.remove('header-hidden');
+    lastY = y;
+  }, { passive: true });
+
   const toTop = document.getElementById('toTop');
   window.addEventListener('scroll', () => toTop.classList.toggle('show', window.scrollY > 600), { passive: true });
   toTop.addEventListener('click', () => window.scrollTo({ top: 0 }));

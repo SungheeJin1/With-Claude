@@ -708,3 +708,10 @@ tbody tr:hover td { background: rgba(255, 255, 255, .03); }
   .pos-desc { font-size: 13px; }
 }
 @media (max-width: 380px) { .brand-link div { display: none; } }
+
+/* 아래로 스크롤하면 숨는 헤더 (휴대폰·태블릿) */
+.site-header { transition: transform .25s ease; }
+@media (max-width: 999px) {
+  .header-hidden .site-header { transform: translateY(calc(-100% - env(safe-area-inset-top, 0px))); }
+}
+@media (prefers-reduced-motion: reduce) { .site-header { transition: none; } }
