@@ -32,7 +32,7 @@ const Q = {
       'subject-number': [['우리 아빠는 버스를 운전하세요.', 'My dad drives a bus.'], ['너희 오빠는 기타를 치니?', 'Does your brother play the guitar?'], ['그녀는 스마트폰이 없어요.', "She doesn't have a smartphone.", 'She does not have a smartphone.']],
       would: [['펭귄은 날 수 없어요.', "Penguins can't fly.", 'Penguins cannot fly.'], ['복도에서 뛰면 안 돼요.', 'You must not run in the hallway.'], ['너는 좀 쉬는 게 좋겠어.', 'You should take a rest.']],
       future: [['아기가 자고 있어요.', 'The baby is sleeping.'], ['우리는 방과 후에 떡볶이를 먹었어요.', 'We ate tteokbokki after school.', 'After school we ate tteokbokki.'], ['내일은 맑을 거예요.', 'It will be sunny tomorrow.', 'Tomorrow it will be sunny.']],
-      'subjunctive-past-perfect': [['나는 눈을 한 번도 본 적이 없어요.', 'I have never seen snow.'], ['영화는 이미 시작했었어요.', 'The movie had already started.'], ['내가 새라면, 너에게 날아갈 텐데.', 'If I were a bird, I would fly to you.', 'I would fly to you if I were a bird.']],
+      'subjunctive-inversion': [['나는 눈을 한 번도 본 적이 없어요.', 'I have never seen snow.'], ['영화는 이미 시작했었어요.', 'The movie had already started.'], ['내가 새라면, 너에게 날아갈 텐데.', 'If I were a bird, I would fly to you.', 'I would fly to you if I were a bird.']],
     },
     end: [['한글은 세종대왕이 만드셨어요.', 'Hangeul was created by King Sejong.'], ['새 도서관은 다음 달에 문을 열 거예요.', 'The new library will be opened next month.'], ['남동생은 공룡에 관심이 많아요.', 'My brother is interested in dinosaurs.']],
   },

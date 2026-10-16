@@ -660,12 +660,49 @@ GRAMMAR.push({
             line: 'I didn’t study. (과거)' },
           { bg: 'sepia', narr: '결과는…', fx: '털썩',
             cast: [{ w: 'I', c: 'orange', m: 'cry' }, { e: '📝', tag: '30점' }],
-            line: 'So I failed the test. (과거)' },
+            line: 'So I failed the exam. (과거)' },
           { bg: 'lav', now: true, narr: '이미 지나간 일을 바꾸는 상상! 동사를 <b>한 칸 더 과거</b>로 보내요.', fx: '후회 모드',
             cast: [{ w: 'If', c: 'yellow', m: 'sad', say: '그때 ~했더라면…' }, { w: 'had studied', c: 'purple', m: 'normal', tag: 'had + p.p.' }, { e: '🕰️' }] },
           { bg: 'night', narr: '결과 쪽은 <b>would have + p.p.</b>로 “~했을 텐데”!',
             cast: [{ w: 'I', c: 'orange', m: 'cry' }, { w: 'would have', c: 'teal', m: 'sad' }, { w: 'passed', c: 'green', m: 'sad', tag: 'p.p.' }],
-            line: { t: 'If I <u>had studied</u>, I <u>would have passed</u>.', ok: true } },
+            line: { t: 'If I <u>had studied</u>, I <u>would have passed</u> the exam.', ok: true } },
+        ],
+      },
+    },
+    {
+      id: 'subjunctive-inversion', title: '가정법의 도치: if를 빼고 앞으로', en: 'Were I …, Had I …',
+      html: `
+        <p>가정법 문장에서는 <b>if를 빼고</b>, 그 대신 <span class="en">were</span>나 <span class="en">had</span>를 <b>주어 앞으로</b> 보내도 뜻이 똑같아요. 이렇게 순서가 뒤바뀌는 걸 <b>도치</b>라고 해요. 주로 글이나 격식 있는 말에서 써요.</p>
+        ${H.formula('If', '+', '주어', '+', '*were / had', '→', '*Were / Had', '+', '주어')}
+        ${H.table(['', '원래 문장', '도치한 문장'], [
+          ['가정법 과거', en('<b>If I were</b> you, I would say sorry.'), en('<b>Were I</b> you, I would say sorry.')],
+          ['가정법 과거완료', en('<b>If I had</b> studied harder, I would have passed the exam.'), en('<b>Had I</b> studied harder, I would have passed the exam.')],
+          ['혹시라도 ~하면 (should)', en('<b>If you should</b> need help, call me.'), en('<b>Should you</b> need help, call me.')],
+        ])}
+        ${H.box('tip', '의문문처럼 생겼지만 물음표가 없고, 쉼표 뒤에 결과 문장이 이어지면 가정법 도치예요. “만약 ~라면 / ~했더라면”으로 해석해요.')}
+        ${H.box('warn', `앞으로 나올 수 있는 건 <b>were, had, should</b> 세 가지뿐이에요. 일반동사 과거형은 앞으로 못 와요.<br>${en('If I knew his name, …')} → <span class="strike en">Knew I his name, …</span>`)}
+        ${H.box('more', `${en('If it were not for ~')} (~이 없다면) → ${en('<b>Were it not for</b> ~')}<br>${en('<b>Were it not for</b> water, nothing could live.')} 물이 없다면 아무것도 살 수 없을 거예요.`)}
+      `,
+      examples: [
+        ['<b>Were I</b> a bird, I would fly to you.', '내가 새라면 너에게 날아갈 텐데.'],
+        ['<b>Had I</b> known, I would have told you.', '내가 알았더라면 너에게 말해 줬을 텐데.'],
+        ['<b>Had we</b> left earlier, we wouldn’t have missed the bus.', '더 일찍 나왔더라면 버스를 놓치지 않았을 텐데.'],
+        ['<b>Should you</b> have any questions, please ask me.', '혹시 질문이 있으면 저에게 물어보세요.'],
+      ],
+      toon: {
+        title: 'if가 빠지면 had가 맨 앞으로!',
+        panels: [
+          { bg: 'lav', narr: '평범한 가정법 과거완료 문장이에요.',
+            cast: [{ w: 'If', c: 'yellow', m: 'happy' }, { w: 'I', c: 'orange', m: 'normal' }, { w: 'had', c: 'purple', m: 'normal' }, { w: 'studied', c: 'blue', m: 'normal' }],
+            line: 'If I had studied, I would have passed the exam.' },
+          { bg: 'sun', narr: 'If가 잠깐 자리를 비우겠대요.', fx: '슝!',
+            cast: [{ w: 'If', c: 'yellow', m: 'smug', st: 'ghost', say: '나 잠깐 빠질게!' }, { w: 'had', c: 'purple', m: 'cool', st: 'jump', say: '그럼 “만약에” 표시는 내가 맨 앞에서 할게!' }, { w: 'I', c: 'orange', m: 'surprised' }] },
+          { bg: 'mint', narr: 'had가 주어 앞으로 나와서 if 없이도 “~했더라면”이 돼요.',
+            cast: [{ w: 'Had', c: 'purple', m: 'cool', hat: '👑' }, { w: 'I', c: 'orange', m: 'happy' }, { w: 'studied', c: 'blue', m: 'happy' }],
+            line: { t: '<u>Had I</u> studied, I would have passed the exam.', ok: true } },
+          { bg: 'rose', narr: '일반동사는 흉내 낼 수 없어요. 앞으로 나올 수 있는 건 were, had, should뿐!',
+            cast: [{ w: 'Knew', c: 'red', m: 'dizzy', st: 'x', say: '나도 앞으로…!' }, { w: 'I', c: 'orange', m: 'surprised' }],
+            line: { t: '<s>Knew I his name, …</s>', ok: false } },
         ],
       },
     },
@@ -766,6 +803,7 @@ GRAMMAR.push({
     ['틀린 곳을 고치세요: <span class="en">I have met him last Sunday.</span>', '<span class="en">last Sunday</span>는 끝난 과거 → <span class="en">I <b>met</b> him last Sunday.</span>'],
     ['빈칸: <span class="en">When I got home, my sister ( ) already ( ) (eat) all the pizza.</span>', '<span class="en">had eaten</span> — 내가 집에 온 것보다 더 먼저 일어난 일(대과거).'],
     ['빈칸: <span class="en">If I ( ) (be) rich, I would buy a big house.</span>', '<span class="en">were</span> — 지금 사실의 반대는 가정법 과거.'],
+    ['if를 빼고 다시 쓰세요: <span class="en">If I had known, I would have helped you.</span>', '<span class="en"><b>Had I known</b>, I would have helped you.</span>'],
     ['빈칸: <span class="en">If she ( ) (wake) up early, she would have caught the bus.</span>', '<span class="en">had woken</span> — 과거 사실의 반대는 가정법 과거완료.'],
     ['수동태로: <span class="en">My mom made this cake.</span>', '<span class="en">This cake <b>was made</b> by my mom.</span>'],
     ['틀린 곳을 고치세요: <span class="en">She cans play the piano.</span>', '조동사에는 s가 붙지 않아요 → <span class="en">She <b>can</b> play the piano.</span>'],
