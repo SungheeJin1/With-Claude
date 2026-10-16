@@ -844,3 +844,4 @@ body .brand { min-height: 35px; }
 .quiz.combine h3 { font-size: 21px; }
 .cb-pair { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
 .cb-plus { color: var(--yellow); font-weight: 900; }
+.q-tip { color: var(--tip); font-weight: 600; font-size: 15px; }

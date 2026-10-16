@@ -172,6 +172,11 @@
       <p class="us-help">O/X 문제는 버튼을 누르고, 나머지는 답을 쓴 뒤 <b>엔터</b>를 누르세요. 빈칸이 여러 개면 순서대로 쉼표(,)로 나눠 써요. <b>문장 쓰기</b> 문제는 대문자와 문장부호까지 채점해요.</p>
       ${items}</div>`;
   }
+  /* 자주 하는 실수를 콕 집어 주는 힌트: tips = [[정규식, 안내 문구], …] */
+  const tipFor = (q, v) => {
+    const hit = (q.tips || []).find(([re]) => re.test(v));
+    return hit ? `<span class="q-tip">💡 ${hit[1]}</span>` : '';
+  };
   /* 빈칸 문제는 빈칸을 채운 문장 전체를 써도 정답: 문제 속 영어 문장의 ( )에 정답을 넣어 만들어요 */
   function filledSentences(q) {
     if (q._filled) return q._filled;
@@ -226,7 +231,7 @@
       const near = !ok && answers.some(a => usLoose(a) === usLoose(input.value));
       quizMark(el, ok, ok ? `<span>⭕ 정답이에요!</span>${exp}`
         : near ? `<span>🟡 단어는 맞았어요! <b>대문자</b>와 <b>문장부호(. , ? !)</b>를 다시 확인해 보세요.</span>${show}`
-        : `<span>❌ 아쉬워요. 다시 해 보세요.</span>${show}`, near ? 'near' : '');
+        : `<span>❌ 아쉬워요. 다시 해 보세요.</span>${tipFor(q, input.value)}${show}`, near ? 'near' : '');
     } else {
       const given = wordNorm(input.value);
       const ok = answers.some(a => wordNorm(a) === given) || filledSentences(q).some(f => wordNorm(f) === given);
@@ -239,7 +244,7 @@
     if (!s.combine || !s.combine.length) return '';
     const items = s.combine.map((q, i) => {
       const key = `cb-${t.id}-${s.id}-${i}`;
-      quizData[key] = { sentence: q.sentence, exp: q.exp, q: q.q };
+      quizData[key] = { sentence: q.sentence, exp: q.exp, q: q.q, tips: q.tips };
       const [a, b] = q.q.split(' + ');
       return `<div class="q" data-qkey="${key}">
         <div class="q-text"><span class="q-kind">${q.hint}</span>Q${i + 1}.
