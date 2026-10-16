@@ -64,7 +64,9 @@
   }
 
   /* ---------- 단어 순서 맞히기 (언스크램블) ---------- */
-  const usNorm = v => v.toLowerCase().replace(/[’‘`]/g, "'").replace(/[.,!?]/g, ' ').replace(/\s+/g, ' ').trim();
+  /* 비교할 때 대문자·마침표·물음표·느낌표는 무시해요. 쉼표는 keepComma 문제에서만 따져요 */
+  const usNorm = (v, keepComma) => v.toLowerCase().replace(/[’‘`]/g, "'")
+    .replace(keepComma ? /[.!?]/g : /[.,!?]/g, ' ').replace(/\s*,\s*/g, ', ').replace(/\s+/g, ' ').trim();
   const usData = {};
   function usHTML(tabId, s) {
     if (!s.unscramble || !s.unscramble.length) return '';
@@ -91,9 +93,9 @@
     const q = usData[item.dataset.key];
     const input = item.querySelector('.us-input');
     const box = item.querySelector('.us-result');
-    const given = usNorm(input.value);
+    const given = usNorm(input.value, q.keepComma);
     if (!given) { box.className = 'us-result'; box.textContent = '먼저 답을 써 주세요.'; input.focus(); return; }
-    const ok = [q.answer, ...(q.alt || [])].some(a => usNorm(a) === given);
+    const ok = [q.answer, ...(q.alt || [])].some(a => usNorm(a, q.keepComma) === given);
     item.classList.toggle('us-ok', ok);
     item.classList.toggle('us-no-ok', !ok);
     box.className = 'us-result ' + (ok ? 'ok' : 'no');
