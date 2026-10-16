@@ -729,12 +729,12 @@ tbody tr:hover td { background: rgba(255, 255, 255, .03); }
 .icon-btn:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
 .home-btn.icon-btn { height: 40px; padding: 0; }
 .is-home .head-actions { display: none; }
-body:not(.is-home) .brand-logo { width: 34px; height: 34px; font-size: 11px; }
-body:not(.is-home) .brand h1 { font-size: 18px; }
-body:not(.is-home) .brand p { display: none; }
-body:not(.is-home) .brand { gap: 10px; padding-bottom: 10px; }
-body:not(.is-home) .site-header { padding-top: 10px; }
-body:not(.is-home) .crumb { font-size: 15px; padding-left: 10px; }
+body .brand-logo { width: 34px; height: 34px; font-size: 11px; }
+body .brand h1 { font-size: 18px; }
+body .brand p { display: none; }
+body .brand { gap: 10px; padding-bottom: 10px; }
+body .site-header { padding-top: 10px; }
+body .crumb { font-size: 15px; padding-left: 10px; }
 
 /* 검색 창 위쪽의 검색칸 */
 .panel-search { display: flex; gap: 6px; padding: 14px; border-bottom: 1px solid var(--glass-line); flex: 0 0 auto; }
@@ -745,8 +745,8 @@ body:not(.is-home) .crumb { font-size: 15px; padding-left: 10px; }
 .search-title:empty { display: none; }
 .search-title span { color: var(--yellow); }
 @media (max-width: 640px) {
-  body:not(.is-home) .brand-logo { width: 32px; height: 32px; font-size: 10px; }
-  body:not(.is-home) .brand h1 { font-size: 16px; }
+  body .brand-logo { width: 32px; height: 32px; font-size: 10px; }
+  body .brand h1 { font-size: 16px; }
   .icon-btn { width: 36px; height: 36px; font-size: 16px; }
   .home-btn.icon-btn { height: 36px; }
   .search-panel { padding-top: calc(16px + env(safe-area-inset-top, 0px)); }
@@ -754,14 +754,14 @@ body:not(.is-home) .crumb { font-size: 15px; padding-left: 10px; }
 .search-box .panel-search { order: -1; flex: 0 0 auto; }
 .panel-search .search-close { background: rgba(255, 255, 255, .08); color: var(--text); border: 1px solid var(--glass-line); border-radius: 50%; padding: 0; font-weight: 700; }
 
-/* 품사 페이지 상단 바 높이를 약 70%로 (57px → 약 40px) */
-body:not(.is-home) .site-header { padding-top: 5px; }
-body:not(.is-home) .brand { padding-bottom: 5px; gap: 8px; }
-body:not(.is-home) .brand-logo { width: 28px; height: 28px; font-size: 9px; letter-spacing: 0; }
-body:not(.is-home) .brand h1 { font-size: 16px; }
-body:not(.is-home) .crumb { font-size: 14px; }
-body:not(.is-home) .head-actions { gap: 6px; }
-body:not(.is-home) .icon-btn { width: 30px; height: 30px; font-size: 14px; }
+/* 상단 바 높이 (시작 페이지·품사 페이지 모두 약 41px) */
+body .site-header { padding-top: 5px; }
+body .brand { padding-bottom: 5px; gap: 8px; }
+body .brand-logo { width: 28px; height: 28px; font-size: 9px; letter-spacing: 0; }
+body .brand h1 { font-size: 16px; }
+body .crumb { font-size: 14px; }
+body .head-actions { gap: 6px; }
+body .icon-btn { width: 30px; height: 30px; font-size: 14px; }
 
 /* iOS Safari는 16px보다 작은 입력칸을 누르면 화면을 확대하고 되돌리지 않아요 → 모든 입력칸 16px 이상 */
 input, select, textarea { font-size: max(16px, 1em); }
@@ -840,3 +840,5 @@ a.side-other:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2
   body { padding-top: env(safe-area-inset-top, 0px); }
   .to-top { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
 }
+body .icon-btn, body .home-btn.icon-btn { width: 30px; height: 30px; font-size: 14px; }
+body .brand { min-height: 35px; }
