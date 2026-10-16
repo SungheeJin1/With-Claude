@@ -172,6 +172,31 @@
       <p class="us-help">O/X 문제는 버튼을 누르고, 나머지는 답을 쓴 뒤 <b>엔터</b>를 누르세요. 빈칸이 여러 개면 순서대로 쉼표(,)로 나눠 써요. <b>문장 쓰기</b> 문제는 대문자와 문장부호까지 채점해요.</p>
       ${items}</div>`;
   }
+  /* 빈칸 문제는 빈칸을 채운 문장 전체를 써도 정답: 문제 속 영어 문장의 ( )에 정답을 넣어 만들어요 */
+  function filledSentences(q) {
+    if (q._filled) return q._filled;
+    const d = document.createElement('div'); d.innerHTML = q.q;
+    const tpls = [...d.querySelectorAll('.en')].map(e => e.textContent).filter(t => t.includes('( )'));
+    q._filled = [];
+    tpls.forEach(tpl => {
+      const blanks = tpl.split('( )').length - 1;
+      q.word.forEach(ans => {
+        let parts = [ans];
+        if (blanks > 1) {
+          const byComma = ans.split(',').map(x => x.trim());
+          const bySpace = ans.split(/\s+/);
+          /* 단어가 빈칸보다 많으면(does not like) 앞쪽 단어들을 첫 빈칸에 몰아 넣어요 */
+          parts = byComma.length === blanks ? byComma
+            : bySpace.length >= blanks ? [bySpace.slice(0, bySpace.length - blanks + 1).join(' '), ...bySpace.slice(bySpace.length - blanks + 1)]
+            : null;
+        }
+        if (!parts) return;
+        let i = 0;
+        q._filled.push(tpl.replace(/\(\s\)/g, () => parts[i++]));
+      });
+    });
+    return q._filled;
+  }
   function quizMark(el, ok, html, cls) {
     if (ok) cheer(el.querySelector('.ox-row, .us-row'));
     el.dataset.ok = ok ? '1' : '0';
@@ -203,7 +228,8 @@
         : near ? `<span>🟡 단어는 맞았어요! <b>대문자</b>와 <b>문장부호(. , ? !)</b>를 다시 확인해 보세요.</span>${show}`
         : `<span>❌ 아쉬워요. 다시 해 보세요.</span>${show}`, near ? 'near' : '');
     } else {
-      const ok = answers.some(a => wordNorm(a) === wordNorm(input.value));
+      const given = wordNorm(input.value);
+      const ok = answers.some(a => wordNorm(a) === given) || filledSentences(q).some(f => wordNorm(f) === given);
       quizMark(el, ok, ok ? `<span>⭕ 정답이에요!</span>${exp}` : `<span>❌ 아쉬워요. 다시 해 보세요.</span>${show}`);
     }
   }
