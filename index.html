@@ -26,7 +26,10 @@
       </div>
     </a>
     <span class="crumb" id="crumb"></span>
-    <a class="home-btn" href="#home">🏠 처음으로</a>
+    <div class="head-actions">
+      <button type="button" class="icon-btn" id="searchBtn" aria-label="용어 검색" title="용어 검색" aria-haspopup="dialog">🔍</button>
+      <a class="icon-btn home-btn" href="#home" aria-label="처음으로" title="처음으로">🏠</a>
+    </div>
   </div>
 </header>
 
@@ -37,7 +40,13 @@
 <div class="side-backdrop" id="sideBackdrop"></div>
 <div class="search-panel" id="searchPanel" role="dialog" aria-modal="true" aria-labelledby="searchTitle" hidden>
   <div class="search-box">
-    <div class="search-head"><h2 id="searchTitle"></h2><button type="button" class="search-close" id="searchClose" aria-label="검색 결과 닫기">✕</button></div>
+    <form class="search panel-search" id="panelSearchForm" data-search role="search" autocomplete="off">
+      <label class="sr-only" for="panelSearchInput">용어 검색</label>
+      <input id="panelSearchInput" type="search" placeholder="용어 검색 (예: 관계대명사)" enterkeyhint="search" spellcheck="false">
+      <button type="submit">검색</button>
+      <button type="button" class="search-close" id="searchClose" aria-label="검색 닫기">✕</button>
+    </form>
+    <h2 id="searchTitle" class="search-title"></h2>
     <ol class="search-results" id="searchResults"></ol>
   </div>
 </div>

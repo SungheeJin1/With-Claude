@@ -30,7 +30,7 @@
           <p class="eyebrow">English Grammar · 8 Parts of Speech</p>
           <h2>오늘은 어떤 품사를 탐험할까요?</h2>
           <p>품사를 골라 설명과 웹툰, 문제를 살펴보세요. 궁금한 용어가 있으면 검색해도 돼요.</p>
-          <form class="search home-search" id="searchForm" role="search" autocomplete="off">
+          <form class="search home-search" id="searchForm" data-search role="search" autocomplete="off">
             <label class="sr-only" for="searchInput">용어 검색</label>
             <input id="searchInput" type="search" placeholder="용어 검색 (예: 관계대명사, 현재완료)" enterkeyhint="search" spellcheck="false">
             <button type="submit">검색</button>

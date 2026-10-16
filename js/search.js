@@ -1,7 +1,9 @@
 /* 용어 검색: 입력한 말이 그대로 들어 있는 항목만 보여 줘요 (자동완성 없음) */
 (function () {
-  /* 검색창은 시작 페이지에만 있고 페이지를 오갈 때마다 새로 그려지므로, 그때그때 찾아 써요 */
-  const getInput = () => document.getElementById('searchInput');
+  /* 검색창은 두 곳: 시작 페이지의 큰 검색창, 품사 페이지 🔍 버튼으로 여는 검색 창.
+     시작 페이지 검색창은 페이지를 오갈 때마다 새로 그려지므로 그때그때 찾아 써요 */
+  const panelInput = document.getElementById('panelSearchInput');
+  let opener = null;
   const panel = document.getElementById('searchPanel');
   const title = document.getElementById('searchTitle');
   const list = document.getElementById('searchResults');
@@ -41,12 +43,27 @@
   }
 
   let lastQuery = '';
+  function open() {
+    panel.hidden = false;
+    document.body.classList.add('search-open');
+  }
+  document.getElementById('searchBtn').addEventListener('click', e => {
+    opener = e.currentTarget;
+    title.textContent = '';
+    list.innerHTML = '<li class="sr-empty">찾고 싶은 용어를 정확히 입력하고 <b>검색</b>을 누르세요. 예: <b>관계대명사</b>, <b>현재완료</b>, <b>a few</b></li>';
+    panelInput.value = '';
+    open();
+    panelInput.focus();
+  });
+
   document.addEventListener('submit', e => {
-    if (e.target.id !== 'searchForm') return;
+    if (!e.target.matches('form[data-search]')) return;
     e.preventDefault();
-    const input = getInput();
+    const input = e.target.querySelector('input');
+    if (e.target.id === 'searchForm') opener = input;
     const q = norm(input.value);
     if (!q) { input.focus(); return; }
+    panelInput.value = q;
     lastQuery = q;
     const lower = q.toLowerCase();
     const hits = index.map(it => {
@@ -62,10 +79,9 @@
         <span class="sr-snip">${snippet(h.text, h.at, q.length)}</span>
       </a></li>`).join('')
       : `<li class="sr-empty">‘${esc(q)}’이(가) 들어 있는 내용이 없어요.<br>용어를 정확히 입력했는지 확인해 주세요. 예: <b>관계대명사</b>, <b>현재완료</b>, <b>a few</b></li>`;
-    panel.hidden = false;
-    document.body.classList.add('search-open');
+    open();
     const first = list.querySelector('a');
-    (first || document.getElementById('searchClose')).focus();
+    (first || panelInput).focus();
   });
 
   function close() {
@@ -74,7 +90,7 @@
   }
   document.getElementById('searchClose').addEventListener('click', close);
   panel.addEventListener('click', e => { if (e.target === panel) close(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) { close(); const i = getInput(); if (i) i.focus(); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) { close(); if (opener && document.contains(opener)) opener.focus(); } });
 
   /* 결과를 누르면 그 항목으로 이동하고, 찾은 말을 노랗게 표시 */
   list.addEventListener('click', e => {

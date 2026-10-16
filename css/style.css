@@ -717,3 +717,39 @@ tbody tr:hover td { background: rgba(255, 255, 255, .03); }
 @media (prefers-reduced-motion: reduce) { .site-header { transition: none; } }
 .us-result.near { color: var(--yellow); }
 .us-item.us-near { border-color: rgba(247, 215, 74, .5); }
+
+/* ===== 품사 페이지 상단 바: 작은 로고 + 🔍 + 🏠 ===== */
+.head-actions { flex: 0 0 auto; display: flex; gap: 8px; }
+.icon-btn {
+  display: grid; place-items: center; width: 40px; height: 40px; padding: 0;
+  border-radius: 50%; border: 1px solid var(--glass-line); background: rgba(255, 255, 255, .08);
+  color: var(--text); text-decoration: none; font-size: 18px; line-height: 1; cursor: pointer;
+}
+.icon-btn:hover { background: rgba(247, 215, 74, .25); border-color: var(--yellow); }
+.icon-btn:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+.home-btn.icon-btn { height: 40px; padding: 0; }
+.is-home .head-actions { display: none; }
+body:not(.is-home) .brand-logo { width: 34px; height: 34px; font-size: 11px; }
+body:not(.is-home) .brand h1 { font-size: 18px; }
+body:not(.is-home) .brand p { display: none; }
+body:not(.is-home) .brand { gap: 10px; padding-bottom: 10px; }
+body:not(.is-home) .site-header { padding-top: 10px; }
+body:not(.is-home) .crumb { font-size: 15px; padding-left: 10px; }
+
+/* 검색 창 위쪽의 검색칸 */
+.panel-search { display: flex; gap: 6px; padding: 14px; border-bottom: 1px solid var(--glass-line); flex: 0 0 auto; }
+.panel-search input { height: 44px; }
+.panel-search button[type="submit"] { height: 44px; }
+.panel-search .search-close { flex: 0 0 auto; width: 44px; height: 44px; }
+.search-title { margin: 0; padding: 12px 18px 0; font-size: 16px; }
+.search-title:empty { display: none; }
+.search-title span { color: var(--yellow); }
+@media (max-width: 640px) {
+  body:not(.is-home) .brand-logo { width: 32px; height: 32px; font-size: 10px; }
+  body:not(.is-home) .brand h1 { font-size: 16px; }
+  .icon-btn { width: 36px; height: 36px; font-size: 16px; }
+  .home-btn.icon-btn { height: 36px; }
+  .search-panel { padding-top: calc(16px + env(safe-area-inset-top, 0px)); }
+}
+.search-box .panel-search { order: -1; flex: 0 0 auto; }
+.panel-search .search-close { background: rgba(255, 255, 255, .08); color: var(--text); border: 1px solid var(--glass-line); border-radius: 50%; padding: 0; font-weight: 700; }
