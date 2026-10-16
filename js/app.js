@@ -117,8 +117,8 @@
       }
       n++;
       const sid = `${t.id}-${s.id || i}`;
-      toc += `<a href="#${t.id}.${s.id || i}" class="${s.toon ? 'has-toon' : ''}">${s.title}</a>`;
-      side += `<li><a href="#${t.id}.${s.id || i}" data-target="${sid}"><span class="side-no">${n}</span><span>${s.title}${s.toon ? ' 🎞' : ''}</span></a></li>`;
+      toc += `<a href="#${t.id}.${s.id || i}" class="${s.toon ? 'has-toon' : ''}${s.unscramble ? ' has-us' : ''}">${s.title}</a>`;
+      side += `<li><a href="#${t.id}.${s.id || i}" data-target="${sid}"><span class="side-no">${n}</span><span>${s.title}${s.toon ? ' 🎞' : ''}${s.unscramble ? ' 🧩' : ''}</span></a></li>`;
       body += `<section class="section" id="${sid}">
         <h3><span class="sec-no">${n}</span>${s.title}${s.en ? `<span class="sec-en">${s.en}</span>` : ''}</h3>
         ${s.html || ''}
@@ -149,7 +149,7 @@
         <p class="eyebrow">Part ${String(data.indexOf(t) + 1).padStart(2, '0')} · ${t.en}</p>
         <h2>${t.name}<span>${t.en}</span></h2><p>${t.intro}</p>
       </div>
-      <nav class="toc" aria-label="목차"><span class="toc-title">📚 이 탭에서 배울 것 (🎞 = 웹툰 있음)</span>${toc}</nav>
+      <nav class="toc" aria-label="목차"><span class="toc-title">📚 이 탭에서 배울 것 (🎞 = 웹툰, 🧩 = 단어 순서 맞히기)</span>${toc}</nav>
       ${body}${quiz}`;
     watchSections();
   }

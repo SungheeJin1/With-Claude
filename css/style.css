@@ -199,6 +199,8 @@ a { color: var(--tip); }
 }
 .toc a:hover { background: var(--yellow); color: var(--yellow-ink); border-color: var(--yellow); }
 .toc a.has-toon::after { content: " 🎞"; }
+.toc a.has-us::after { content: " 🧩"; }
+.toc a.has-toon.has-us::after { content: " 🎞 🧩"; }
 .toc .toc-group {
   width: 100%; margin-top: 6px; color: var(--yellow);
   font-weight: 800; font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
