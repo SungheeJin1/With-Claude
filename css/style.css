@@ -647,3 +647,5 @@ tbody tr:hover td { background: rgba(255, 255, 255, .03); }
 .us-show { height: 32px; padding: 0 12px; border: 1px solid var(--glass-line); background: rgba(255, 255, 255, .08); color: var(--text); font-size: 13px; }
 .us-answer { color: var(--text); }
 .us-answer[hidden], .us-show[hidden] { display: none; }
+.unscramble.bare { margin-top: 0; padding: 0; border: 0; background: none; }
+.section.review { border-color: rgba(247, 215, 74, .35); }

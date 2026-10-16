@@ -68,7 +68,7 @@
   const usNorm = (v, keepComma) => v.toLowerCase().replace(/[’‘`]/g, "'")
     .replace(keepComma ? /[.!?]/g : /[.,!?]/g, ' ').replace(/\s*,\s*/g, ', ').replace(/\s+/g, ' ').trim();
   const usData = {};
-  function usHTML(tabId, s) {
+  function usHTML(tabId, s, bare) {
     if (!s.unscramble || !s.unscramble.length) return '';
     const items = s.unscramble.map((q, i) => {
       const key = `us-${tabId}-${s.id}-${i}`;
@@ -85,7 +85,7 @@
         <div class="us-result" aria-live="polite"></div>
       </li>`;
     }).join('');
-    return `<div class="unscramble"><p class="us-title">🧩 단어 순서 맞히기</p>
+    return `<div class="unscramble${bare ? ' bare' : ''}">${bare ? '' : '<p class="us-title">🧩 단어 순서 맞히기</p>'}
       <p class="us-help">우리말에 맞게 단어를 순서대로 써 보세요. 단어 카드를 누르면 자동으로 들어가요. 대문자와 마침표는 신경 쓰지 않아도 돼요.</p>
       <ol class="us-list">${items}</ol></div>`;
   }
@@ -130,6 +130,14 @@
         ${usHTML(t.id, s)}
       </section>`;
     });
+    if (t.unscrambleEnd && t.unscrambleEnd.length) {
+      toc += `<a href="#${t.id}.review">🧩 단어 순서 맞히기</a>`;
+      side += `<li class="side-quiz"><a href="#${t.id}.review" data-target="${t.id}-review">🧩 단어 순서 맞히기</a></li>`;
+      body += `<section class="section review" id="${t.id}-review">
+        <h3>🧩 단어 순서 맞히기<span class="sec-en">${t.name} 마무리</span></h3>
+        ${usHTML(t.id, { id: 'review', unscramble: t.unscrambleEnd }, true)}
+      </section>`;
+    }
     const quiz = t.quiz && t.quiz.length ? `<div class="quiz" id="${t.id}-quiz"><p class="eyebrow">Quiz · Check</p><h3>🧩 확인 퀴즈</h3>${t.quiz.map(([q, a], i) => `
       <div class="q"><div class="q-text">Q${i + 1}. ${q}</div>
       <button class="q-btn" type="button">정답 보기</button><div class="q-ans">${a}</div></div>`).join('')}</div>` : '';
