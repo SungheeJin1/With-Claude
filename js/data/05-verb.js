@@ -16,7 +16,7 @@ const irregular = [
 
 GRAMMAR.push({
   id: 'verb', name: '동사', en: 'Verb', icon: '🏃', color: '#3f6fe0',
-  intro: '동사는 문장의 <b>심장</b>이에요. “달리다, 먹다, 좋아하다, ~이다”처럼 움직임이나 상태를 나타내요. 동사는 <b>① 수</b>(주어가 하나냐 여럿이냐)에 따라 모양이 바뀌고, <b>② 조동사</b>의 도움을 받아 뜻이 더해지고, <b>③ 시제</b>(언제 일어났냐)와 <b>④ 태</b>(하는 쪽이냐 당하는 쪽이냐)에 따라 또 모양이 바뀌어요. 이 순서대로 배워 봐요!',
+  intro: '동사는 문장의 <b>심장</b>이에요. “달리다, 먹다, 좋아하다, ~이다”처럼 움직임이나 상태를 나타내요. 동사는 <b>① 수</b>(주어가 하나냐 여럿이냐)에 따라 모양이 바뀌고, <b>② 조동사</b>의 도움을 받아 뜻이 더해지고, <b>③ 시제</b>(언제 일어났냐)와 <b>④ 태</b>(하는 쪽이냐 당하는 쪽이냐)에 따라 또 모양이 바뀌어요. 마지막으로 동사에 to나 -ing를 붙여 “~하는 것”으로 쓰는 <b>⑤ to부정사와 동명사</b>까지, 이 순서대로 배워 봐요!',
   sections: [
     {
       id: 'basic', title: '동사의 두 가족: be동사와 일반동사', en: 'be verbs & action verbs',
@@ -794,6 +794,115 @@ GRAMMAR.push({
       ],
     },
 
+
+    /* ================= 5. to부정사와 동명사 ================= */
+    { group: 'to부정사와 동명사', no: '5', desc: '동사에 to를 붙이거나 -ing를 붙이면 “~하는 것”이라는 명사처럼 쓸 수 있어요. 둘은 비슷하지만 어울리는 동사가 달라요.' },
+    {
+      id: 'verbal-basic', title: 'to부정사와 동명사란?', en: 'to play / playing',
+      html: `
+        <p>동사는 원래 “하다”예요. 그런데 “<b>~하는 것</b>”이라고 말하고 싶을 때가 있죠. 그럴 때 동사에 옷을 입혀요.</p>
+        ${H.formula('*to', '+', '동사원형', '=', 'to부정사')}
+        ${H.formula('동사원형', '+', '*-ing', '=', '동명사')}
+        <p>둘 다 “~하는 것”이라는 뜻이라서, 명사처럼 <b>주어·목적어·보어</b> 자리에 앉을 수 있어요.</p>
+        ${H.table(['자리', 'to부정사', '동명사', '뜻'], [
+          ['주어', en('<b>To swim</b> is fun.'), en('<b>Swimming</b> is fun.'), '수영하는 것은 재미있다.'],
+          ['목적어', en('I like <b>to read</b>.'), en('I like <b>reading</b>.'), '나는 읽는 것을 좋아한다.'],
+          ['보어', en('My dream is <b>to be</b> a chef.'), en('My hobby is <b>drawing</b>.'), '내 꿈은 요리사가 되는 것이다. / 내 취미는 그림 그리기다.'],
+        ])}
+        ${H.box('tip', `주어 자리에는 동명사를 더 많이 써요. ${en('<b>Swimming</b> is fun.')}이 ${en('To swim is fun.')}보다 자연스러워요.`)}
+        ${H.box('warn', `주어로 쓰인 to부정사·동명사는 <b>하나</b>로 쳐서 동사는 단수예요. ${en('Reading books <b>is</b> fun.')} (books에 속지 마세요!)`)}
+      `,
+      examples: [
+        ['<b>Playing</b> soccer is my favorite thing.', '축구하는 것이 내가 제일 좋아하는 일이에요.'],
+        ['I want <b>to be</b> a teacher.', '나는 선생님이 되고 싶어요.'],
+        ['My hobby is <b>collecting</b> stickers.', '내 취미는 스티커 모으기예요.'],
+      ],
+    },
+    {
+      id: 'verbal-choose', title: '동사에 따라 골라 쓰기', en: 'want to / enjoy -ing',
+      html: `
+        <p>목적어 자리에 올 때는 <b>앞에 있는 동사</b>가 to부정사를 좋아하는지, 동명사를 좋아하는지 정해져 있어요.</p>
+        ${H.table(['', '어울리는 동사', '예'], [
+          ['<b>to부정사</b>만', en('want, hope, wish, plan, decide, promise, need, would like, learn, expect'), en('I <b>want to go</b> home.')],
+          ['<b>동명사</b>만', en('enjoy, finish, mind, keep, give up, avoid, practice, quit'), en('I <b>enjoy reading</b> comics.')],
+          ['<b>둘 다</b> (뜻 같음)', en('like, love, hate, start, begin, continue'), en('It started <b>to rain</b>. = It started <b>raining</b>.')],
+        ])}
+        ${H.box('memo', '<b>to는 화살표 ➜</b>라서 “앞으로 할 일”(원하다, 계획하다, 결심하다)과 어울려요.<br><b>-ing는 지금 하고 있는 느낌</b>이라서 “하고 있는·해 온 일”(즐기다, 끝내다, 계속하다)과 어울려요.')}
+      `,
+      examples: [
+        ['We <b>decided to visit</b> Jeju this summer.', '우리는 이번 여름에 제주에 가기로 결심했어요.'],
+        ['Did you <b>finish doing</b> your homework?', '숙제 다 끝냈니?'],
+        ['She <b>kept talking</b> during the movie.', '그녀는 영화 보는 내내 계속 떠들었어요.'],
+        ['I <b>enjoy to swim</b>.', '→ <span class="en">I enjoy <b>swimming</b>.</span> enjoy는 동명사만!', 'x'],
+      ],
+      toon: {
+        title: 'want는 미래파, enjoy는 지금파',
+        panels: [
+          { bg: 'sky', narr: 'want는 <b>아직 안 한 일</b>을 바라요. 그래서 앞을 가리키는 화살표 to를 데려와요.',
+            cast: [{ w: 'want', c: 'blue', m: 'happy', say: '하고 싶어! 앞으로!' }, { w: 'to', c: 'yellow', m: 'cool', st: 'small', say: '➜' }, { w: 'play', c: 'green', m: 'happy' }],
+            line: { t: 'I want <u>to play</u> soccer.', ok: true } },
+          { bg: 'sun', narr: 'enjoy는 <b>지금 하고 있는 걸</b> 즐겨요. 그래서 진행 느낌 -ing가 딱이에요.',
+            cast: [{ w: 'enjoy', c: 'orange', m: 'love', say: '지금 너무 재밌어!' }, { w: 'playing', c: 'green', m: 'love' }],
+            line: { t: 'I enjoy <u>playing</u> soccer.', ok: true } },
+          { bg: 'rose', narr: 'to가 enjoy 옆에 서려고 하자…',
+            cast: [{ w: 'enjoy', c: 'orange', m: 'angry', say: '화살표는 사양할게! 난 지금 즐기는 중이라고.' }, { w: 'to', c: 'yellow', m: 'cry', st: 'small x' }],
+            line: { t: '<s>I enjoy to play soccer.</s>', ok: false } },
+          { bg: 'lav', narr: '외우는 주문: <b>“앞으로 할 일은 to, 하고 있는 일은 -ing”</b>',
+            cast: [{ w: 'to', c: 'yellow', m: 'cool', tag: 'want · plan · decide' }, { w: '-ing', c: 'green', m: 'cool', tag: 'enjoy · finish · keep' }] },
+        ],
+      },
+    },
+    {
+      id: 'verbal-meaning', title: '둘 다 되지만 뜻이 바뀌는 동사', en: 'stop / remember / forget / try',
+      html: `
+        <p>어떤 동사는 to부정사와 동명사를 둘 다 데려올 수 있는데, <span class="mark">뜻이 완전히 달라져요</span>. 여기서도 “to = 앞으로 할 일, -ing = 하던·했던 일”이 열쇠예요.</p>
+        ${H.table(['동사', '+ -ing (하던·했던 일)', '+ to부정사 (앞으로 할 일)'], [
+          [en('stop'), en('stop <b>playing</b>') + '<br>노는 것을 <b>그만두다</b>', en('stop <b>to buy</b>') + '<br>사기 <b>위해</b> 멈추다'],
+          [en('remember'), en('remember <b>meeting</b> her') + '<br>그녀를 만났던 것을 기억하다', en('remember <b>to call</b> her') + '<br>그녀에게 전화할 것을 기억하다'],
+          [en('forget'), en('forget <b>meeting</b> her') + '<br>그녀를 만났던 것을 잊다', en('forget <b>to bring</b> it') + '<br>가져와야 할 것을 잊다'],
+          [en('try'), en('try <b>eating</b> kimchi') + '<br>김치를 <b>시험 삼아</b> 먹어 보다', en('try <b>to open</b> the door') + '<br>문을 열려고 <b>애쓰다</b>'],
+        ])}
+      `,
+      examples: [
+        ['Please <b>stop talking</b>.', '말하는 것 좀 그만해 주세요.'],
+        ['He <b>stopped to tie</b> his shoes.', '그는 신발 끈을 묶으려고 멈춰 섰어요.'],
+        ['<b>Remember to bring</b> your book tomorrow.', '내일 책 가져오는 거 잊지 마.'],
+        ['I <b>forgot to turn</b> off the light.', '불 끄는 걸 깜빡했어요.'],
+      ],
+      toon: {
+        title: 'stop playing과 stop to buy는 달라요',
+        panels: [
+          { bg: 'night', narr: '지유가 밤늦게까지 게임을 하고 있어요. 엄마가 “이제 그만!” 하셨어요.',
+            cast: [{ e: '🎮' }, { w: 'stop', c: 'red', m: 'angry', say: '하던 걸 멈춰!' }, { w: 'playing', c: 'green', m: 'sad', tag: '하던 일' }],
+            line: { t: 'Jiyu <u>stopped playing</u> games. (게임을 그만뒀다)', ok: true } },
+          { bg: 'sun', narr: '다음 날, 학교에 가다가 아이스크림 가게 앞에서 멈췄어요.',
+            cast: [{ w: 'stop', c: 'red', m: 'happy', say: '사려고 잠깐 멈출게!' }, { w: 'to', c: 'yellow', m: 'cool', st: 'small' }, { w: 'buy', c: 'blue', m: 'love', tag: '앞으로 할 일' }, { e: '🍦' }],
+            line: { t: 'Jiyu <u>stopped to buy</u> ice cream. (아이스크림을 사려고 멈췄다)', ok: true } },
+          { bg: 'lav', narr: 'remember도 똑같아요. <b>-ing는 지난 일</b>, <b>to는 할 일</b>!',
+            cast: [{ w: 'remember', c: 'purple', m: 'cool' }, { w: 'meeting', c: 'green', m: 'happy', tag: '만났던 것' }, { w: 'to call', c: 'yellow', m: 'happy', tag: '할 것' }] },
+        ],
+      },
+    },
+    {
+      id: 'verbal-prep', title: '전치사 뒤에는 동명사', en: 'good at swimming',
+      html: `
+        <p>전치사(at, for, about, of, in …) 뒤에는 명사가 와야 해요. 그래서 동사를 쓰고 싶으면 <b>동명사(-ing)</b>로 바꿔요. to부정사는 올 수 없어요.</p>
+        ${H.table(['표현', '뜻', '예'], [
+          [en('be good at -ing'), '~을 잘하다', en('She is good at <b>drawing</b>.')],
+          [en('Thank you for -ing'), '~해 줘서 고마워', en('Thank you for <b>helping</b> me.')],
+          [en('How about -ing?'), '~하는 게 어때?', en('How about <b>going</b> to the park?')],
+          [en('be interested in -ing'), '~에 관심이 있다', en('I’m interested in <b>making</b> robots.')],
+          [en('look forward to -ing'), '~을 기대하다', en('I look forward to <b>seeing</b> you.')],
+        ])}
+        ${H.box('warn', `${en('look forward to')}의 to는 to부정사가 아니라 <b>전치사</b>예요! 그래서 뒤에 동명사가 와요.<br><span class="strike en">I look forward to see you.</span> → ${en('I look forward to <b>seeing</b> you.')}`)}
+        ${H.box('more', `to부정사는 “~하는 것” 말고도 이렇게 쓰여요.<br>• 명사 꾸미기 (~할): ${en('I want something <b>to drink</b>.')} 마실 것<br>• 목적 (~하기 위해): ${en('I went to the store <b>to buy</b> milk.')} 우유를 사러`)}
+      `,
+      examples: [
+        ['My brother is good at <b>playing</b> the piano.', '우리 형은 피아노를 잘 쳐요.'],
+        ['Thank you for <b>inviting</b> me.', '초대해 줘서 고마워.'],
+        ['How about <b>eating</b> pizza tonight?', '오늘 밤에 피자 먹는 거 어때?'],
+      ],
+    },
   ],
   quiz: [
     ['알맞은 것을 고르세요: <span class="en">She (don’t / doesn’t) (like / likes) spicy food.</span>', '<span class="en">doesn’t like</span> — does가 s를 가져가면 뒤 동사는 원형!'],

@@ -57,6 +57,10 @@ const QUIZ = {
     { sentence: ['She can play the piano.'], q: `틀린 곳을 고쳐 문장 전체를 쓰세요: ${en('She cans play the piano.')}`, exp: '조동사에는 s가 붙지 않아요.' },
     { ox: false, q: `${en('You don’t have to go.')}는 “가면 안 된다”라는 뜻이다.`, exp: '“안 가도 된다”(필요 없음)예요. “가면 안 된다”는 You must not go.' },
     { word: ['be able to'], q: `빈칸: “나는 내년에 수영할 수 있을 것이다.” ${en('I will ( ) ( ) ( ) swim next year.')}`, exp: 'will과 can은 같이 못 써서 be able to.' },
+    { word: ['swimming'], q: `swim을 알맞게 바꿔 쓰세요: ${en('I enjoy ( ) in the sea.')}`, exp: 'enjoy는 동명사만 데려와요.' },
+    { word: ['to buy'], q: `buy를 알맞게 바꿔 쓰세요: “나는 새 신발을 사고 싶어요.” ${en('I want ( ) new shoes.')}`, exp: 'want는 앞으로 할 일이라 to부정사.' },
+    { ox: false, q: `${en('He stopped to play games.')}는 “그는 게임을 그만뒀다”라는 뜻이다.`, exp: '“게임을 하려고 멈췄다”예요. 그만둔 건 He stopped playing games.' },
+    { sentence: ['I look forward to seeing you.'], q: `틀린 곳을 고쳐 문장 전체를 쓰세요: ${en('I look forward to see you.')}`, exp: 'look forward to의 to는 전치사라서 뒤에 동명사.' },
   ],
   preposition: [
     { word: ['on, in, at, in'], q: `at / on / in을 순서대로 쓰세요: ${en('( ) Friday, ( ) 2025, ( ) 3 p.m., ( ) spring')}`, exp: '요일은 on, 연도·계절은 in, 시각은 at.' },
