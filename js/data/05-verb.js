@@ -838,6 +838,7 @@ GRAMMAR.push({
           ['<b>P</b>', en('practice / postpone'), '연습하다 / 미루다', en('I practice <b>playing</b> the piano.')],
           ['<b>S</b>', en('stop / suggest'), '그만두다 / 제안하다', en('He suggested <b>going</b> to the beach.')],
         ])}
+        <p>➕ <b>더 있어요:</b> ${en('deny')}(부인하다), ${en('delay')}(미루다), ${en('dislike')}(싫어하다), ${en('consider')}(고려하다), ${en('imagine')}(상상하다), ${en('quit')}(그만두다), ${en('keep')}(계속하다)도 동명사만 데려와요.</p>
         ${H.box('warn', `MEGAFEPS 중 ${en('stop')}만은 to부정사와도 쓰이는데, 그때는 “~하기 위해 멈추다”로 뜻이 바뀌어요. 바로 다음 챕터에서 다뤄요.`)}
         ${H.box('memo', '<b>to는 화살표 ➜</b>라서 “앞으로 할 일”(원하다, 계획하다, 결심하다)과 어울려요.<br><b>-ing는 지금 하고 있는 느낌</b>이라서 “하고 있는·해 온 일”(즐기다, 끝내다, 계속하다)과 어울려요.')}
       `,
