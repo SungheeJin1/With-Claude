@@ -824,9 +824,21 @@ GRAMMAR.push({
         <p>목적어 자리에 올 때는 <b>앞에 있는 동사</b>가 to부정사를 좋아하는지, 동명사를 좋아하는지 정해져 있어요.</p>
         ${H.table(['', '어울리는 동사', '예'], [
           ['<b>to부정사</b>만', en('want, hope, wish, plan, decide, promise, need, would like, learn, expect'), en('I <b>want to go</b> home.')],
-          ['<b>동명사</b>만', en('enjoy, finish, mind, keep, give up, avoid, practice, quit'), en('I <b>enjoy reading</b> comics.')],
+          ['<b>동명사</b>만', en('enjoy, finish, mind, keep, give up, avoid, practice, quit, escape, postpone, suggest'), en('I <b>enjoy reading</b> comics.')],
           ['<b>둘 다</b> (뜻 같음)', en('like, love, hate, start, begin, continue'), en('It started <b>to rain</b>. = It started <b>raining</b>.')],
         ])}
+        <p><b>동명사만 데려오는 동사 외우기: MEGAFEPS 🎵</b></p>
+        ${H.table(['글자', '동사', '뜻', '예'], [
+          ['<b>M</b>', en('mind'), '꺼리다', en('Do you mind <b>opening</b> the window?')],
+          ['<b>E</b>', en('enjoy'), '즐기다', en('I enjoy <b>singing</b>.')],
+          ['<b>G</b>', en('give up'), '포기하다', en('Don’t give up <b>trying</b>.')],
+          ['<b>A</b>', en('avoid'), '피하다', en('He avoids <b>eating</b> carrots.')],
+          ['<b>F</b>', en('finish'), '끝내다', en('I finished <b>cleaning</b> my room.')],
+          ['<b>E</b>', en('escape'), '모면하다, 피하다', en('She escaped <b>being</b> late.')],
+          ['<b>P</b>', en('practice / postpone'), '연습하다 / 미루다', en('I practice <b>playing</b> the piano.')],
+          ['<b>S</b>', en('stop / suggest'), '그만두다 / 제안하다', en('He suggested <b>going</b> to the beach.')],
+        ])}
+        ${H.box('warn', `MEGAFEPS 중 ${en('stop')}만은 to부정사와도 쓰이는데, 그때는 “~하기 위해 멈추다”로 뜻이 바뀌어요. 바로 다음 챕터에서 다뤄요.`)}
         ${H.box('memo', '<b>to는 화살표 ➜</b>라서 “앞으로 할 일”(원하다, 계획하다, 결심하다)과 어울려요.<br><b>-ing는 지금 하고 있는 느낌</b>이라서 “하고 있는·해 온 일”(즐기다, 끝내다, 계속하다)과 어울려요.')}
       `,
       examples: [
