@@ -48,6 +48,7 @@ function render() {
   if (!S.ready) { main.innerHTML = `<div class="card empty"><div class="big">📚</div><p class="soft">불러오는 중…</p></div>`; return; }
   const [view, arg] = location.hash.slice(1).split('/');
   $$('#drawer button').forEach(b => b.toggleAttribute('aria-current', b.dataset.go === (view || 'home')));
+  main.classList.toggle('wide', view === 'library');
   switch (view) {
     case 'library': if (arg && arg !== S.open) openPaper(arg, false); main.innerHTML = viewLibrary(); afterLibrary(); break;
     case 'add': main.innerHTML = viewAdd(); afterAdd(); break;
@@ -254,6 +255,20 @@ function keywordsTab(p) {
       <p>${esc(k.desc)}</p></div>`).join('')}</div>`;
 }
 
+/* 해석 한 줄마다 오른쪽 여백에 메모 (휴대폰에서는 ✎를 눌러 줄 아래에) */
+function noteRows(pid, c) {
+  const notes = c.notes || {};
+  return Paper.translationLines(c.tr).map((html, j) => {
+    const key = `${pid}:${c.i}:${j}`;
+    const note = notes[j] || '';
+    return `<div class="row${note ? ' has' : ''}${S.noteOpen === key ? ' open' : ''}">
+      <div class="txt">${html}</div>
+      <button class="pen" type="button" data-pen="${key}" aria-label="이 줄에 메모">✎</button>
+      <div class="note"><textarea data-note="${key}" rows="${note ? Math.max(2, note.split('\n').length) : 1}" placeholder="＋ 메모" aria-label="이 줄 메모">${esc(note)}</textarea></div>
+    </div>`;
+  }).join('');
+}
+
 function fullTab(p, chunks, job) {
   const done = chunks.filter(c => c && c.tr).length;
   const total = p.chunkCount;
@@ -270,7 +285,7 @@ function fullTab(p, chunks, job) {
     <div class="panel tr">
       ${done ? chunks.map(c => c && c.tr ? `
         <div class="chunk">
-          ${Paper.renderTranslation(c.tr)}
+          ${noteRows(p.id, c)}
           ${c.truncated ? '<p class="err">이 부분은 길어서 끝이 잘렸을 수 있어요.</p>' : ''}
           <button class="link-btn" type="button" data-orig="${p.id}:${c.i}">${S.showOrig[p.id + ':' + c.i] ? '원문 접기 ▲' : '원문 보기 ▼'}</button>
           ${S.showOrig[p.id + ':' + c.i] ? `<div class="orig">${Paper.renderOriginal(c.orig, p.analysis)}</div>` : ''}
@@ -313,7 +328,7 @@ function refreshPaper(pid) {
   const n = list.length - list.findIndex(p => p.id === pid);
   const p = S.papers.find(x => x.id === pid);
   if (!p) return card.remove();
-  const ta = card.querySelector('textarea');
+  const ta = card.querySelector('form[data-ask] textarea');
   const draft = ta && ta.value;
   card.outerHTML = paperCard(p, n);
   if (draft) { const t = $('#paper-' + pid + ' textarea'); if (t) t.value = draft; }
@@ -649,6 +664,13 @@ document.addEventListener('click', async e => {
   if (d.analyze) return analyze(d.analyze, true);
   if (d.translate) return translate(d.translate);
   if (d.stop) { S.jobs[d.stop]?.ctl?.abort(); return; }
+  if (d.pen) {
+    S.noteOpen = S.noteOpen === d.pen ? null : d.pen;
+    refreshPaper(d.pen.split(':')[0]);
+    const ta = $(`textarea[data-note="${d.pen}"]`);
+    if (ta && S.noteOpen) ta.focus();
+    return;
+  }
   if (d.orig) { S.showOrig[d.orig] = !S.showOrig[d.orig]; return refreshPaper(d.orig.split(':')[0]); }
   if (d.suggest) return ask(d.suggest, t.textContent);
   if (d.clearchat) {
@@ -673,6 +695,27 @@ document.addEventListener('click', async e => {
     return render();
   }
   if (d.day) { S.calDay = d.day; return render(); }
+});
+const noteTimers = {};
+document.addEventListener('input', e => {
+  const key = e.target.dataset && e.target.dataset.note;
+  if (!key) return;
+  const [pid, ci, j] = key.split(':');
+  const c = (S.chunks[pid] || [])[ci];
+  if (!c) return;
+  const v = e.target.value;
+  c.notes = { ...(c.notes || {}) };
+  if (v.trim()) c.notes[j] = v; else delete c.notes[j];
+  e.target.closest('.row').classList.toggle('has', !!v.trim());
+  e.target.rows = Math.max(2, v.split('\n').length);
+  clearTimeout(noteTimers[pid + ':' + ci]);
+  noteTimers[pid + ':' + ci] = setTimeout(() => {
+    Store.saveChunk(pid, c);
+    if (v.trim()) {
+      const p = S.papers.find(x => x.id === pid);
+      checkin('note', p ? (p.analysis?.titleKo || p.title) : '');
+    }
+  }, 600);
 });
 document.addEventListener('submit', e => {
   const f = e.target.closest('form[data-ask]');

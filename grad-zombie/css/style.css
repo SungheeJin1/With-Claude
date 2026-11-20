@@ -238,6 +238,31 @@ mark.key { background: linear-gradient(transparent 12%, var(--hl-bg) 12%, var(--
 .tr strong { color: #ffd88a; }
 .chunk { border-bottom: 1px dashed rgba(255,255,255,.1); padding-bottom: 6px; margin-bottom: 14px; }
 .chunk:last-child { border-bottom: 0; }
+
+/* 줄 옆 메모 */
+.row { position: relative; padding-right: 30px; }
+.row .txt > :last-child { margin-bottom: 14px; }
+.pen {
+  position: absolute; top: 2px; right: 0; width: 26px; height: 26px; border-radius: 8px;
+  border: 0; background: none; color: var(--text-dim); font-size: 15px; line-height: 1;
+}
+.pen:hover, .row.has .pen { color: var(--yellow); }
+.note { display: none; margin: -6px 0 14px; }
+.row.has .note, .row.open .note { display: block; }
+.note textarea {
+  min-height: 0; field-sizing: content; padding: 8px 10px; font-size: 14px; line-height: 1.55; border-radius: 10px;
+  background: rgba(247, 215, 74, .1); border: 1px solid rgba(247, 215, 74, .28); color: #fff8d6;
+}
+.note textarea::placeholder { color: var(--text-dim); }
+@media (min-width: 900px) {
+  .wrap.wide { max-width: 1040px; }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 18px; padding-right: 0; }
+  .pen { display: none; }
+  .note, .row.has .note, .row.open .note { display: block; margin: 0 0 14px; }
+  .note textarea { min-height: 0; background: transparent; border: 1px dashed rgba(255,255,255,.12); resize: none; }
+  .row:hover .note textarea, .note textarea:focus { border-color: rgba(247, 215, 74, .5); }
+  .row.has .note textarea { background: rgba(247, 215, 74, .1); border: 1px solid rgba(247, 215, 74, .28); }
+}
 .orig { margin: 6px 0 14px; padding: 12px 14px; border-left: 3px solid rgba(255,255,255,.18); font-size: 14px; line-height: 1.75; color: var(--text-soft); white-space: pre-wrap; background: rgba(255,255,255,.03); border-radius: 0 10px 10px 0; }
 .orig mark.key { color: #fff; }
 .link-btn { border: 0; background: none; padding: 0; color: var(--tip); font-size: 13px; font-weight: 700; }

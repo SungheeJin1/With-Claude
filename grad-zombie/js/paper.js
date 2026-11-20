@@ -160,18 +160,20 @@ ${contextOf(text)}
       .replace(/\[\[([\s\S]+?)\]\]/g, '<span class="kwd">$1</span>')
       .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>');
   }
-  function renderTranslation(tr) {
-    return tr.split(/\n\s*\n/).map(block => {
-      const b = block.trim();
-      if (!b) return '';
-      const h = b.match(/^#{1,4}\s+(.+)$/m);
-      if (h && b.split('\n').length === 1) return `<h3>${inline(h[1])}</h3>`;
-      return b.split('\n').map(line => {
-        const hh = line.match(/^#{1,4}\s+(.+)$/);
-        return hh ? `<h3>${inline(hh[1])}</h3>` : `<p>${inline(line)}</p>`;
-      }).join('');
-    }).join('');
+  /* 번역문을 줄(제목·문단) 단위 HTML 조각 배열로 — 줄마다 옆에 메모를 달 수 있게 */
+  function translationLines(tr) {
+    const out = [];
+    for (const block of tr.split(/\n\s*\n/)) {
+      for (const line of block.trim().split('\n')) {
+        const t = line.trim();
+        if (!t) continue;
+        const h = t.match(/^#{1,4}\s+(.+)$/);
+        out.push(h ? `<h3>${inline(h[1])}</h3>` : `<p>${inline(t)}</p>`);
+      }
+    }
+    return out;
   }
+  function renderTranslation(tr) { return translationLines(tr).join(''); }
 
   /* 원문 보기: 분석에서 고른 핵심 문장과 키워드를 원문에도 칠해요 */
   function renderOriginal(orig, analysis) {
@@ -189,5 +191,5 @@ ${contextOf(text)}
     return html;
   }
 
-  return { readPdf, clean, cutReferences, chunk, analysisPrompt, translatePrompt, chatPrompt, renderTranslation, renderOriginal };
+  return { readPdf, clean, cutReferences, chunk, analysisPrompt, translatePrompt, chatPrompt, renderTranslation, translationLines, renderOriginal };
 })();

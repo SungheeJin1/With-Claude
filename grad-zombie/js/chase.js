@@ -11,6 +11,7 @@ const Chase = (() => {
     analyze: '논문을 분석했어요',
     translate: '전문 해석을 진행했어요',
     ask: 'Claude에게 논문 질문을 했어요',
+    note: '논문에 메모를 남겼어요',
   };
 
   function step(d, checked) {
