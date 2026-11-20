@@ -5,7 +5,8 @@ const S = {
   chunks: {},        // pid → [{i, orig, tr, truncated}]
   open: null,        // 펼쳐진 논문 id
   tab: {},           // pid → 탭 이름
-  showOrig: {},      // `${pid}:${i}` → 원문 보기 여부
+  showOrig: {},
+  collapsed: {},     // pid → {소제목 번호: true} 접어 둔 목차      // `${pid}:${i}` → 원문 보기 여부
   jobs: {},          // pid → {kind, ctl, label, done, total, stream, error}
   calMonth: null,
   calDay: null,
@@ -256,23 +257,44 @@ function keywordsTab(p) {
 }
 
 /* 해석 한 줄마다 오른쪽 여백에 메모 (휴대폰에서는 ✎를 눌러 줄 아래에) */
-function noteRows(pid, c) {
-  const notes = c.notes || {};
-  return Paper.translationLines(c.tr).map((html, j) => {
-    const key = `${pid}:${c.i}:${j}`;
-    const note = notes[j] || '';
-    return `<div class="row${note ? ' has' : ''}${S.noteOpen === key ? ' open' : ''}">
+function noteRow(pid, c, j, html) {
+  const key = `${pid}:${c.i}:${j}`;
+  const note = (c.notes || {})[j] || '';
+  return `<div class="row${note ? ' has' : ''}${S.noteOpen === key ? ' open' : ''}">
       <div class="txt">${html}</div>
       <button class="pen" type="button" data-pen="${key}" aria-label="이 줄에 메모">✎</button>
       <div class="note"><textarea data-note="${key}" rows="${note ? Math.max(2, note.split('\n').length) : 1}" placeholder="＋ 메모" aria-label="이 줄 메모">${esc(note)}</textarea></div>
     </div>`;
-  }).join('');
+}
+
+/* 해석문을 소제목(## …) 단위 묶음으로 나눠요. 첫 소제목 앞 내용은 '시작' 묶음 */
+function sections(p, chunks) {
+  const out = [];
+  let cur = null;
+  for (const c of chunks) {
+    if (!c || !c.tr) continue;
+    Paper.translationLines(c.tr).forEach((html, j) => {
+      const h = html.match(/^<h3>([\s\S]*)<\/h3>$/);
+      if (h) { cur = { title: h[1], items: [] }; out.push(cur); return; }
+      if (!cur) { cur = { title: '시작', items: [] }; out.push(cur); }
+      cur.items.push(noteRow(p.id, c, j, html));
+    });
+    if (!cur) continue;
+    // 이 조각의 끝: 잘림 안내와 원문 보기
+    const k = p.id + ':' + c.i;
+    cur.items.push(`${c.truncated ? '<p class="err">이 부분은 길어서 끝이 잘렸을 수 있어요.</p>' : ''}
+      <p class="orig-line"><button class="link-btn" type="button" data-orig="${k}">${S.showOrig[k] ? '원문 접기 ▲' : '원문 보기 ▼'}</button></p>
+      ${S.showOrig[k] ? `<div class="orig">${Paper.renderOriginal(c.orig, p.analysis)}</div>` : ''}`);
+  }
+  return out;
 }
 
 function fullTab(p, chunks, job) {
   const done = chunks.filter(c => c && c.tr).length;
   const total = p.chunkCount;
   const running = job?.kind === 'translate';
+  const secs = done ? sections(p, chunks) : [];
+  const shut = S.collapsed[p.id] || {};
   return `
     <p class="legend"><span><mark class="key">핵심 문장</mark></span><span><span class="kwd">키워드</span></span><span><strong style="color:#ffd88a">중요 구절</strong></span></p>
     ${running ? jobPanel(p, job) : done < total ? `
@@ -282,14 +304,18 @@ function fullTab(p, chunks, job) {
         ${job?.error ? `<p class="err">${esc(job.error)}</p>` : ''}
         <button class="btn" type="button" data-translate="${p.id}">${done ? '이어서 해석하기' : '전문 해석 시작'}</button>
       </div>` : ''}
+    ${secs.length ? `
+    <nav class="panel toc" aria-label="목차">
+      <div class="toc-head"><p class="eyebrow" style="margin:0">Contents · 목차</p>
+        <span class="btn-row"><button class="link-btn" type="button" data-foldall="${p.id}:1">모두 접기</button><button class="link-btn" type="button" data-foldall="${p.id}:0">모두 펼치기</button></span></div>
+      <ol>${secs.map((x, n) => `<li><button type="button" data-jump="${p.id}:${n}">${x.title}</button></li>`).join('')}</ol>
+    </nav>` : ''}
     <div class="panel tr">
-      ${done ? chunks.map(c => c && c.tr ? `
-        <div class="chunk">
-          ${noteRows(p.id, c)}
-          ${c.truncated ? '<p class="err">이 부분은 길어서 끝이 잘렸을 수 있어요.</p>' : ''}
-          <button class="link-btn" type="button" data-orig="${p.id}:${c.i}">${S.showOrig[p.id + ':' + c.i] ? '원문 접기 ▲' : '원문 보기 ▼'}</button>
-          ${S.showOrig[p.id + ':' + c.i] ? `<div class="orig">${Paper.renderOriginal(c.orig, p.analysis)}</div>` : ''}
-        </div>` : '').join('') : '<p class="dim" style="margin:0">해석된 내용이 여기에 나와요.</p>'}
+      ${secs.length ? secs.map((x, n) => `
+        <section class="sec${shut[n] ? ' shut' : ''}" id="sec-${p.id}-${n}">
+          <button class="sec-head" type="button" data-sec="${p.id}:${n}" aria-expanded="${!shut[n]}"><h3>${x.title}</h3>${CHEV}</button>
+          <div class="sec-body">${x.items.join('')}</div>
+        </section>`).join('') : '<p class="dim" style="margin:0">해석된 내용이 여기에 나와요.</p>'}
     </div>`;
 }
 
@@ -664,6 +690,35 @@ document.addEventListener('click', async e => {
   if (d.analyze) return analyze(d.analyze, true);
   if (d.translate) return translate(d.translate);
   if (d.stop) { S.jobs[d.stop]?.ctl?.abort(); return; }
+  if (d.sec) {
+    const [pid, n] = d.sec.split(':');
+    const c = S.collapsed[pid] || (S.collapsed[pid] = {});
+    c[n] = !c[n];
+    const el = $(`#sec-${pid}-${n}`);
+    if (el) { el.classList.toggle('shut', c[n]); t.setAttribute('aria-expanded', String(!c[n])); }
+    return;
+  }
+  if (d.foldall) {
+    const [pid, v] = d.foldall.split(':');
+    const c = S.collapsed[pid] = {};
+    $$(`#body-${pid} .sec`).forEach((el, n) => {
+      c[n] = v === '1';
+      el.classList.toggle('shut', c[n]);
+      el.querySelector('.sec-head').setAttribute('aria-expanded', String(!c[n]));
+    });
+    return;
+  }
+  if (d.jump) {
+    const [pid, n] = d.jump.split(':');
+    if (S.collapsed[pid]) S.collapsed[pid][n] = false;
+    const el = $(`#sec-${pid}-${n}`);
+    if (el) {
+      el.classList.remove('shut');
+      el.querySelector('.sec-head').setAttribute('aria-expanded', 'true');
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    return;
+  }
   if (d.pen) {
     S.noteOpen = S.noteOpen === d.pen ? null : d.pen;
     refreshPaper(d.pen.split(':')[0]);

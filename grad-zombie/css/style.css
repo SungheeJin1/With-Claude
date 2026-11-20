@@ -239,6 +239,25 @@ mark.key { background: linear-gradient(transparent 12%, var(--hl-bg) 12%, var(--
 .chunk { border-bottom: 1px dashed rgba(255,255,255,.1); padding-bottom: 6px; margin-bottom: 14px; }
 .chunk:last-child { border-bottom: 0; }
 
+/* 목차 · 접기 */
+.toc { margin-bottom: 12px; }
+.toc-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.toc-head .btn-row { gap: 14px; }
+.toc ol { margin: 0; padding-left: 0; list-style: none; }
+.toc li { margin: 2px 0; }
+.toc li button::before { content: "› "; color: var(--yellow); font-weight: 800; }
+.toc li button { border: 0; background: none; padding: 4px 0; color: #fff; text-align: left; font-size: 15px; font-weight: 600; }
+.toc li button:hover { color: var(--yellow); }
+.sec { scroll-margin-top: 80px; }
+.sec + .sec { border-top: 1px dashed rgba(255,255,255,.1); }
+.sec-head { display: flex; align-items: center; gap: 10px; width: 100%; border: 0; background: none; padding: 10px 0; text-align: left; }
+.sec-head h3 { flex: 1; margin: 0 !important; }
+.sec-head .chev { transform: rotate(180deg); }
+.sec.shut .sec-head .chev { transform: none; }
+.sec-body { padding-top: 6px; }
+.sec.shut .sec-body { display: none; }
+.orig-line { margin: -6px 0 12px !important; }
+
 /* 줄 옆 메모 */
 .row { position: relative; padding-right: 30px; }
 .row .txt > :last-child { margin-bottom: 14px; }
