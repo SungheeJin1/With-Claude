@@ -236,7 +236,8 @@ function summaryTab(p) {
   const rows = [['연구 문제', st.problem], ['방법', st.method], ['결과', st.results], ['기여', st.contribution], ['한계', st.limitations]].filter(r => r[1]);
   return `
     <div class="panel">
-      <p class="meta">${esc([a.title, a.authors, a.year, a.field].filter(Boolean).join(' · '))}</p>
+      ${a.title ? `<div class="ptitle"><span>${esc(a.title)}</span><button class="btn ghost small" type="button" data-copytitle="${p.id}">제목 복사</button></div>` : ''}
+      <p class="meta">${esc([a.authors, a.year, a.field].filter(Boolean).join(' · '))}</p>
       <p class="oneline">${esc(a.oneLine)}</p>
       <ul class="bul">${(a.summary || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul>
     </div>
@@ -778,6 +779,19 @@ document.addEventListener('click', async e => {
   }
   if (d.orig) { S.showOrig[d.orig] = !S.showOrig[d.orig]; return refreshPaper(d.orig.split(':')[0]); }
   if (d.suggest) return ask(d.suggest, t.textContent);
+  if (d.copytitle) {
+    const p = S.papers.find(x => x.id === d.copytitle);
+    const title = p?.analysis?.title || p?.title || '';
+    try { await navigator.clipboard.writeText(title); toast('논문 제목을 복사했어요'); }
+    catch {
+      // 복사가 막힌 화면이면 제목 글자를 선택해 둬서 바로 복사할 수 있게
+      const span = t.parentElement.querySelector('span');
+      const r = document.createRange(); r.selectNodeContents(span);
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      toast('제목을 선택해 뒀어요. 길게 눌러 복사하세요');
+    }
+    return;
+  }
   if (d.clearchat) {
     const p = S.papers.find(x => x.id === d.clearchat);
     if (p && confirm('이 논문과의 대화를 지울까요?')) { p.chat = []; await Store.savePaper(p); refreshPaper(p.id); }
