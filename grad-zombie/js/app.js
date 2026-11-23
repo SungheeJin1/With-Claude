@@ -225,6 +225,7 @@ function jobPanel(p, job) {
       <p style="margin:0"><b>${esc(job.label)}…</b> ${job.total ? `<span class="dim">${job.done}/${job.total}</span>` : ''}</p>
       ${job.total ? `<div class="progress"><i style="width:${pct}%"></i></div>` : '<div class="progress"><i style="width:35%"></i></div>'}
       <div class="stream" id="stream-${p.id}">${esc(job.stream || '')}</div>
+      <p class="dim" style="margin:8px 0 0">앱을 닫거나 다른 앱으로 가면 잠시 멈추고, 다시 열면 멈춘 곳부터 자동으로 이어서 해요.</p>
       <button class="btn ghost small" style="margin-top:10px" type="button" data-stop="${p.id}">멈추기</button>
     </div>`;
 }
@@ -394,6 +395,8 @@ async function analyze(pid, thenTranslate = true) {
   if (!S.chunks[pid]) S.chunks[pid] = await Store.loadChunks(pid);
   const ctl = new AbortController();
   const job = S.jobs[pid] = { kind: 'analyze', ctl, label: '요약·키워드 뽑는 중', done: 0, total: 0, stream: '' };
+  if (thenTranslate && !p.autoRun) { p.autoRun = true; Store.savePaper(p); }
+  keepAwake(true);
   refreshPaper(pid);
   try {
     const a = await AI.json(Paper.analysisPrompt(fullText(pid)), {
@@ -406,9 +409,12 @@ async function analyze(pid, thenTranslate = true) {
     delete S.jobs[pid];
     checkin('analyze', a.titleKo || p.title);
     refreshPaper(pid);
-    if (thenTranslate) translate(pid);
+    if (thenTranslate) return translate(pid);
+    keepAwake(anyJob());
   } catch (e) {
     S.jobs[pid] = { error: e.code === 'cancelled' ? '' : AI.errText(e) };
+    if (e.code === 'cancelled') { p.autoRun = false; Store.savePaper(p); }
+    keepAwake(anyJob());
     refreshPaper(pid);
   }
 }
@@ -421,6 +427,8 @@ async function translate(pid) {
   const total = p.chunkCount;
   const job = S.jobs[pid] = { kind: 'translate', ctl, label: '전문 해석 중', done: chunks.filter(c => c && c.tr).length, total, stream: '' };
   if (!S.tab[pid] || S.tab[pid] === 'summary') S.tab[pid] = 'full';
+  if (!p.autoRun) { p.autoRun = true; await Store.savePaper(p); }
+  keepAwake(true);
   refreshPaper(pid);
   try {
     for (const c of chunks) {
@@ -440,12 +448,52 @@ async function translate(pid) {
       refreshPaper(pid);
     }
     delete S.jobs[pid];
+    p.autoRun = false;
+    await Store.savePaper(p);
     toast('전문 해석을 끝냈어요 📖');
   } catch (e) {
     S.jobs[pid] = { error: e.code === 'cancelled' ? '' : AI.errText(e) };
+    if (e.code === 'cancelled') { p.autoRun = false; Store.savePaper(p); }
   }
+  keepAwake(anyJob());
   refreshPaper(pid);
 }
+
+/* 앱을 닫거나 다른 앱으로 가면 브라우저가 작업을 멈춰요.
+   그래서 끝나지 않은 분석·해석을 기억해 두었다가, 앱을 다시 열거나 돌아오면 이어서 해요. */
+let resuming = false;
+async function resumeWork() {
+  if (resuming || !S.ready || !AI.mode) return;
+  resuming = true;
+  try {
+    for (const p of S.papers.filter(x => x.autoRun)) {
+      if (S.jobs[p.id]?.ctl) continue;
+      if (!p.analysis) await analyze(p.id, true);
+      else if ((p.done || 0) < p.chunkCount) await translate(p.id);
+      else { p.autoRun = false; await Store.savePaper(p); continue; }
+      if (S.jobs[p.id]?.error) break; // 오류가 나면 다음에 다시 열 때 이어서
+    }
+  } finally { resuming = false; }
+}
+
+/* 해석하는 동안 화면이 꺼져서 멈추지 않게 (지원하는 브라우저에서만) */
+let wakeLock = null;
+const anyJob = () => Object.values(S.jobs).some(j => j && j.ctl && j.kind !== 'ask');
+async function keepAwake(on) {
+  try {
+    if (on && !wakeLock && navigator.wakeLock && document.visibilityState === 'visible') {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } else if (!on && wakeLock) {
+      const w = wakeLock; wakeLock = null; await w.release();
+    }
+  } catch { wakeLock = null; }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (anyJob()) keepAwake(true);
+  resumeWork();
+});
 
 async function ask(pid, question) {
   const p = S.papers.find(x => x.id === pid);
@@ -542,6 +590,7 @@ function afterAdd() {
       id: uid(), createdAt: Date.now(), openedAt: Date.now(),
       title: ($('#title').value.trim() || fileName || firstLine).slice(0, 160),
       chars: body.length, chunkCount: parts.length, done: 0, analysis: null, chat: [],
+      autoRun: $('#autoRun').checked,
     };
     try {
       for (let i = 0; i < parts.length; i++) await Store.saveChunk(meta.id, { i, orig: parts[i], tr: '' });
@@ -652,6 +701,7 @@ function afterSettings() {
     Store.setModel($('#model').value);
     toast('저장했어요');
     render();
+    resumeWork();
   });
   const del = $('#keyDel');
   if (del) del.addEventListener('click', () => { Store.setKey(''); toast('키를 지웠어요'); render(); });
@@ -817,4 +867,5 @@ setInterval(() => { if (dayKey() !== lastDay) { lastDay = dayKey(); updateTop();
   const [view, arg] = location.hash.slice(1).split('/');
   if (view === 'library' && arg) { S.open = null; S.scrollTo = arg; }
   render();
+  resumeWork();
 })();
